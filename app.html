@@ -6,53 +6,7 @@
     <title>AETERNUM // ARCHITECT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg-void: #050505; --accent: #66fcf1; --glass: rgba(20,20,25,0.95); }
-        body { background-color: var(--bg-void); color: #e0e7ff; font-family: 'Space Mono', monospace; }
-        
-        /* Custom UI Elements */
-        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
-        .input-dark { background-color: #111; border: 1px solid #334155; color: #fff; transition: 0.2s; }
-        .input-dark:focus { outline: none; border-color: var(--accent); }
-        .input-label { font-size: 0.65rem; text-transform: uppercase; font-weight: bold; color: #64748b; margin-bottom: 0.25rem; display: block; tracking-wider; }
-        
-        /* Advanced Logic Selectors */
-        .logic-select { background-color: #0f172a; border: 1px solid #334155; color: #94a3b8; font-size: 0.65rem; border-radius: 4px; padding: 2px 6px; cursor: pointer; }
-        .logic-select:focus { border-color: var(--accent); outline: none; color: white; }
-
-        /* Lorebook Entry Items */
-        .entry-item { padding: 12px; border-bottom: 1px solid #1e293b; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
-        .entry-item:hover { background-color: #1e293b; }
-        .entry-item.active { background-color: #1e293b; border-left-color: var(--accent); }
-        .entry-item.constant { border-left-color: #c084fc; } 
-
-        /* Mode Switcher */
-        .btn-mode { padding: 6px 12px; font-weight: bold; border-radius: 4px; font-size: 0.75rem; border: 1px solid #334155; color: #64748b; transition: 0.2s; }
-        .btn-mode.active { background-color: rgba(102, 252, 241, 0.1); border-color: var(--accent); color: var(--accent); }
-
-        /* Hamburger Menu */
-        #mobile-menu {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 8, 0.98); z-index: 100;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: 0.3s ease-in-out;
-        }
-        #mobile-menu.open { opacity: 1; pointer-events: auto; }
-        .mobile-link { font-size: 1.5rem; color: #64748b; margin: 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
-        .mobile-link:hover { color: var(--accent); }
-
-        /* Responsive Utilities */
-        @media (max-width: 768px) {
-            .desktop-only { display: none !important; }
-            .mobile-stack { flex-direction: column; }
-            .mobile-hidden { display: none; }
-            .mobile-w-full { width: 100%; }
-            .mobile-h-auto { height: auto; }
-        }
-        @media (min-width: 769px) {
-            .mobile-only { display: none !important; }
-        }
-    </style>
+   <link rel="stylesheet" href="style.css">
 </head>
 <body class="h-screen flex flex-col overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
 

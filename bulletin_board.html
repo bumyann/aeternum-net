@@ -6,39 +6,7 @@
     <title>AETERNUM // SOCIAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lucida+Grande&display=swap" rel="stylesheet">
-    <style>
-        :root { --glass: rgba(20, 20, 25, 0.95); --accent: #66fcf1; --void: #050505; --ao3-red: #900; }
-        body { background-color: var(--void); color: #e0e7ff; font-family: 'Space Mono', monospace; }
-        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
-        
-        /* AO3 CARD STYLES */
-        .ao3-work { font-family: 'Lucida Grande', sans-serif; border: 1px solid #333; margin-bottom: 20px; background: #111; box-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
-        .ao3-header { background: #222; border-bottom: 3px solid var(--ao3-red); padding: 10px; display: flex; gap: 10px; align-items: flex-start; }
-        .ao3-title { font-size: 1.1rem; color: #e0e7ff; font-weight: bold; }
-        .ao3-tags { font-size: 0.7rem; color: #fff; padding: 5px 10px; }
-        .ao3-summary { padding: 10px; font-size: 0.85rem; color: #ccc; border-top: 1px solid #333; background: #1a1a1a; }
-        
-        /* BOTTOM DOCK */
-        .bottom-dock {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: rgba(5, 5, 5, 0.98); border-top: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px); z-index: 50; display: flex;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .dock-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; transition: 0.3s; }
-        .dock-btn.active { color: var(--accent); background: linear-gradient(to top, rgba(102,252,241,0.05), transparent); border-top: 2px solid var(--accent); }
-        .dock-icon { font-size: 1.5rem; margin-bottom: 2px; }
-        .dock-label { font-size: 0.6rem; font-weight: bold; letter-spacing: 1px; }
-
-        /* INPUT STYLES */
-        .input-social { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .input-social:focus { outline: none; border-color: var(--accent); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="h-screen flex flex-col lg:bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] lg:bg-fixed">
 
