@@ -2,167 +2,322 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETERNUM // FEED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AETERNUM // HUB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-void: #050505; --glass: rgba(20, 20, 25, 0.75); --accent: #a5b4fc; --highlight: #66fcf1; }
+        :root { --bg-void: #050505; --glass: rgba(20, 20, 25, 0.9); --highlight: #66fcf1; }
         body { background-color: var(--bg-void); color: #e0e7ff; font-family: 'Space Mono', monospace; overflow: hidden; }
         
-        /* UI */
         .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
-        .nav-item { display: block; padding: 10px 15px; border-left: 2px solid transparent; color: #94a3b8; text-decoration: none; transition: 0.3s; font-size: 0.8rem; }
+        .nav-item { display: block; padding: 10px; border-left: 2px solid transparent; color: #94a3b8; text-decoration: none; transition: 0.3s; }
         .nav-item:hover, .nav-item.active { border-left-color: var(--highlight); color: #fff; background: rgba(102, 252, 241, 0.05); }
-        
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
 
-        /* ANIMATION */
-        .star-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-        .stars { background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.2; }
+        .feed-tab { cursor: pointer; padding-bottom: 5px; color: #64748b; border-bottom: 2px solid transparent; transition: 0.3s; }
+        .feed-tab.active { color: var(--highlight); border-color: var(--highlight); }
+
+        .scenario-list { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .scenario-list.open { max-height: 500px; transition: max-height 0.5s ease-in; }
+
+        .admin-btn { position: fixed; bottom: 90px; right: 20px; background: #900; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.4); z-index: 60; display: none; cursor: pointer; transition: 0.3s; }
+        .admin-btn:hover { transform: scale(1.05); background: #b00; }
+
+        @media (min-width: 1024px) { .mobile-only { display: none !important; } .desktop-only { display: flex !important; } }
+        @media (max-width: 1023px) { .desktop-only { display: none !important; } }
+
+        .star-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.3; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; }
+        
+        .bottom-dock { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(5, 5, 5, 0.95); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); z-index: 50; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); }
+        .dock-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; text-decoration: none; transition: 0.3s; width: 25%; height: 100%; }
+        .dock-btn.active { color: var(--highlight); background: linear-gradient(to top, rgba(102,252,241,0.05), transparent); border-top: 2px solid var(--highlight); }
     </style>
 </head>
-<body class="h-screen flex justify-center p-4">
+<body class="h-screen w-full flex flex-col lg:flex-row lg:p-6 lg:gap-6">
 
-    <div class="star-layer stars"></div>
+    <div class="star-layer"></div>
 
-    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+    <aside class="desktop-only glass-panel rounded-xl w-64 flex-col p-4">
+        <div class="mb-6 pb-4 border-b border-white/10">
+            <h1 class="text-xl font-bold text-white tracking-widest">AETERNUM</h1>
+            <p class="text-[10px] text-[#66fcf1]">OPERATOR_MODE</p>
+        </div>
+        <nav class="space-y-1">
+            <a href="#" class="nav-item active">/// FEED</a>
+            <a href="bulletin_board.html" class="nav-item">/// BULLETIN_BOARD</a>
+            <a href="app.html" class="nav-item">/// ARCHITECT_TOOL</a>
+            <a href="character_files.html" class="nav-item">/// FILES</a>
+        </nav>
+        <div class="mt-auto pt-4 border-t border-white/10">
+            <a href="index.html" class="text-xs text-red-400 hover:text-red-300">< LOG_OUT</a>
+        </div>
+    </aside>
+
+    <main class="flex-1 glass-panel lg:rounded-xl flex flex-col relative h-full overflow-hidden">
         
-        <aside class="glass-panel rounded-xl flex flex-col overflow-hidden">
-            <div class="p-6 border-b border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-indigo-900 border border-indigo-500 flex items-center justify-center">👤</div>
-                    <div>
-                        <h2 class="font-bold text-white text-sm">OUTSIDER</h2>
-                        <p class="text-[10px] text-[#66fcf1]">ONLINE</p>
-                    </div>
-                </div>
+        <header class="p-4 border-b border-white/10 bg-black/40 flex justify-between items-end sticky top-0 z-10 backdrop-blur-md">
+            <div class="flex gap-6 text-sm font-bold tracking-widest">
+                <button onclick="switchFeed('stream')" id="tab-stream" class="feed-tab active">NETWORK STREAM</button>
+                <button onclick="switchFeed('logs')" id="tab-logs" class="feed-tab">SYSTEM LOGS</button>
             </div>
-            <nav class="flex-1 py-4 overflow-y-auto">
-                <div class="px-4 mb-2 text-[10px] text-gray-500 font-bold uppercase">System</div>
-                <a href="#" class="nav-item active">/// FEED</a>
-                <a href="character_files.html" class="nav-item">/// CHARACTER FILES</a>
-                <a href="simulation_terminals.html" class="nav-item">/// SIMULATION TERMINALS</a>
-                <a href="bulletin_board.html" class="nav-item">/// BULLETIN BOARD</a>
-                <a href="network_guidelines.html" class="nav-item">/// GUIDELINES</a>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-[10px] text-gray-400">LIVE</span>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6 pb-24 lg:pb-6 relative">
+            
+            <div id="view-stream" class="space-y-6">
+                <div id="latest-notice-container"></div>
+                <div id="characters-container" class="space-y-4"></div>
+            </div>
+
+            <div id="view-logs" class="hidden space-y-4">
+                <div id="logs-container"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <aside class="desktop-only glass-panel rounded-xl w-64 flex-col gap-6 p-6">
+        <a href="faye.html" class="block glass-panel p-6 rounded-xl relative overflow-hidden group hover:border-[#66fcf1] transition">
+            <div class="absolute top-0 right-0 p-2 opacity-10 text-4xl group-hover:opacity-20 transition">👁️</div>
+            <h3 class="text-xs font-bold text-[#66fcf1] mb-2 border-b border-white/10 pb-2">F.A.Y.E. ASSISTANT</h3>
+            <div class="text-[10px] text-gray-400 font-mono">
+                > STATUS: <span class="text-green-400">ACTIVE</span><br>
+                > MOOD: HELPFUL
+            </div>
+        </a>
+    </aside>
+
+    <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">⚙️ OPERATOR</button>
+
+    <div id="admin-panel" class="fixed inset-0 bg-black/95 z-[70] hidden flex-col p-6 overflow-y-auto">
+        <div class="max-w-2xl mx-auto w-full space-y-8">
+            <div class="flex justify-between items-center border-b border-white/20 pb-4">
+                <h2 class="text-2xl font-bold text-[#66fcf1]">OPERATOR CONSOLE</h2>
+                <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-white">CLOSE [X]</button>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl">
+                <h3 class="text-sm font-bold text-white mb-4">📢 POST SYSTEM NOTICE</h3>
+                <input id="notice-title" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Notice Title (e.g., v.1.0.9 Update)">
+                <textarea id="notice-content" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-4 h-24" placeholder="Message content..."></textarea>
+                <button onclick="postNotice()" class="bg-indigo-600 text-white px-4 py-2 rounded text-xs font-bold">BROADCAST NOTICE</button>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl">
+                <h3 class="text-sm font-bold text-white mb-4">👤 ADD / EDIT CHARACTER</h3>
+                <div class="grid grid-cols-2 gap-4 mb-2">
+                    <input id="bot-name" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Character Name">
+                    <input id="bot-tag" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Short Tag (e.g., Rugby Captain)">
+                </div>
+                <textarea id="bot-desc" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Description / Quote"></textarea>
                 
-                <div class="px-4 mt-6 mb-2 text-[10px] text-[#66fcf1] font-bold uppercase">Tools</div>
-                <a href="app.html" class="nav-item group">>> ARCHITECT.EXE</a>
-                
-                <div class="px-4 mt-6 mb-2 text-[10px] text-red-400 font-bold uppercase">Session</div>
-                <a href="index.html" class="nav-item text-red-300 hover:text-red-100">< LOG_OUT</a>
-            </nav>
-        </aside>
-
-        <main class="lg:col-span-2 glass-panel rounded-xl flex flex-col overflow-hidden relative">
-            <div class="p-4 border-b border-white/5 bg-black/20 flex justify-between items-center sticky top-0 z-10">
-                <h1 class="font-bold text-[#66fcf1] tracking-widest">NETWORK STREAM</h1>
-                <div class="flex gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span class="text-[10px] text-gray-400">LIVE</span>
+                <h4 class="text-xs font-bold text-gray-500 mt-2 mb-1">SCENARIO LINKS (Label, URL)</h4>
+                <div id="link-inputs" class="space-y-2 mb-4">
+                    <div class="flex gap-2">
+                        <input class="link-label bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-1" placeholder="Label (e.g. JanitorAI)">
+                        <input class="link-url bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-[2]" placeholder="https://...">
+                    </div>
                 </div>
+                <button onclick="addLinkInput()" class="text-[10px] text-[#66fcf1] mb-4">+ Add Another Link</button>
+                <br>
+                <button onclick="saveCharacter()" class="bg-green-700 text-white px-4 py-2 rounded text-xs font-bold">SAVE CHARACTER</button>
             </div>
-
-            <div class="flex-1 overflow-y-auto p-6 space-y-6">
-                
-                <div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm">
-                    <div class="flex items-center gap-2 mb-2 text-indigo-300">
-                        <span>📢</span>
-                        <span class="font-bold">SYSTEM NOTICE [v.1.0.4]</span>
-                    </div>
-                    <p class="text-gray-400 mb-2">Interface Optimisation complete.</p>
-                    <ul class="list-disc list-inside text-xs text-gray-500 space-y-1">
-                        <li>Fixed bug where simulation signal looped back to sender.</li>
-                        <li>New 'Character' asset pack available in Cache.</li>
-                        <li class="text-red-400">ALERT: Fragmentation detected in Core Directory.</li>
-                    </ul>
-                </div>
-
-                <div class="glass-panel p-4 rounded border-l-2 border-l-[#66fcf1]">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex gap-2 items-center">
-                            <span class="text-[#66fcf1] font-bold text-sm">F.A.Y.E.</span>
-                            <span class="text-[10px] bg-white/10 px-1 rounded text-gray-400">ADMIN</span>
-                        </div>
-                        <span class="text-[10px] text-gray-600">NOW</span>
-                    </div>
-                    <p class="text-sm text-gray-300 italic">
-                        "Please wipe your feet before stepping into the simulation! We wouldn't want to track any 'Outside' logic into the dream, would we?"
-                    </p>
-                </div>
-
-                <div class="glass-panel p-4 rounded hover:bg-white/5 transition cursor-pointer group border border-transparent hover:border-gray-600">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden">
-                            <div class="w-full h-full bg-gradient-to-br from-gray-700 to-black"></div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <h3 class="font-bold text-white group-hover:text-[#66fcf1]">Izaiah Lambert</h3>
-                                <span class="text-[10px] border border-gray-700 px-1 rounded text-gray-500">Aurelon</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">Rugby Captain. "Whatever happens on the field stays on the field."</p>
-                            <div class="mt-3 flex gap-2">
-                                <a href="YOUR_JANITOR_LINK_HERE" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">CONNECT</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-4 rounded hover:bg-white/5 transition cursor-pointer group border border-transparent hover:border-gray-600">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden">
-                            <div class="w-full h-full bg-gradient-to-br from-indigo-900 to-black"></div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <h3 class="font-bold text-white group-hover:text-[#66fcf1]">The Overseer</h3>
-                                <span class="text-[10px] border border-purple-900 text-purple-400 px-1 rounded">Deity</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">"I have witnessed everything that happened, could happen, and will happen."</p>
-                            <div class="mt-3 flex gap-2">
-                                <a href="YOUR_CAI_LINK_HERE" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">CONNECT</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </main>
-
-        <aside class="flex flex-col gap-6">
-            <div class="glass-panel p-6 rounded-xl flex-1 flex flex-col">
-                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Active Vessels</h3>
-                <div class="space-y-4 overflow-y-auto pr-2">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span class="text-xs text-gray-300">Sora (Figüra)</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span class="text-xs text-gray-300">YJ</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                        <span class="text-xs text-gray-300">Mother Earth (Idle)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-2 opacity-10 text-4xl">👁️</div>
-                <h3 class="text-xs font-bold text-[#66fcf1] mb-2">F.A.Y.E.</h3>
-                <div class="text-[10px] text-gray-400 font-mono bg-black/40 p-2 rounded">
-                    > STATUS: MONITORING<br>
-                    > MOOD: CURIOUS<br>
-                    > <span class="text-indigo-300">"Leave a piece of yourself behind! It makes the world feel more real."</span>
-                </div>
-            </div>
-        </aside>
-
+            
+            <div class="text-center text-xs text-gray-500">Changes update in real-time.</div>
+        </div>
     </div>
+
+    <nav class="bottom-dock mobile-only">
+        <a href="#" class="dock-btn active"><span class="text-xl">⚡</span><span class="text-[10px] font-bold">FEED</span></a>
+        <a href="bulletin_board.html" class="dock-btn"><span class="text-xl">💬</span><span class="text-[10px] font-bold">COMM</span></a>
+        <a href="app.html" class="dock-btn"><span class="text-xl">🛠️</span><span class="text-[10px] font-bold">TOOL</span></a>
+        <a href="faye.html" class="dock-btn text-[#66fcf1]"><span class="text-xl">👁️</span><span class="text-[10px] font-bold">HELP</span></a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // *** CONFIG ***
+        const firebaseConfig = {
+            apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
+  authDomain: "aeternum-840dd.firebaseapp.com",
+  projectId: "aeternum-840dd",
+  storageBucket: "aeternum-840dd.firebasestorage.app",
+  messagingSenderId: "409417083922",
+  appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
+  measurementId: "G-TDJQLYF4S4"
+};
+        
+        // *** REPLACE THIS WITH YOUR GOOGLE EMAIL ***
+        const ADMIN_EMAIL = "yann359705@gmail.com"; 
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // 1. AUTH CHECK
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if(user.email === ADMIN_EMAIL) {
+                    document.getElementById('admin-toggle').style.display = 'block';
+                }
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        // 2. RENDER FEED (Notices)
+        const feedQ = query(collection(db, "system_feed"), orderBy("timestamp", "desc"));
+        onSnapshot(feedQ, (snap) => {
+            const latestContainer = document.getElementById('latest-notice-container');
+            const logsContainer = document.getElementById('logs-container');
+            
+            latestContainer.innerHTML = "";
+            logsContainer.innerHTML = "";
+
+            let docs = [];
+            snap.forEach(d => docs.push(d.data()));
+
+            if(docs.length > 0) {
+                // Latest Notice
+                const latest = docs[0];
+                latestContainer.innerHTML = `
+                    <div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4">
+                        <div class="flex items-center gap-2 mb-2 text-indigo-300">
+                            <span>📢</span> <span class="font-bold uppercase">${escape(latest.title)}</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed">${escape(latest.content)}</p>
+                    </div>`;
+                
+                // Logs (All)
+                docs.forEach(d => {
+                    const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Unknown";
+                    logsContainer.innerHTML += `
+                        <div class="p-3 border-l-2 border-gray-600 bg-white/5 relative group">
+                            <div class="text-[10px] text-gray-500 mb-1">${date}</div>
+                            <h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3>
+                            <p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p>
+                        </div>`;
+                });
+            } else {
+                latestContainer.innerHTML = `<div class="text-gray-500 text-xs italic">System Offline. No data.</div>`;
+            }
+        });
+
+        // 3. RENDER CHARACTERS
+        const charQ = query(collection(db, "characters"), orderBy("timestamp", "desc"));
+        onSnapshot(charQ, (snap) => {
+            const container = document.getElementById('characters-container');
+            container.innerHTML = "";
+            
+            snap.forEach(doc => {
+                const c = doc.data();
+                const cid = doc.id;
+                
+                let linksHtml = "";
+                if(c.links) {
+                    c.links.forEach(l => {
+                        linksHtml += `
+                            <a href="${l.url}" target="_blank" class="block p-3 bg-white/5 rounded hover:bg-[#66fcf1]/10 border border-transparent hover:border-[#66fcf1] transition flex justify-between items-center group/link">
+                                <span class="text-xs text-gray-300 group-hover/link:text-white">${escape(l.label)}</span>
+                                <span class="text-[10px] text-gray-500">OPEN ></span>
+                            </a>`;
+                    });
+                }
+
+                container.innerHTML += `
+                    <div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group relative">
+                        <div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${cid}')">
+                            <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative">
+                                <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-black flex items-center justify-center text-xs font-bold text-gray-500">${c.name[0]}</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(c.name)}</h3>
+                                    <span class="text-[10px] text-gray-500">▼ EXPAND</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">${escape(c.desc)}</p>
+                            </div>
+                        </div>
+                        <div id="scen-${cid}" class="scenario-list border-t border-white/5 mt-2">
+                            <div class="pt-3 space-y-2">${linksHtml}</div>
+                        </div>
+                    </div>`;
+            });
+        });
+
+        // 4. ADMIN FUNCTIONS
+        window.postNotice = async function() {
+            const title = document.getElementById('notice-title').value;
+            const content = document.getElementById('notice-content').value;
+            if(!title) return;
+            await addDoc(collection(db, "system_feed"), {
+                title, content, timestamp: serverTimestamp()
+            });
+            alert("Notice Posted");
+            document.getElementById('notice-title').value = "";
+            document.getElementById('notice-content').value = "";
+        }
+
+        window.saveCharacter = async function() {
+            const name = document.getElementById('bot-name').value;
+            const tag = document.getElementById('bot-tag').value;
+            const desc = document.getElementById('bot-desc').value;
+            
+            const linkLabels = document.querySelectorAll('.link-label');
+            const linkUrls = document.querySelectorAll('.link-url');
+            let links = [];
+            
+            linkLabels.forEach((el, i) => {
+                if(el.value && linkUrls[i].value) {
+                    links.push({ label: el.value, url: linkUrls[i].value });
+                }
+            });
+
+            if(!name) return;
+
+            await addDoc(collection(db, "characters"), {
+                name, tag, desc, links, timestamp: serverTimestamp()
+            });
+            
+            alert("Character Saved");
+            document.getElementById('bot-name').value = "";
+            document.getElementById('bot-desc').value = "";
+        }
+
+        window.addLinkInput = function() {
+            const div = document.createElement('div');
+            div.className = "flex gap-2";
+            div.innerHTML = `<input class="link-label bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-1" placeholder="Label"><input class="link-url bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-[2]" placeholder="URL">`;
+            document.getElementById('link-inputs').appendChild(div);
+        }
+
+        // Global Utils
+        window.toggleAdminPanel = function() {
+            const p = document.getElementById('admin-panel');
+            p.style.display = p.style.display === 'flex' ? 'none' : 'flex';
+        }
+        window.switchFeed = function(tab) {
+            document.getElementById('view-stream').classList.toggle('hidden', tab !== 'stream');
+            document.getElementById('view-logs').classList.toggle('hidden', tab !== 'logs');
+            document.getElementById('tab-stream').classList.toggle('active', tab === 'stream');
+            document.getElementById('tab-logs').classList.toggle('active', tab !== 'stream');
+        }
+        window.toggleScenario = function(id) {
+            const el = document.getElementById(id);
+            if(el.classList.contains('open')) el.classList.remove('open');
+            else {
+                document.querySelectorAll('.scenario-list').forEach(x => x.classList.remove('open'));
+                el.classList.add('open');
+            }
+        }
+        function escape(s){ return s ? s.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
+    </script>
 </body>
 </html>

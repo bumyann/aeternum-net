@@ -2,155 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AETERNUM // ARCHIVE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AETERNUM // SOCIAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lucida+Grande&display=swap" rel="stylesheet">
     <style>
         :root { --glass: rgba(20, 20, 25, 0.95); --accent: #66fcf1; --void: #050505; --ao3-red: #900; }
         body { background-color: var(--void); color: #e0e7ff; font-family: 'Space Mono', monospace; }
-        
         .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
         
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border: 1px solid #000; }
+        /* AO3 CARD STYLES */
+        .ao3-work { font-family: 'Lucida Grande', sans-serif; border: 1px solid #333; margin-bottom: 20px; background: #111; box-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .ao3-header { background: #222; border-bottom: 3px solid var(--ao3-red); padding: 10px; display: flex; gap: 10px; align-items: flex-start; }
+        .ao3-title { font-size: 1.1rem; color: #e0e7ff; font-weight: bold; }
+        .ao3-tags { font-size: 0.7rem; color: #fff; padding: 5px 10px; }
+        .ao3-summary { padding: 10px; font-size: 0.85rem; color: #ccc; border-top: 1px solid #333; background: #1a1a1a; }
+        
+        /* BOTTOM DOCK */
+        .bottom-dock {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: rgba(5, 5, 5, 0.98); border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px); z-index: 50; display: flex;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .dock-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; transition: 0.3s; }
+        .dock-btn.active { color: var(--accent); background: linear-gradient(to top, rgba(102,252,241,0.05), transparent); border-top: 2px solid var(--accent); }
+        .dock-icon { font-size: 1.5rem; margin-bottom: 2px; }
+        .dock-label { font-size: 0.6rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* --- AO3 STYLE (Dark Mode Adaptation) --- */
-        .ao3-work { 
-            font-family: 'Lucida Grande', 'Lucida Sans Unicode', sans-serif; 
-            border: 1px solid #333; 
-            margin-bottom: 20px; 
-            background: #111;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-        
-        .ao3-header { 
-            background: #222; 
-            border-bottom: 3px solid var(--ao3-red); 
-            padding: 10px; 
-            display: flex; 
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .ao3-rating-box {
-            width: 25px; height: 25px; 
-            background: #4a4a4a; 
-            border: 1px solid #fff; 
-            text-align: center; line-height: 25px; font-size: 10px; font-weight: bold; color: white;
-        }
-        
-        .ao3-title { font-size: 1.2rem; color: #e0e7ff; font-weight: bold; text-decoration: none; }
-        .ao3-author { font-size: 0.9rem; color: #e0e7ff; font-weight: normal; }
-        .ao3-fandoms { font-size: 0.8rem; color: #aaa; margin-bottom: 8px; }
-        
-        .ao3-tags { font-size: 0.75rem; color: #fff; line-height: 1.4; padding: 0 10px; }
-        .ao3-tag { color: #fff; text-decoration: none; font-weight: bold; }
-        .ao3-tag:hover { text-decoration: underline; color: var(--ao3-red); }
-        
-        .ao3-summary { 
-            padding: 15px; 
-            font-size: 0.9rem; 
-            color: #ccc; 
-            border-top: 1px solid #333; 
-            margin-top: 10px;
-            background: #1a1a1a;
-        }
-        
-        .ao3-stats { 
-            background: #222; 
-            padding: 8px 10px; 
-            font-size: 0.8rem; 
-            color: #999; 
-            text-align: right; 
-            border-top: 1px solid #333;
-        }
-        .ao3-stats dt { display: inline; font-weight: bold; color: #fff; margin-left: 10px; }
-        .ao3-stats dd { display: inline; margin-right: 5px; }
+        /* FAB (Floating Action Button) for Desktop */
+        .fab { position: fixed; bottom: 90px; right: 20px; background: var(--ao3-red); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 40; transition: 0.3s; }
+        .fab:hover { transform: scale(1.1); }
 
-        /* Chat Style */
-        .msg-card { border-left: 2px solid #334155; padding: 1rem; margin-bottom: 1rem; background: rgba(255,255,255,0.02); }
-        
-        /* TABS */
-        .tab-btn { padding: 12px 20px; color: #666; cursor: pointer; transition: 0.3s; font-weight: bold; border-bottom: 2px solid transparent; }
-        .tab-btn.active { color: #fff; border-bottom-color: var(--ao3-red); background: rgba(153, 0, 0, 0.1); }
+        /* INPUT STYLES */
+        .input-social { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .input-social:focus { outline: none; border-color: var(--accent); }
     </style>
 </head>
-<body class="min-h-screen p-4 lg:p-8 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
+<body class="h-screen flex flex-col lg:bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] lg:bg-fixed">
 
-    <div class="max-w-6xl mx-auto glass-panel rounded-xl min-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl">
+    <div class="w-full max-w-2xl mx-auto h-full flex flex-col relative bg-black/80 border-x border-white/5 shadow-2xl">
         
-        <header class="bg-black/50 border-b border-white/10">
-            <div class="p-6 flex justify-between items-center">
-                <div>
-                    <h1 class="text-xl font-bold tracking-widest text-white">AETERNUM <span class="text-[#900]">ARCHIVE</span></h1>
-                    <p class="text-[10px] text-gray-500 font-mono">CONNECTION: <span id="user-status" class="text-[#66fcf1]">VERIFYING...</span></p>
-                </div>
-                <a href="dashboard.html" class="text-xs text-gray-500 hover:text-white transition">< DASHBOARD</a>
-            </div>
-            
-            <div class="flex border-t border-white/10">
-                <button onclick="switchTab('lit')" id="tab-lit" class="tab-btn active flex-1 font-sans">Works</button>
-                <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn flex-1 font-mono">Comments // Chat</button>
+        <header class="p-4 border-b border-white/10 bg-black/90 backdrop-blur sticky top-0 z-30 flex justify-between items-center">
+            <h1 class="text-lg font-bold text-white tracking-widest">AETERNUM <span class="text-[#66fcf1]">SOCIAL</span></h1>
+            <div class="flex items-center gap-3">
+                <span id="user-name" class="text-xs text-gray-400">Guest</span>
+                <img id="user-pfp" src="https://api.dicebear.com/7.x/bottts/svg?seed=Guest" class="w-8 h-8 rounded-full border border-gray-600">
+                <a href="dashboard.html" class="text-xs border border-gray-600 px-2 py-1 rounded text-gray-400 hover:text-white">EXIT</a>
             </div>
         </header>
 
-        <div id="content-area" class="flex-1 overflow-y-auto p-4 lg:p-8 bg-black/20">
-            
-            <div id="view-lit" class="space-y-6 max-w-4xl mx-auto">
-                <div class="text-center text-xs text-gray-600 italic py-10">Accessing The Archive...</div>
+        <div id="view-feed" class="flex-1 overflow-y-auto p-4 pb-24 scroll-smooth">
+            <div id="feed-container" class="space-y-6">
+                <div class="text-center text-gray-600 text-xs py-10 animate-pulse">Loading Archives...</div>
             </div>
-
-            <div id="view-chat" class="hidden space-y-2 max-w-4xl mx-auto font-mono">
-                <div class="text-center text-xs text-gray-600 italic py-10">Connecting to Comm Stream...</div>
-            </div>
-
         </div>
 
-        <div class="p-4 border-t border-white/10 bg-black/80 backdrop-blur-md z-20">
+        <div id="view-create" class="hidden flex-1 overflow-y-auto p-6 pb-24 bg-[#0a0a0a]">
+            <h2 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">CREATE NEW WORK</h2>
             
-            <div id="error-log" class="text-[10px] text-red-500 mb-2 hidden font-mono"></div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Title</label>
+                    <input id="post-title" type="text" class="input-social font-bold text-lg" placeholder="Enter Title...">
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Tags</label>
+                    <input id="post-tags" type="text" class="input-social text-sm text-[#66fcf1]" placeholder="#romance, #scifi, #angst">
+                </div>
 
-            <div id="input-chat" class="hidden gap-4 font-mono">
-                <div class="text-xs text-[#66fcf1] pt-3 font-bold display-user">USER:</div>
-                <textarea id="chat-msg" rows="1" class="flex-1 bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#66fcf1] focus:outline-none resize-none" placeholder="Type message..."></textarea>
-                <button onclick="sendPost('chat')" class="bg-[#66fcf1]/10 text-[#66fcf1] border border-[#66fcf1] px-6 rounded hover:bg-[#66fcf1] hover:text-black font-bold text-xs transition">SEND</button>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Summary</label>
+                    <textarea id="post-summary" rows="3" class="input-social text-sm" placeholder="Brief description..."></textarea>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Work Content</label>
+                    <textarea id="post-body" rows="12" class="input-social font-serif text-sm leading-relaxed" placeholder="Once upon a time in the Aeternum..."></textarea>
+                </div>
+
+                <button onclick="publishWork()" class="w-full bg-[#900] hover:bg-red-700 text-white font-bold py-4 rounded text-sm tracking-widest transition shadow-lg mt-4">
+                    PUBLISH TO ARCHIVE
+                </button>
             </div>
-
-            <div id="input-lit" class="flex flex-col gap-3 font-sans">
-                <div class="flex justify-between items-center text-xs text-gray-500">
-                    <span class="font-bold text-[#900]">POST NEW WORK</span>
-                    <span>Posting as: <span class="display-user text-white">Guest</span></span>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input id="lit-title" type="text" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none" placeholder="Title">
-                    <input id="lit-tags" type="text" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none" placeholder="Tags (comma separated)">
-                </div>
-                
-                <textarea id="lit-summary" rows="2" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none resize-none" placeholder="Summary"></textarea>
-                
-                <textarea id="lit-body" rows="6" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none font-serif leading-relaxed" placeholder="Work Text..."></textarea>
-                
-                <div class="flex justify-end">
-                    <button onclick="sendPost('lit')" class="bg-[#900] text-white px-6 py-2 rounded text-xs font-bold hover:bg-red-700 transition shadow-lg">POST</button>
-                </div>
-            </div>
-
         </div>
+
+        <div id="view-chat" class="hidden flex-1 flex flex-col h-full overflow-hidden bg-black">
+            <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-3 pb-4">
+                </div>
+            <div class="p-3 bg-[#111] border-t border-white/10 flex gap-2 mb-[70px]">
+                <input id="chat-input" type="text" class="flex-1 bg-black border border-gray-700 rounded px-3 text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Broadcast message...">
+                <button onclick="sendChat()" class="bg-[#66fcf1] text-black px-4 rounded font-bold text-xs">SEND</button>
+            </div>
+        </div>
+
     </div>
+
+    <nav class="bottom-dock">
+        <button onclick="switchTab('feed')" id="btn-feed" class="dock-btn active">
+            <span class="dock-icon">📰</span>
+            <span class="dock-label">FEED</span>
+        </button>
+        <button onclick="switchTab('create')" id="btn-create" class="dock-btn">
+            <span class="dock-icon">✍️</span>
+            <span class="dock-label">CREATE</span>
+        </button>
+        <button onclick="switchTab('chat')" id="btn-chat" class="dock-btn">
+            <span class="dock-icon">💬</span>
+            <span class="dock-label">CHAT</span>
+        </button>
+    </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, where, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // ==========================================
-        //  PASTE YOUR KEYS HERE (AGAIN)
-        // ==========================================
+        // *** PASTE YOUR CONFIG HERE ***
         const firebaseConfig = {
-  apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
+            apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
   authDomain: "aeternum-840dd.firebaseapp.com",
   projectId: "aeternum-840dd",
   storageBucket: "aeternum-840dd.firebasestorage.app",
@@ -158,159 +129,164 @@
   appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
   measurementId: "G-TDJQLYF4S4"
 };
-        // ==========================================
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // State
         let currentUser = null;
-        let currentHandle = "GUEST";
-        let currentTab = 'lit';
 
-        // Auth Check
+        // 1. AUTH STATE
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                const userSnap = await getDoc(doc(db, "users", user.uid));
-                if (userSnap.exists()) {
-                    currentHandle = userSnap.data().handle;
-                    document.querySelectorAll('.display-user').forEach(el => el.innerText = currentHandle);
-                    document.getElementById('user-status').innerText = currentHandle;
-                }
+                // If Google/Github user, use their real data. If Anon, use 'Guest'
+                const displayName = user.displayName || "Anonymous Agent";
+                const photoURL = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                
+                document.getElementById('user-name').innerText = displayName.split(' ')[0]; // First name only
+                document.getElementById('user-pfp').src = photoURL;
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        // UI Logic
+        // 2. TAB SWITCHING
         window.switchTab = function(tab) {
-            currentTab = tab;
-            document.getElementById('tab-lit').classList.toggle('active', tab === 'lit');
-            document.getElementById('tab-chat').classList.toggle('active', tab === 'chat');
+            // Hide all
+            document.getElementById('view-feed').classList.add('hidden');
+            document.getElementById('view-create').classList.add('hidden');
+            document.getElementById('view-chat').classList.add('hidden');
             
-            document.getElementById('view-lit').classList.toggle('hidden', tab !== 'lit');
-            document.getElementById('view-chat').classList.toggle('hidden', tab !== 'chat');
-            
-            document.getElementById('input-lit').classList.toggle('hidden', tab !== 'lit');
-            document.getElementById('input-lit').style.display = tab === 'lit' ? 'flex' : 'none';
-            document.getElementById('input-chat').classList.toggle('hidden', tab !== 'chat');
-            document.getElementById('input-chat').style.display = tab === 'chat' ? 'flex' : 'none';
-        }
+            document.getElementById('btn-feed').classList.remove('active');
+            document.getElementById('btn-create').classList.remove('active');
+            document.getElementById('btn-chat').classList.remove('active');
 
-        // Send Post
-        window.sendPost = async function(type) {
-            const errorLog = document.getElementById('error-log');
-            errorLog.classList.add('hidden');
-            if (!currentUser) return alert("Disconnected. Please Login.");
+            // Show target
+            document.getElementById('view-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active');
 
-            try {
-                if (type === 'chat') {
-                    const field = document.getElementById('chat-msg');
-                    const text = field.value.trim();
-                    if (!text) return;
-                    await addDoc(collection(db, "posts"), {
-                        type: "chat", uid: currentUser.uid, user: currentHandle, text: text, timestamp: serverTimestamp()
-                    });
-                    field.value = ""; 
-                } 
-                else if (type === 'lit') {
-                    const title = document.getElementById('lit-title').value.trim();
-                    const tags = document.getElementById('lit-tags').value.trim();
-                    const summary = document.getElementById('lit-summary').value.trim();
-                    const body = document.getElementById('lit-body').value.trim();
-                    
-                    if (!title || !body) return alert("Title and Body required.");
-
-                    await addDoc(collection(db, "posts"), {
-                        type: "lit",
-                        uid: currentUser.uid,
-                        user: currentHandle,
-                        title: title,
-                        tags: tags,
-                        summary: summary,
-                        text: body,
-                        hits: Math.floor(Math.random() * 100), // Fake hits for realism
-                        words: body.split(' ').length,
-                        timestamp: serverTimestamp()
-                    });
-                    
-                    document.getElementById('lit-title').value = "";
-                    document.getElementById('lit-tags').value = "";
-                    document.getElementById('lit-summary').value = "";
-                    document.getElementById('lit-body').value = "";
-                    alert("Work Posted to Archive.");
-                }
-            } catch (e) {
-                console.error(e);
-                errorLog.innerText = "ERR: " + e.message;
-                errorLog.classList.remove('hidden');
-            }
-        }
-
-        // Listeners
-        const litQ = query(collection(db, "posts"), where("type", "==", "lit"), orderBy("timestamp", "desc"));
-        onSnapshot(litQ, (snap) => {
-            const view = document.getElementById('view-lit');
-            view.innerHTML = "";
-            if (snap.empty) view.innerHTML = `<div class="text-center text-gray-500 italic mt-10">Archive Empty.</div>`;
-            
-            snap.forEach(doc => {
-                const d = doc.data();
-                const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Draft";
-                const tagList = d.tags ? d.tags.split(',').map(t => `<span class="ao3-tag">#${t.trim()}</span>`).join(', ') : "";
-
-                view.innerHTML += `
-                    <div class="ao3-work">
-                        <div class="ao3-header">
-                            <div class="ao3-rating-box" style="background:#5da328;">M</div>
-                            <div>
-                                <div class="ao3-title">${escape(d.title)}</div>
-                                <div class="ao3-author">by <strong>${escape(d.user)}</strong></div>
-                                <div class="ao3-fandoms">Fandom: <span class="text-white">Aeternum Network</span></div>
-                            </div>
-                        </div>
-                        <div class="ao3-tags">${tagList}</div>
-                        <div class="ao3-summary">
-                            <strong class="text-white">Summary:</strong><br>
-                            ${escape(d.summary || "No summary provided.")}
-                        </div>
-                        <div class="p-4 text-sm font-serif text-gray-300 border-t border-gray-800 leading-7">
-                            ${escape(d.text).substring(0, 300)}... <span class="text-[#900] font-bold cursor-pointer">[Read More]</span>
-                        </div>
-                        <dl class="ao3-stats">
-                            <dt>Published:</dt> <dd>${date}</dd>
-                            <dt>Words:</dt> <dd>${d.words || 0}</dd>
-                            <dt>Hits:</dt> <dd>${d.hits || 0}</dd>
-                            <dt>Kudos:</dt> <dd>♥</dd>
-                        </dl>
-                    </div>`;
-            });
-        });
-
-        const chatQ = query(collection(db, "posts"), where("type", "==", "chat"), orderBy("timestamp", "asc"));
-        onSnapshot(chatQ, (snap) => {
-            const view = document.getElementById('view-chat');
-            view.innerHTML = `<div class="text-center text-[10px] text-gray-700 mb-4">--- STREAM ACTIVE ---</div>`;
-            snap.forEach(doc => {
-                const d = doc.data();
-                view.innerHTML += `
-                    <div class="msg-card">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <span class="text-xs font-bold text-[#66fcf1]">${escape(d.user)}</span>
-                            <span class="text-[10px] text-gray-600">ID: ${d.uid.slice(0,4)}</span>
-                        </div>
-                        <p class="text-sm text-gray-300 whitespace-pre-wrap">${escape(d.text)}</p>
-                    </div>`;
-            });
-            if(currentTab === 'chat') {
-                const el = document.getElementById('content-area');
+            // Auto-scroll chat
+            if(tab === 'chat') {
+                const el = document.getElementById('chat-container');
                 el.scrollTop = el.scrollHeight;
             }
+        }
+
+        // 3. PUBLISH WORK (FEED)
+        window.publishWork = async function() {
+            if(!currentUser) return alert("Please Login");
+            
+            const title = document.getElementById('post-title').value;
+            const body = document.getElementById('post-body').value;
+            const summary = document.getElementById('post-summary').value;
+            const tags = document.getElementById('post-tags').value;
+
+            if(!title || !body) return alert("Title and Content are required.");
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    type: "lit",
+                    uid: currentUser.uid,
+                    author: currentUser.displayName || "Anonymous",
+                    authorPic: currentUser.photoURL || null,
+                    title: title,
+                    text: body,
+                    summary: summary,
+                    tags: tags,
+                    timestamp: serverTimestamp(),
+                    hits: 0
+                });
+                
+                // Reset and go to feed
+                document.getElementById('post-title').value = "";
+                document.getElementById('post-body').value = "";
+                document.getElementById('post-summary').value = "";
+                document.getElementById('post-tags').value = "";
+                switchTab('feed');
+                
+            } catch(e) { alert("Error: " + e.message); }
+        }
+
+        // 4. SEND CHAT
+        window.sendChat = async function() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            await addDoc(collection(db, "posts"), {
+                type: "chat",
+                uid: currentUser.uid,
+                author: currentUser.displayName || "Anonymous",
+                authorPic: currentUser.photoURL || null,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+            input.value = "";
+        }
+
+        // 5. LISTENERS
+        // Feed Listener (Client-side sort to avoid index errors)
+        onSnapshot(query(collection(db, "posts"), where("type", "==", "lit")), (snap) => {
+            const container = document.getElementById('feed-container');
+            container.innerHTML = "";
+            
+            let posts = [];
+            snap.forEach(doc => posts.push(doc.data()));
+            posts.sort((a,b) => (b.timestamp?.seconds||0) - (a.timestamp?.seconds||0));
+
+            if(posts.length === 0) container.innerHTML = `<div class="text-center text-gray-500 mt-10">No works found. Be the first to post!</div>`;
+
+            posts.forEach(p => {
+                const tagHtml = p.tags ? p.tags.split(',').map(t=>`<span class="mr-2 text-gray-400 text-[10px] uppercase tracking-wide">#${t.trim()}</span>`).join('') : "";
+                const pfp = p.authorPic || `https://api.dicebear.com/7.x/bottts/svg?seed=${p.uid}`;
+                
+                container.innerHTML += `
+                    <div class="ao3-work">
+                        <div class="ao3-header">
+                            <img src="${pfp}" class="w-8 h-8 rounded border border-gray-600">
+                            <div class="flex-1 min-w-0">
+                                <div class="ao3-title truncate">${escape(p.title)}</div>
+                                <div class="text-[10px] text-gray-400">by <span class="text-white font-bold">${escape(p.author)}</span></div>
+                            </div>
+                        </div>
+                        <div class="ao3-tags">${tagHtml}</div>
+                        <div class="ao3-summary">${escape(p.summary)}</div>
+                        <div class="p-4 text-xs font-serif text-gray-300 border-t border-gray-800 leading-6 whitespace-pre-wrap max-h-60 overflow-y-auto scrollbar-thin">
+                            ${escape(p.text)}
+                        </div>
+                        <div class="bg-[#222] p-2 text-[10px] text-gray-500 text-right flex justify-between">
+                            <span>Status: Completed</span>
+                            <span>Hits: ${p.hits || 0}</span>
+                        </div>
+                    </div>`;
+            });
         });
 
-        function escape(s) { if(!s) return ""; return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+        // Chat Listener
+        onSnapshot(query(collection(db, "posts"), where("type", "==", "chat")), (snap) => {
+            const container = document.getElementById('chat-container');
+            container.innerHTML = "";
+            
+            let chats = [];
+            snap.forEach(doc => chats.push(doc.data()));
+            chats.sort((a,b) => (a.timestamp?.seconds||0) - (b.timestamp?.seconds||0));
+
+            chats.forEach(c => {
+                const pfp = c.authorPic || `https://api.dicebear.com/7.x/bottts/svg?seed=${c.uid}`;
+                container.innerHTML += `
+                    <div class="flex gap-2 items-start mb-3 animate-fade-in">
+                        <img src="${pfp}" class="w-6 h-6 rounded-full mt-1">
+                        <div class="bg-[#111] border border-gray-800 rounded-lg rounded-tl-none p-2 max-w-[85%]">
+                            <div class="text-[10px] text-[#66fcf1] font-bold mb-0.5">${escape(c.author)}</div>
+                            <div class="text-xs text-gray-300 leading-relaxed">${escape(c.text)}</div>
+                        </div>
+                    </div>`;
+            });
+            container.scrollTop = container.scrollHeight;
+        });
+
+        function escape(s){ return s ? s.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
     </script>
 </body>
 </html>
