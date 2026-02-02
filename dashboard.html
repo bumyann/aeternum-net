@@ -74,7 +74,6 @@
             
             <div class="flex items-center gap-3">
                 <button onclick="openProfileSettings()" class="mobile-only text-white text-xl">⚙️</button>
-                
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                     <span class="text-[10px] text-gray-400">LIVE</span>
@@ -83,28 +82,42 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6 pb-24 lg:pb-6 relative">
-            
             <div id="view-stream" class="space-y-6">
                 <div id="latest-notice-container"></div>
                 <div id="characters-container" class="space-y-4"></div>
             </div>
-
             <div id="view-logs" class="hidden space-y-4">
                 <div id="logs-container"></div>
             </div>
-
         </div>
     </main>
 
     <aside class="desktop-only glass-panel rounded-xl w-64 flex-col gap-6 p-6">
+        
         <a href="faye.html" class="block glass-panel p-6 rounded-xl relative overflow-hidden group hover:border-[#66fcf1] transition">
-            <div class="absolute top-0 right-0 p-2 opacity-10 text-4xl group-hover:opacity-20 transition">👁️</div>
-            <h3 class="text-xs font-bold text-[#66fcf1] mb-2 border-b border-white/10 pb-2">F.A.Y.E. ASSISTANT</h3>
-            <div class="text-[10px] text-gray-400 font-mono">
-                > STATUS: <span class="text-green-400">ACTIVE</span><br>
-                > MOOD: HELPFUL
+            <img src="faye.jpg" class="absolute -right-2 -bottom-2 w-24 h-24 opacity-30 group-hover:opacity-60 transition rotate-12" style="image-rendering: pixelated;">
+            
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+            
+            <div class="relative z-10">
+                <h3 class="text-xs font-bold text-[#66fcf1] mb-2 border-b border-white/10 pb-2">F.A.Y.E. ASSISTANT</h3>
+                <div class="text-[10px] text-gray-400 font-mono">
+                    > STATUS: <span class="text-green-400">ACTIVE</span><br>
+                    > MOOD: HELPFUL
+                </div>
             </div>
         </a>
+
+        <div class="bg-white/5 p-4 rounded border border-white/10">
+            <h3 class="text-xs font-bold text-gray-500 mb-2 uppercase">Network Stats</h3>
+            <div class="flex justify-between text-[10px] text-gray-400">
+                <span>UPTIME:</span> <span>99.9%</span>
+            </div>
+            <div class="flex justify-between text-[10px] text-gray-400">
+                <span>VESSELS:</span> <span>14</span>
+            </div>
+        </div>
+
     </aside>
 
     <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">⚙️ OPERATOR</button>
@@ -112,32 +125,23 @@
     <div id="profile-modal" class="modal-overlay">
         <div class="glass-panel p-6 rounded-xl w-full max-w-md mx-4 relative bg-[#050505] border border-white/20">
             <button onclick="closeProfileSettings()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
-            
             <h2 class="text-xl font-bold text-white mb-1">IDENTITY SETTINGS</h2>
-            <p class="text-[10px] text-gray-500 mb-6 uppercase tracking-wider">Update how you appear on the network</p>
-
-            <div class="space-y-4">
+            <div class="space-y-4 mt-4">
                 <div class="flex justify-center mb-4">
                     <img id="edit-pfp-preview" src="" class="w-20 h-20 rounded-full border-2 border-[#66fcf1] object-cover bg-black">
                 </div>
-
                 <div>
                     <label class="text-[10px] font-bold text-[#66fcf1] block mb-1">DISPLAY NAME</label>
-                    <input id="edit-name" class="w-full bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Enter Alias...">
+                    <input id="edit-name" class="w-full bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none">
                 </div>
-
                 <div>
                     <label class="text-[10px] font-bold text-[#66fcf1] block mb-1">AVATAR URL</label>
                     <div class="flex gap-2">
-                        <input id="edit-pfp" class="flex-1 bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="https://..." oninput="document.getElementById('edit-pfp-preview').src = this.value">
-                        <button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white hover:bg-gray-700">🎲</button>
+                        <input id="edit-pfp" class="flex-1 bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none" oninput="document.getElementById('edit-pfp-preview').src = this.value">
+                        <button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white">🎲</button>
                     </div>
-                    <p class="text-[9px] text-gray-500 mt-1">Paste a link to an image, or click 🎲 to generate a random bot face.</p>
                 </div>
-
-                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] hover:bg-white text-black font-bold py-3 rounded text-sm tracking-widest mt-4 transition shadow-[0_0_15px_rgba(102,252,241,0.3)]">
-                    SAVE IDENTITY
-                </button>
+                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] hover:bg-white text-black font-bold py-3 rounded text-sm tracking-widest mt-4">SAVE IDENTITY</button>
             </div>
         </div>
     </div>
@@ -148,14 +152,12 @@
                 <h2 class="text-2xl font-bold text-[#66fcf1]">OPERATOR CONSOLE</h2>
                 <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-white">CLOSE [X]</button>
             </div>
-
             <div class="glass-panel p-6 rounded-xl">
                 <h3 class="text-sm font-bold text-white mb-4">📢 POST SYSTEM NOTICE</h3>
                 <input id="notice-title" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Notice Title">
                 <textarea id="notice-content" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-4 h-24" placeholder="Message content..."></textarea>
                 <button onclick="postNotice()" class="bg-indigo-600 text-white px-4 py-2 rounded text-xs font-bold">BROADCAST NOTICE</button>
             </div>
-
             <div class="glass-panel p-6 rounded-xl">
                 <h3 class="text-sm font-bold text-white mb-4">👤 ADD CHARACTER</h3>
                 <div class="grid grid-cols-2 gap-4 mb-2">
@@ -163,8 +165,6 @@
                     <input id="bot-tag" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Tag">
                 </div>
                 <textarea id="bot-desc" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Description"></textarea>
-                
-                <h4 class="text-xs font-bold text-gray-500 mt-2 mb-1">SCENARIO LINKS</h4>
                 <div id="link-inputs" class="space-y-2 mb-4">
                     <div class="flex gap-2">
                         <input class="link-label bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-1" placeholder="Label">
@@ -182,7 +182,7 @@
         <a href="#" class="dock-btn active"><span class="text-xl">⚡</span><span class="text-[10px] font-bold">FEED</span></a>
         <a href="bulletin_board.html" class="dock-btn"><span class="text-xl">💬</span><span class="text-[10px] font-bold">COMM</span></a>
         <a href="app.html" class="dock-btn"><span class="text-xl">🛠️</span><span class="text-[10px] font-bold">TOOL</span></a>
-        <a href="faye.html" class="dock-btn text-[#66fcf1]"><span class="text-xl">👁️</span><span class="text-[10px] font-bold">HELP</span></a>
+        <a href="faye.html" class="dock-btn text-[#66fcf1]"><span class="text-xl">🐰</span><span class="text-[10px] font-bold">HELP</span></a>
     </nav>
 
     <script type="module">
@@ -212,31 +212,22 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                // Update Sidebar UI
                 document.getElementById('sidebar-name').innerText = user.displayName || "Anonymous";
                 document.getElementById('sidebar-pfp').src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
                 
-                // Pre-fill Settings Modal
                 document.getElementById('edit-name').value = user.displayName || "";
                 document.getElementById('edit-pfp').value = user.photoURL || "";
                 document.getElementById('edit-pfp-preview').src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
 
-                // Admin Check
-                if(user.email === ADMIN_EMAIL) {
-                    document.getElementById('admin-toggle').style.display = 'block';
-                }
+                if(user.email === ADMIN_EMAIL) document.getElementById('admin-toggle').style.display = 'block';
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        // PROFILE FUNCTIONS
-        window.openProfileSettings = function() {
-            document.getElementById('profile-modal').classList.add('open');
-        }
-        window.closeProfileSettings = function() {
-            document.getElementById('profile-modal').classList.remove('open');
-        }
+        // PROFILE
+        window.openProfileSettings = function() { document.getElementById('profile-modal').classList.add('open'); }
+        window.closeProfileSettings = function() { document.getElementById('profile-modal').classList.remove('open'); }
         window.randomizeAvatar = function() {
             const seed = Math.floor(Math.random() * 10000);
             const url = `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}`;
@@ -246,30 +237,16 @@
         window.saveProfile = async function() {
             const newName = document.getElementById('edit-name').value;
             const newPfp = document.getElementById('edit-pfp').value;
-            
             if(!newName) return alert("Name cannot be empty.");
-
             try {
-                // Update Firebase Auth (Global)
-                await updateProfile(currentUser, {
-                    displayName: newName,
-                    photoURL: newPfp
-                });
-
-                // Update Firestore User Doc
-                await setDoc(doc(db, "users", currentUser.uid), {
-                    name: newName,
-                    photo: newPfp
-                }, { merge: true });
-
+                await updateProfile(currentUser, { displayName: newName, photoURL: newPfp });
+                await setDoc(doc(db, "users", currentUser.uid), { name: newName, photo: newPfp }, { merge: true });
                 alert("Identity Updated.");
-                location.reload(); // Reload to reflect changes everywhere
-            } catch(e) {
-                alert("Error: " + e.message);
-            }
+                location.reload();
+            } catch(e) { alert("Error: " + e.message); }
         }
 
-        // FEED & CHARACTERS LOGIC (Same as before)
+        // FEED
         const feedQ = query(collection(db, "system_feed"), orderBy("timestamp", "desc"));
         onSnapshot(feedQ, (snap) => {
             const latest = document.getElementById('latest-notice-container');
@@ -295,7 +272,7 @@
             });
         });
 
-        // ADMIN FUNCTIONS
+        // ADMIN
         window.postNotice = async function() {
             const title = document.getElementById('notice-title').value;
             const content = document.getElementById('notice-content').value;
