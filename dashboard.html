@@ -44,13 +44,18 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6 pb-24 lg:pb-6 relative">
+            
             <div id="view-stream" class="space-y-6">
                 <div id="latest-notice-container"></div>
-                <div id="characters-container" class="space-y-4"></div>
+                
+                <div id="characters-container" class="space-y-8"></div>
             </div>
+
             <div id="view-logs" class="hidden space-y-4">
-                <div id="logs-container"></div>
+                <h3 class="text-xs font-bold text-gray-500 mb-4 border-b border-white/10 pb-2">SYSTEM ARCHIVE</h3>
+                <div id="logs-container" class="space-y-2"></div>
             </div>
+
         </div>
     </main>
 
@@ -67,6 +72,22 @@
 
     <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">⚙️ OPERATOR</button>
 
+    <div id="profile-modal" class="modal-overlay">
+        <div class="glass-panel p-6 rounded-xl w-full max-w-md mx-4 bg-[#050505] border border-white/20 relative">
+            <button onclick="closeProfileSettings()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+            <h2 class="text-xl font-bold text-white mb-4">IDENTITY</h2>
+            <div class="space-y-4">
+                <img id="edit-pfp-preview" src="" class="w-20 h-20 rounded-full border-2 border-[#66fcf1] mx-auto bg-black object-cover">
+                <input id="edit-name" class="input-dark" placeholder="Alias">
+                <div class="flex gap-2">
+                    <input id="edit-pfp" class="input-dark" placeholder="Avatar URL" oninput="document.getElementById('edit-pfp-preview').src=this.value">
+                    <button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white">🎲</button>
+                </div>
+                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] text-black font-bold py-3 rounded text-sm">SAVE IDENTITY</button>
+            </div>
+        </div>
+    </div>
+
     <div id="admin-panel" class="fixed inset-0 bg-black/95 z-[70] hidden flex-col p-6 overflow-y-auto">
         <div class="max-w-3xl mx-auto w-full space-y-8 pb-20">
             <div class="flex justify-between items-center border-b border-white/20 pb-4">
@@ -74,12 +95,20 @@
                 <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-white">CLOSE [X]</button>
             </div>
             
+            <div class="glass-panel p-6 rounded-xl border border-indigo-500/30">
+                <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">📢 POST SYSTEM NOTICE</h3>
+                <input id="notice-title" class="input-dark mb-2 font-bold" placeholder="Notice Title (e.g. v2.0 Update)">
+                <textarea id="notice-content" class="input-dark h-24 mb-4" placeholder="Announcement content..."></textarea>
+                <button onclick="postNotice()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-xs font-bold transition">BROADCAST NOTICE</button>
+            </div>
+
             <div class="bg-[#1a1a1a] p-4 rounded border border-white/20">
-                <label class="create-label text-[#66fcf1]">EDIT EXISTING CHARACTER</label>
+                <label class="create-label text-[#66fcf1]">SELECT CHARACTER TO EDIT</label>
                 <select id="edit-char-select" class="input-dark mb-2" onchange="loadCharacterForEdit()">
-                    <option value="">-- Create New --</option>
+                    <option value="">-- Create New Character --</option>
                 </select>
-                <input type="hidden" id="edit-char-id"> </div>
+                <input type="hidden" id="edit-char-id">
+            </div>
 
             <div class="glass-panel p-6 rounded-xl">
                 <h3 class="text-sm font-bold text-white mb-4">👤 CHARACTER METADATA</h3>
@@ -94,33 +123,42 @@
                     </label>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mb-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
                     <input id="bot-name" class="input-dark" placeholder="Name">
                     <input id="bot-tag" class="input-dark" placeholder="Tag (e.g. Hero)">
+                    <input id="bot-series" class="input-dark border-indigo-900 focus:border-indigo-500" placeholder="Series Name (e.g. Cyberpunk)">
                 </div>
+                
                 <textarea id="bot-desc" class="input-dark h-20" placeholder="Description"></textarea>
                 
                 <h4 class="text-xs font-bold text-[#66fcf1] mt-6 mb-2 border-b border-white/10 pb-1">SCENARIOS & LINKS</h4>
-                <div id="scenarios-container" class="space-y-4">
-                    </div>
+                <div id="scenarios-container" class="space-y-4"></div>
                 
                 <button onclick="addScenarioBlock()" class="mt-4 text-[10px] bg-white/10 px-3 py-1 rounded text-white hover:bg-white/20">+ ADD SCENARIO BLOCK</button>
                 
-                <div class="mt-8 pt-4 border-t border-white/20">
-                    <button onclick="saveCharacter()" class="bg-green-700 text-white px-6 py-3 rounded text-sm font-bold w-full hover:bg-green-600 transition">SAVE CHARACTER DATABASE</button>
+                <div class="mt-8 pt-4 border-t border-white/20 flex gap-4">
+                    <button onclick="saveCharacter()" class="bg-green-700 text-white px-6 py-3 rounded text-sm font-bold flex-1 hover:bg-green-600 transition">SAVE CHARACTER</button>
+                    <button onclick="deleteCharacter()" class="bg-red-900/30 text-red-400 border border-red-900 px-4 py-3 rounded text-sm font-bold hover:bg-red-900 hover:text-white transition">DELETE</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <nav class="bottom-dock mobile-only">
+        <a href="#" class="dock-btn active"><span class="text-xl">⚡</span><span class="text-[10px] font-bold">FEED</span></a>
+        <a href="bulletin_board.html" class="dock-btn"><span class="text-xl">💬</span><span class="text-[10px] font-bold">COMM</span></a>
+        <a href="app.html" class="dock-btn"><span class="text-xl">🛠️</span><span class="text-[10px] font-bold">TOOL</span></a>
+        <a href="faye.html" class="dock-btn text-[#66fcf1]"><span class="text-xl">🐰</span><span class="text-[10px] font-bold">HELP</span></a>
+    </nav>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // *** CONFIG ***
+        // *** PASTE YOUR CONFIG HERE ***
         const firebaseConfig = {
-           apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
+            apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
   authDomain: "aeternum-840dd.firebaseapp.com",
   projectId: "aeternum-840dd",
   storageBucket: "aeternum-840dd.firebasestorage.app",
@@ -135,25 +173,48 @@
         const auth = getAuth(app);
         let currentUser = null;
         let currentBotImage = null;
-        let existingChars = []; // Local cache for dropdown
+        let existingChars = [];
 
-        // ... (AUTH LOGIC SAME AS BEFORE) ...
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
+                const pfp = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                document.getElementById('sidebar-name').innerText = user.displayName || "Anonymous";
+                document.getElementById('sidebar-pfp').src = pfp;
+                document.getElementById('edit-name').value = user.displayName || "";
+                document.getElementById('edit-pfp').value = user.photoURL || "";
+                document.getElementById('edit-pfp-preview').src = pfp;
                 if(user.email === ADMIN_EMAIL) document.getElementById('admin-toggle').style.display = 'block';
             } else window.location.href = "index.html";
         });
 
-        // 1. POPULATE EDIT DROPDOWN
+        // --- FEED & LOGS ---
+        const feedQ = query(collection(db, "system_feed"), orderBy("timestamp", "desc"));
+        onSnapshot(feedQ, (snap) => {
+            const latest = document.getElementById('latest-notice-container');
+            const logs = document.getElementById('logs-container');
+            latest.innerHTML = ""; logs.innerHTML = "";
+            let docs = []; snap.forEach(d => docs.push(d.data()));
+            
+            if(docs.length > 0) {
+                latest.innerHTML = `<div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4"><div class="flex items-center gap-2 mb-2 text-indigo-300"><span>📢</span> <span class="font-bold uppercase">${escape(docs[0].title)}</span></div><p class="text-gray-400 text-xs leading-relaxed">${escape(docs[0].content)}</p></div>`;
+                docs.forEach(d => logs.innerHTML += `<div class="p-3 border-l-2 border-gray-600 bg-white/5 relative mb-2"><div class="text-[10px] text-gray-500 mb-1">${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():"Unknown"}</div><h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3><p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p></div>`);
+            } else {
+                latest.innerHTML = `<div class="text-gray-500 text-xs italic">System Offline. No announcements.</div>`;
+                logs.innerHTML = `<div class="text-gray-500 text-xs italic">Log archive is empty.</div>`;
+            }
+        });
+
+        // --- CHARACTERS (GROUPED BY SERIES) ---
         onSnapshot(query(collection(db, "characters"), orderBy("timestamp", "desc")), (snap) => {
             const select = document.getElementById('edit-char-select');
             const feed = document.getElementById('characters-container');
             
-            // Clear but keep "New" option
             select.innerHTML = '<option value="">-- Create New --</option>';
             feed.innerHTML = "";
             existingChars = [];
+            
+            let grouped = {};
 
             snap.forEach(doc => {
                 const d = doc.data();
@@ -162,85 +223,72 @@
                 
                 // Add to Dropdown
                 const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.innerText = d.name;
-                select.appendChild(opt);
+                opt.value = d.id; opt.innerText = d.name; select.appendChild(opt);
 
-                // Render to Feed
-                renderCharacterCard(d, feed);
+                // Grouping Logic
+                const series = d.series || "Unsorted";
+                if(!grouped[series]) grouped[series] = [];
+                grouped[series].push(d);
+            });
+
+            // Render Groups
+            Object.keys(grouped).sort().forEach(seriesName => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = "mb-8";
+                
+                if(seriesName !== "Unsorted" || Object.keys(grouped).length > 1) {
+                    groupDiv.innerHTML = `<h3 class="text-xs font-bold text-[#66fcf1] uppercase tracking-widest border-b border-white/10 pb-2 mb-4">${escape(seriesName)}</h3>`;
+                }
+                
+                const gridDiv = document.createElement('div');
+                gridDiv.className = "space-y-4";
+                
+                grouped[seriesName].forEach(char => renderCharacterCard(char, gridDiv));
+                groupDiv.appendChild(gridDiv);
+                feed.appendChild(groupDiv);
             });
         });
 
         function renderCharacterCard(char, container) {
             let scenariosHtml = "";
-            
-            // Handle Old vs New Data Structure
             if (char.scenarios) {
-                // NEW STRUCTURE
                 char.scenarios.forEach(s => {
                     let linksRow = "";
-                    s.links.forEach(l => {
-                        linksRow += `<a href="${l.url}" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] border border-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">${escape(l.label)}</a>`;
-                    });
-                    scenariosHtml += `
-                        <div class="bg-white/5 p-3 rounded mb-2">
-                            <div class="text-xs font-bold text-gray-300 mb-2 border-b border-white/10 pb-1">${escape(s.title)}</div>
-                            <div class="flex flex-wrap gap-2">${linksRow}</div>
-                        </div>`;
+                    s.links.forEach(l => { linksRow += `<a href="${l.url}" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] border border-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">${escape(l.label)}</a>`; });
+                    scenariosHtml += `<div class="bg-white/5 p-3 rounded mb-2"><div class="text-xs font-bold text-gray-300 mb-2 border-b border-white/10 pb-1">${escape(s.title)}</div><div class="flex flex-wrap gap-2">${linksRow}</div></div>`;
                 });
             } else if (char.links) {
-                // OLD BACKWARDS COMPATIBILITY
-                char.links.forEach(l => {
-                    scenariosHtml += `<a href="${l.url}" target="_blank" class="block p-2 bg-white/5 rounded text-xs text-gray-300 mb-1 hover:text-white">🔗 ${escape(l.label)}</a>`;
-                });
+                char.links.forEach(l => { scenariosHtml += `<a href="${l.url}" target="_blank" class="block p-2 bg-white/5 rounded text-xs text-gray-300 mb-1 hover:text-white">🔗 ${escape(l.label)}</a>`; });
             }
 
             const imgHtml = char.image ? `<img src="${char.image}" class="w-full h-full object-cover">` : `<div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500 font-bold">${char.name[0]}</div>`;
 
-            container.innerHTML += `
-                <div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group">
-                    <div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${char.id}')">
-                        <div class="w-12 h-12 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative">${imgHtml}</div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-center">
-                                <h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(char.name)}</h3>
-                                <span class="text-[10px] text-gray-500">▼</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">${escape(char.desc)}</p>
-                        </div>
-                    </div>
-                    <div id="scen-${char.id}" class="scenario-list border-t border-white/5 mt-2 hidden">
-                        <div class="pt-3 space-y-2">${scenariosHtml}</div>
-                    </div>
-                </div>`;
+            container.innerHTML += `<div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group"><div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${char.id}')"><div class="w-12 h-12 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative">${imgHtml}</div><div class="flex-1"><div class="flex justify-between items-center"><h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(char.name)}</h3><span class="text-[10px] text-gray-500">▼</span></div><p class="text-xs text-gray-400 mt-1">${escape(char.desc)}</p></div></div><div id="scen-${char.id}" class="scenario-list border-t border-white/5 mt-2 hidden"><div class="pt-3 space-y-2">${scenariosHtml}</div></div></div>`;
         }
 
-        // 2. ADMIN EDITOR LOGIC
+        // --- ADMIN / EDITOR LOGIC ---
         window.loadCharacterForEdit = function() {
             const id = document.getElementById('edit-char-select').value;
-            const container = document.getElementById('scenarios-container');
-            container.innerHTML = "";
-
+            document.getElementById('scenarios-container').innerHTML = "";
+            
             if (!id) {
-                // Reset for New
+                // Reset
                 document.getElementById('edit-char-id').value = "";
                 document.getElementById('bot-name').value = "";
                 document.getElementById('bot-tag').value = "";
+                document.getElementById('bot-series').value = "";
                 document.getElementById('bot-desc').value = "";
-                document.getElementById('bot-img-preview').src = "";
                 document.getElementById('bot-img-preview').classList.add('hidden');
                 currentBotImage = null;
-                addScenarioBlock(); // Add one empty block
+                addScenarioBlock();
                 return;
             }
 
             const char = existingChars.find(c => c.id === id);
-            if (!char) return;
-
-            // Fill Form
             document.getElementById('edit-char-id').value = char.id;
             document.getElementById('bot-name').value = char.name;
             document.getElementById('bot-tag').value = char.tag;
+            document.getElementById('bot-series').value = char.series || "";
             document.getElementById('bot-desc').value = char.desc;
             
             if (char.image) {
@@ -249,66 +297,33 @@
                 document.getElementById('bot-img-preview').classList.remove('hidden');
             }
 
-            // Populate Scenarios
-            if (char.scenarios) {
-                char.scenarios.forEach(s => addScenarioBlock(s.title, s.links));
-            } else {
-                addScenarioBlock("Default Scenario", char.links || []); // Convert old data
-            }
+            if (char.scenarios) char.scenarios.forEach(s => addScenarioBlock(s.title, s.links));
+            else addScenarioBlock("Default", char.links || []);
         }
 
         window.addScenarioBlock = function(titleVal = "", linksData = []) {
             const div = document.createElement('div');
             div.className = "bg-black/40 border border-white/10 p-3 rounded scenario-block";
-            
             let linksHtml = "";
-            // If we have existing links, create inputs for them
-            if (linksData.length > 0) {
-                linksData.forEach(l => {
-                    linksHtml += createLinkRowHtml(l.label, l.url);
-                });
-            } else {
-                // Default empty link row
-                linksHtml = createLinkRowHtml();
-            }
+            if (linksData.length > 0) linksData.forEach(l => linksHtml += createLinkRowHtml(l.label, l.url));
+            else linksHtml = createLinkRowHtml();
 
-            div.innerHTML = `
-                <div class="flex justify-between items-center mb-2">
-                    <input class="scen-title input-dark font-bold text-[#66fcf1]" placeholder="Scenario Title (e.g. Villain Arc)" value="${escape(titleVal)}">
-                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 text-xs hover:text-white">✕</button>
-                </div>
-                <div class="links-container space-y-2">
-                    ${linksHtml}
-                </div>
-                <button onclick="addLinkRow(this)" class="mt-2 text-[10px] text-gray-500 hover:text-white">+ Add Link to this Scenario</button>
-            `;
+            div.innerHTML = `<div class="flex justify-between items-center mb-2"><input class="scen-title input-dark font-bold text-[#66fcf1]" placeholder="Scenario Title" value="${escape(titleVal)}"><button onclick="this.parentElement.parentElement.remove()" class="text-red-500 text-xs hover:text-white">✕</button></div><div class="links-container space-y-2">${linksHtml}</div><button onclick="addLinkRow(this)" class="mt-2 text-[10px] text-gray-500 hover:text-white">+ Add Link</button>`;
             document.getElementById('scenarios-container').appendChild(div);
         }
 
         function createLinkRowHtml(label = "", url = "") {
-            return `
-            <div class="flex gap-2 link-row">
-                <input class="link-label bg-[#111] border border-gray-700 p-1 rounded text-xs text-white flex-1" placeholder="Platform (e.g. Janitor)" value="${escape(label)}">
-                <input class="link-url bg-[#111] border border-gray-700 p-1 rounded text-xs text-white flex-[2]" placeholder="URL" value="${escape(url)}">
-                <button onclick="this.parentElement.remove()" class="text-red-500 px-1">✕</button>
-            </div>`;
+            return `<div class="flex gap-2 link-row"><input class="link-label input-dark text-xs flex-1" placeholder="Platform" value="${escape(label)}"><input class="link-url input-dark text-xs flex-[2]" placeholder="URL" value="${escape(url)}"><button onclick="this.parentElement.remove()" class="text-red-500 px-1">✕</button></div>`;
         }
-
-        window.addLinkRow = function(btn) {
-            const container = btn.previousElementSibling;
-            const div = document.createElement('div');
-            div.className = "flex gap-2 link-row";
-            div.innerHTML = `<input class="link-label bg-[#111] border border-gray-700 p-1 rounded text-xs text-white flex-1" placeholder="Platform"><input class="link-url bg-[#111] border border-gray-700 p-1 rounded text-xs text-white flex-[2]" placeholder="URL"><button onclick="this.parentElement.remove()" class="text-red-500 px-1">✕</button>`;
-            container.appendChild(div);
-        }
+        window.addLinkRow = function(btn) { btn.previousElementSibling.insertAdjacentHTML('beforeend', createLinkRowHtml()); }
 
         window.saveCharacter = async function() {
             const id = document.getElementById('edit-char-id').value;
             const name = document.getElementById('bot-name').value;
             const tag = document.getElementById('bot-tag').value;
+            const series = document.getElementById('bot-series').value;
             const desc = document.getElementById('bot-desc').value;
 
-            // Collect Scenarios
             let scenarios = [];
             document.querySelectorAll('.scenario-block').forEach(block => {
                 const title = block.querySelector('.scen-title').value;
@@ -322,35 +337,46 @@
             });
 
             if (!name) return alert("Name required");
+            const data = { name, tag, series, desc, scenarios, image: currentBotImage, timestamp: serverTimestamp() };
 
-            const data = { name, tag, desc, scenarios, image: currentBotImage, timestamp: serverTimestamp() };
-
-            if (id) {
-                // Update Existing
-                await setDoc(doc(db, "characters", id), data, {merge: true});
-                alert("Character Updated!");
-            } else {
-                // Create New
-                await addDoc(collection(db, "characters"), data);
-                alert("New Character Created!");
-            }
+            if (id) { await setDoc(doc(db, "characters", id), data, {merge: true}); alert("Updated!"); }
+            else { await addDoc(collection(db, "characters"), data); alert("Created!"); }
             
-            // Reset form logic...
             document.getElementById('edit-char-select').value = "";
-            loadCharacterForEdit(); 
+            loadCharacterForEdit();
         }
 
-        // --- UTILS ---
+        window.deleteCharacter = async function() {
+            const id = document.getElementById('edit-char-id').value;
+            if(!id) return;
+            if(confirm("Delete this character permanently?")) {
+                await deleteDoc(doc(db, "characters", id));
+                alert("Deleted");
+                document.getElementById('edit-char-select').value = "";
+                loadCharacterForEdit();
+            }
+        }
+
+        // --- GLOBAL UTILS ---
+        window.postNotice = async function() {
+            const title = document.getElementById('notice-title').value;
+            const content = document.getElementById('notice-content').value;
+            if(title) await addDoc(collection(db,"system_feed"),{title, content, timestamp:serverTimestamp()});
+            alert("Posted");
+            document.getElementById('notice-title').value = ""; document.getElementById('notice-content').value = "";
+        }
         window.previewBotImage = function() {
             const file = document.getElementById('bot-img-input').files[0];
-            if(!file) return;
-            const r = new FileReader();
-            r.onload = e => { currentBotImage = e.target.result; document.getElementById('bot-img-preview').src = currentBotImage; document.getElementById('bot-img-preview').classList.remove('hidden'); };
-            r.readAsDataURL(file);
+            if(file) { const r = new FileReader(); r.onload = e => { currentBotImage = e.target.result; document.getElementById('bot-img-preview').src = currentBotImage; document.getElementById('bot-img-preview').classList.remove('hidden'); }; r.readAsDataURL(file); }
         }
-        window.toggleScenario = function(id){ const el=document.getElementById(id); el.classList.toggle('hidden'); }
+        window.openProfileSettings = function(){ document.getElementById('profile-modal').classList.add('open'); }
+        window.closeProfileSettings = function(){ document.getElementById('profile-modal').classList.remove('open'); }
+        window.randomizeAvatar = function(){ const u=`https://api.dicebear.com/7.x/bottts/svg?seed=${Math.floor(Math.random()*10000)}`; document.getElementById('edit-pfp').value=u; document.getElementById('edit-pfp-preview').src=u; }
+        window.saveProfile = async function(){ const n=document.getElementById('edit-name').value; const p=document.getElementById('edit-pfp').value; if(n){ await updateProfile(currentUser,{displayName:n,photoURL:p}); await setDoc(doc(db,"users",currentUser.uid),{name:n,photo:p},{merge:true}); location.reload(); } }
+        
         window.toggleAdminPanel = function(){ const p=document.getElementById('admin-panel'); p.style.display=p.style.display==='flex'?'none':'flex'; }
-        window.switchFeed = function(tab){ document.getElementById('view-stream').classList.toggle('hidden',tab!=='stream'); document.getElementById('view-logs').classList.toggle('hidden',tab!=='logs'); }
+        window.switchFeed = function(tab){ document.getElementById('view-stream').classList.toggle('hidden',tab!=='stream'); document.getElementById('view-logs').classList.toggle('hidden',tab!=='logs'); document.getElementById('tab-stream').classList.toggle('active',tab==='stream'); document.getElementById('tab-logs').classList.toggle('active',tab!=='stream'); }
+        window.toggleScenario = function(id){ const el=document.getElementById(id); el.classList.toggle('hidden'); }
         function escape(s){ return s?s.replace(/&/g,"&amp;").replace(/</g,"&lt;"):""; }
     </script>
 </body>
