@@ -2,78 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AETERNUM // BBS</title>
+    <title>AETERNUM // ARCHIVE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lucida+Grande&display=swap" rel="stylesheet">
     <style>
-        :root { --glass: rgba(20, 20, 25, 0.9); --accent: #66fcf1; --void: #050505; }
+        :root { --glass: rgba(20, 20, 25, 0.95); --accent: #66fcf1; --void: #050505; --ao3-red: #900; }
         body { background-color: var(--void); color: #e0e7ff; font-family: 'Space Mono', monospace; }
+        
         .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
         
-        /* Tab Styling */
-        .tab-btn { padding: 10px 20px; border-bottom: 2px solid transparent; color: #64748b; transition: 0.3s; cursor: pointer; }
-        .tab-btn:hover { color: #fff; }
-        .tab-btn.active { border-bottom-color: var(--accent); color: var(--accent); background: rgba(102, 252, 241, 0.05); }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border: 1px solid #000; }
 
-        /* Message Cards */
-        .msg-card { border-left: 2px solid #334155; padding: 1rem; margin-bottom: 1rem; background: rgba(0,0,0,0.2); transition: 0.2s; }
-        .msg-card:hover { border-left-color: var(--accent); background: rgba(255,255,255,0.03); }
+        /* --- AO3 STYLE (Dark Mode Adaptation) --- */
+        .ao3-work { 
+            font-family: 'Lucida Grande', 'Lucida Sans Unicode', sans-serif; 
+            border: 1px solid #333; 
+            margin-bottom: 20px; 
+            background: #111;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        
+        .ao3-header { 
+            background: #222; 
+            border-bottom: 3px solid var(--ao3-red); 
+            padding: 10px; 
+            display: flex; 
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ao3-rating-box {
+            width: 25px; height: 25px; 
+            background: #4a4a4a; 
+            border: 1px solid #fff; 
+            text-align: center; line-height: 25px; font-size: 10px; font-weight: bold; color: white;
+        }
+        
+        .ao3-title { font-size: 1.2rem; color: #e0e7ff; font-weight: bold; text-decoration: none; }
+        .ao3-author { font-size: 0.9rem; color: #e0e7ff; font-weight: normal; }
+        .ao3-fandoms { font-size: 0.8rem; color: #aaa; margin-bottom: 8px; }
+        
+        .ao3-tags { font-size: 0.75rem; color: #fff; line-height: 1.4; padding: 0 10px; }
+        .ao3-tag { color: #fff; text-decoration: none; font-weight: bold; }
+        .ao3-tag:hover { text-decoration: underline; color: var(--ao3-red); }
+        
+        .ao3-summary { 
+            padding: 15px; 
+            font-size: 0.9rem; 
+            color: #ccc; 
+            border-top: 1px solid #333; 
+            margin-top: 10px;
+            background: #1a1a1a;
+        }
+        
+        .ao3-stats { 
+            background: #222; 
+            padding: 8px 10px; 
+            font-size: 0.8rem; 
+            color: #999; 
+            text-align: right; 
+            border-top: 1px solid #333;
+        }
+        .ao3-stats dt { display: inline; font-weight: bold; color: #fff; margin-left: 10px; }
+        .ao3-stats dd { display: inline; margin-right: 5px; }
 
-        /* Lit Card (Written Works) */
-        .lit-card { border: 1px solid #334155; padding: 1.5rem; margin-bottom: 1.5rem; background: rgba(0,0,0,0.4); }
-        .lit-card h3 { font-family: serif; font-size: 1.2rem; color: #a5b4fc; margin-bottom: 0.5rem; }
+        /* Chat Style */
+        .msg-card { border-left: 2px solid #334155; padding: 1rem; margin-bottom: 1rem; background: rgba(255,255,255,0.02); }
+        
+        /* TABS */
+        .tab-btn { padding: 12px 20px; color: #666; cursor: pointer; transition: 0.3s; font-weight: bold; border-bottom: 2px solid transparent; }
+        .tab-btn.active { color: #fff; border-bottom-color: var(--ao3-red); background: rgba(153, 0, 0, 0.1); }
     </style>
 </head>
 <body class="min-h-screen p-4 lg:p-8 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
 
-    <div class="max-w-5xl mx-auto glass-panel rounded-xl min-h-[90vh] flex flex-col relative overflow-hidden">
+    <div class="max-w-6xl mx-auto glass-panel rounded-xl min-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl">
         
-        <header class="border-b border-white/10 bg-black/40">
+        <header class="bg-black/50 border-b border-white/10">
             <div class="p-6 flex justify-between items-center">
                 <div>
-                    <h1 class="text-xl font-bold text-[#66fcf1] tracking-widest">BULLETIN_BOARD</h1>
-                    <p class="text-[10px] text-gray-500">PUBLIC NODE // <span id="user-status">CONNECTING...</span></p>
+                    <h1 class="text-xl font-bold tracking-widest text-white">AETERNUM <span class="text-[#900]">ARCHIVE</span></h1>
+                    <p class="text-[10px] text-gray-500 font-mono">CONNECTION: <span id="user-status" class="text-[#66fcf1]">VERIFYING...</span></p>
                 </div>
-                <a href="dashboard.html" class="text-xs text-gray-400 hover:text-white">< RETURN</a>
+                <a href="dashboard.html" class="text-xs text-gray-500 hover:text-white transition">< DASHBOARD</a>
             </div>
             
-            <div class="flex text-sm font-bold border-t border-white/5">
-                <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn active flex-1">/// COMM_LINK</button>
-                <button onclick="switchTab('lit')" id="tab-lit" class="tab-btn flex-1">/// LITERATURE</button>
+            <div class="flex border-t border-white/10">
+                <button onclick="switchTab('lit')" id="tab-lit" class="tab-btn active flex-1 font-sans">Works</button>
+                <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn flex-1 font-mono">Comments // Chat</button>
             </div>
         </header>
 
-        <div id="content-area" class="flex-1 overflow-y-auto p-6 relative">
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 lg:p-8 bg-black/20">
             
-            <div id="view-chat" class="space-y-4">
-                <div class="text-center text-xs text-gray-600 italic">Connecting to Comm Stream...</div>
+            <div id="view-lit" class="space-y-6 max-w-4xl mx-auto">
+                <div class="text-center text-xs text-gray-600 italic py-10">Accessing The Archive...</div>
             </div>
 
-            <div id="view-lit" class="hidden space-y-6">
-                <div class="text-center text-xs text-gray-600 italic">Accessing Archives...</div>
+            <div id="view-chat" class="hidden space-y-2 max-w-4xl mx-auto font-mono">
+                <div class="text-center text-xs text-gray-600 italic py-10">Connecting to Comm Stream...</div>
             </div>
 
         </div>
 
-        <div class="p-4 border-t border-white/10 bg-black/60 relative z-20">
+        <div class="p-4 border-t border-white/10 bg-black/80 backdrop-blur-md z-20">
             
-            <div id="error-log" class="text-[10px] text-red-400 mb-2 hidden"></div>
+            <div id="error-log" class="text-[10px] text-red-500 mb-2 hidden font-mono"></div>
 
-            <div id="input-chat" class="flex gap-4">
+            <div id="input-chat" class="hidden gap-4 font-mono">
                 <div class="text-xs text-[#66fcf1] pt-3 font-bold display-user">USER:</div>
-                <textarea id="chat-msg" rows="1" class="flex-1 bg-transparent border border-gray-700 rounded p-2 text-sm focus:border-[#66fcf1] focus:outline-none resize-none" placeholder="Broadcast a signal..."></textarea>
+                <textarea id="chat-msg" rows="1" class="flex-1 bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#66fcf1] focus:outline-none resize-none" placeholder="Type message..."></textarea>
                 <button onclick="sendPost('chat')" class="bg-[#66fcf1]/10 text-[#66fcf1] border border-[#66fcf1] px-6 rounded hover:bg-[#66fcf1] hover:text-black font-bold text-xs transition">SEND</button>
             </div>
 
-            <div id="input-lit" class="hidden flex flex-col gap-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-purple-400 font-bold uppercase">New Entry</span>
-                    <span class="text-[10px] text-gray-500 display-user">USER</span>
+            <div id="input-lit" class="flex flex-col gap-3 font-sans">
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <span class="font-bold text-[#900]">POST NEW WORK</span>
+                    <span>Posting as: <span class="display-user text-white">Guest</span></span>
                 </div>
-                <input id="lit-title" type="text" class="w-full bg-transparent border border-gray-700 rounded p-2 text-sm font-bold text-white focus:border-purple-500 focus:outline-none" placeholder="Title of Work...">
-                <textarea id="lit-body" rows="6" class="w-full bg-transparent border border-gray-700 rounded p-2 text-sm focus:border-purple-500 focus:outline-none" placeholder="Write your story, poem, or log here..."></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input id="lit-title" type="text" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none" placeholder="Title">
+                    <input id="lit-tags" type="text" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none" placeholder="Tags (comma separated)">
+                </div>
+                
+                <textarea id="lit-summary" rows="2" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none resize-none" placeholder="Summary"></textarea>
+                
+                <textarea id="lit-body" rows="6" class="bg-[#111] border border-gray-700 rounded p-2 text-sm text-white focus:border-[#900] outline-none font-serif leading-relaxed" placeholder="Work Text..."></textarea>
+                
                 <div class="flex justify-end">
-                    <button onclick="sendPost('lit')" class="bg-purple-900/30 text-purple-300 border border-purple-500 px-8 py-2 rounded hover:bg-purple-500 hover:text-white font-bold text-xs transition">PUBLISH TO ARCHIVE</button>
+                    <button onclick="sendPost('lit')" class="bg-[#900] text-white px-6 py-2 rounded text-xs font-bold hover:bg-red-700 transition shadow-lg">POST</button>
                 </div>
             </div>
 
@@ -81,71 +142,84 @@
     </div>
 
     <script type="module">
-        import { db, auth, collection, addDoc, onSnapshot, query, orderBy, where, serverTimestamp, onAuthStateChanged, doc, getDoc } from './firebase-config.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, where, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // ==========================================
+        //  PASTE YOUR KEYS HERE (AGAIN)
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456:web:abcdef"
+        };
+        // ==========================================
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
         // State
         let currentUser = null;
-        let currentHandle = "UNKNOWN";
-        let currentTab = 'chat';
+        let currentHandle = "GUEST";
+        let currentTab = 'lit';
 
-        // 1. AUTH CHECK (Wait for Firebase to confirm who we are)
+        // Auth Check
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                // Fetch the handle we saved during login
                 const userSnap = await getDoc(doc(db, "users", user.uid));
                 if (userSnap.exists()) {
                     currentHandle = userSnap.data().handle;
                     document.querySelectorAll('.display-user').forEach(el => el.innerText = currentHandle);
-                    document.getElementById('user-status').innerText = "CONNECTED::" + currentHandle;
+                    document.getElementById('user-status').innerText = currentHandle;
                 }
             } else {
-                // Not logged in? Send back to start.
                 window.location.href = "index.html";
             }
         });
 
-        // --- TABS & UI LOGIC (Same as before) ---
+        // UI Logic
         window.switchTab = function(tab) {
             currentTab = tab;
-            document.getElementById('tab-chat').classList.toggle('active', tab === 'chat');
             document.getElementById('tab-lit').classList.toggle('active', tab === 'lit');
-            document.getElementById('view-chat').classList.toggle('hidden', tab !== 'chat');
+            document.getElementById('tab-chat').classList.toggle('active', tab === 'chat');
+            
             document.getElementById('view-lit').classList.toggle('hidden', tab !== 'lit');
-            document.getElementById('input-chat').classList.toggle('hidden', tab !== 'lit'); 
-            document.getElementById('input-chat').style.display = tab === 'chat' ? 'flex' : 'none';
+            document.getElementById('view-chat').classList.toggle('hidden', tab !== 'chat');
+            
             document.getElementById('input-lit').classList.toggle('hidden', tab !== 'lit');
-            const area = document.getElementById('content-area');
-            area.scrollTop = area.scrollHeight;
+            document.getElementById('input-lit').style.display = tab === 'lit' ? 'flex' : 'none';
+            document.getElementById('input-chat').classList.toggle('hidden', tab !== 'chat');
+            document.getElementById('input-chat').style.display = tab === 'chat' ? 'flex' : 'none';
         }
 
-        // --- POSTING LOGIC ---
+        // Send Post
         window.sendPost = async function(type) {
             const errorLog = document.getElementById('error-log');
             errorLog.classList.add('hidden');
-            
-            if (!currentUser) return alert("CONNECTION LOST. PLEASE RELOG.");
+            if (!currentUser) return alert("Disconnected. Please Login.");
 
             try {
                 if (type === 'chat') {
                     const field = document.getElementById('chat-msg');
                     const text = field.value.trim();
                     if (!text) return;
-                    
                     await addDoc(collection(db, "posts"), {
-                        type: "chat",
-                        uid: currentUser.uid, // Store secure ID
-                        user: currentHandle,  // Store display name
-                        text: text,
-                        timestamp: serverTimestamp()
+                        type: "chat", uid: currentUser.uid, user: currentHandle, text: text, timestamp: serverTimestamp()
                     });
                     field.value = ""; 
                 } 
                 else if (type === 'lit') {
-                    const titleField = document.getElementById('lit-title');
-                    const bodyField = document.getElementById('lit-body');
-                    const title = titleField.value.trim();
-                    const body = bodyField.value.trim();
+                    const title = document.getElementById('lit-title').value.trim();
+                    const tags = document.getElementById('lit-tags').value.trim();
+                    const summary = document.getElementById('lit-summary').value.trim();
+                    const body = document.getElementById('lit-body').value.trim();
+                    
                     if (!title || !body) return alert("Title and Body required.");
 
                     await addDoc(collection(db, "posts"), {
@@ -153,60 +227,86 @@
                         uid: currentUser.uid,
                         user: currentHandle,
                         title: title,
+                        tags: tags,
+                        summary: summary,
                         text: body,
+                        hits: Math.floor(Math.random() * 100), // Fake hits for realism
+                        words: body.split(' ').length,
                         timestamp: serverTimestamp()
                     });
-                    titleField.value = "";
-                    bodyField.value = "";
-                    alert("Work Archived.");
+                    
+                    document.getElementById('lit-title').value = "";
+                    document.getElementById('lit-tags').value = "";
+                    document.getElementById('lit-summary').value = "";
+                    document.getElementById('lit-body').value = "";
+                    alert("Work Posted to Archive.");
                 }
             } catch (e) {
-                console.error("Firebase Error:", e);
-                errorLog.innerText = "ERROR: " + e.message;
+                console.error(e);
+                errorLog.innerText = "ERR: " + e.message;
                 errorLog.classList.remove('hidden');
             }
         }
 
-        // --- LISTENERS ---
-        const chatQ = query(collection(db, "posts"), where("type", "==", "chat"), orderBy("timestamp", "asc"));
-        onSnapshot(chatQ, (snapshot) => {
-            const view = document.getElementById('view-chat');
-            view.innerHTML = `<div class="text-center text-[10px] text-gray-700 mb-4">--- ENCRYPTED STREAM ACTIVE ---</div>`;
-            snapshot.forEach(doc => {
+        // Listeners
+        const litQ = query(collection(db, "posts"), where("type", "==", "lit"), orderBy("timestamp", "desc"));
+        onSnapshot(litQ, (snap) => {
+            const view = document.getElementById('view-lit');
+            view.innerHTML = "";
+            if (snap.empty) view.innerHTML = `<div class="text-center text-gray-500 italic mt-10">Archive Empty.</div>`;
+            
+            snap.forEach(doc => {
                 const d = doc.data();
-                const time = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "..";
+                const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Draft";
+                const tagList = d.tags ? d.tags.split(',').map(t => `<span class="ao3-tag">#${t.trim()}</span>`).join(', ') : "";
+
                 view.innerHTML += `
-                    <div class="msg-card py-2">
+                    <div class="ao3-work">
+                        <div class="ao3-header">
+                            <div class="ao3-rating-box" style="background:#5da328;">M</div>
+                            <div>
+                                <div class="ao3-title">${escape(d.title)}</div>
+                                <div class="ao3-author">by <strong>${escape(d.user)}</strong></div>
+                                <div class="ao3-fandoms">Fandom: <span class="text-white">Aeternum Network</span></div>
+                            </div>
+                        </div>
+                        <div class="ao3-tags">${tagList}</div>
+                        <div class="ao3-summary">
+                            <strong class="text-white">Summary:</strong><br>
+                            ${escape(d.summary || "No summary provided.")}
+                        </div>
+                        <div class="p-4 text-sm font-serif text-gray-300 border-t border-gray-800 leading-7">
+                            ${escape(d.text).substring(0, 300)}... <span class="text-[#900] font-bold cursor-pointer">[Read More]</span>
+                        </div>
+                        <dl class="ao3-stats">
+                            <dt>Published:</dt> <dd>${date}</dd>
+                            <dt>Words:</dt> <dd>${d.words || 0}</dd>
+                            <dt>Hits:</dt> <dd>${d.hits || 0}</dd>
+                            <dt>Kudos:</dt> <dd>♥</dd>
+                        </dl>
+                    </div>`;
+            });
+        });
+
+        const chatQ = query(collection(db, "posts"), where("type", "==", "chat"), orderBy("timestamp", "asc"));
+        onSnapshot(chatQ, (snap) => {
+            const view = document.getElementById('view-chat');
+            view.innerHTML = `<div class="text-center text-[10px] text-gray-700 mb-4">--- STREAM ACTIVE ---</div>`;
+            snap.forEach(doc => {
+                const d = doc.data();
+                view.innerHTML += `
+                    <div class="msg-card">
                         <div class="flex justify-between items-baseline mb-1">
                             <span class="text-xs font-bold text-[#66fcf1]">${escape(d.user)}</span>
-                            <span class="text-[10px] text-gray-600">${time}</span>
+                            <span class="text-[10px] text-gray-600">ID: ${d.uid.slice(0,4)}</span>
                         </div>
                         <p class="text-sm text-gray-300 whitespace-pre-wrap">${escape(d.text)}</p>
                     </div>`;
             });
-            if(currentTab === 'chat') document.getElementById('content-area').scrollTop = document.getElementById('content-area').scrollHeight;
-        });
-
-        const litQ = query(collection(db, "posts"), where("type", "==", "lit"), orderBy("timestamp", "desc"));
-        onSnapshot(litQ, (snapshot) => {
-            const view = document.getElementById('view-lit');
-            view.innerHTML = "";
-            if (snapshot.empty) view.innerHTML = `<div class="text-center text-gray-500 italic mt-10">Archives empty.</div>`;
-            snapshot.forEach(doc => {
-                const d = doc.data();
-                const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Pending";
-                view.innerHTML += `
-                    <div class="lit-card rounded bg-black/40 hover:bg-black/60 transition">
-                        <div class="flex justify-between items-start border-b border-gray-800 pb-2 mb-3">
-                            <div>
-                                <h3 class="font-bold text-lg text-purple-300">${escape(d.title)}</h3>
-                                <div class="text-[10px] text-gray-500 uppercase">Author: <span class="text-gray-300">${escape(d.user)}</span></div>
-                            </div>
-                            <span class="text-[10px] border border-gray-800 px-2 py-1 rounded text-gray-600">${date}</span>
-                        </div>
-                        <div class="text-sm text-gray-300 leading-relaxed font-serif whitespace-pre-wrap">${escape(d.text)}</div>
-                    </div>`;
-            });
+            if(currentTab === 'chat') {
+                const el = document.getElementById('content-area');
+                el.scrollTop = el.scrollHeight;
+            }
         });
 
         function escape(s) { if(!s) return ""; return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
