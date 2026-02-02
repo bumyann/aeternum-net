@@ -1,107 +1,66 @@
 /* style.css - MASTER STYLESHEET */
-
-/* 1. FONTS & VARIABLES */
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lucida+Grande&display=swap');
 
 :root {
     --bg-void: #050505;
-    --glass: rgba(20, 20, 25, 0.9);
+    --glass: rgba(20, 20, 25, 0.95);
     --accent: #66fcf1;
     --highlight: #66fcf1;
     --ao3-red: #900;
 }
 
-/* 2. BASE RESET */
+/* BASE RESET */
 body {
     background-color: var(--bg-void);
     color: #e0e7ff;
     font-family: 'Space Mono', monospace;
-    overflow: hidden; /* App-like feel */
+    overflow: hidden;
     background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
     background-attachment: fixed;
 }
 
-/* 3. UTILITY CLASSES */
-.glass-panel {
-    background: var(--glass);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(165, 180, 252, 0.15);
-}
+/* UTILITY CLASSES */
+.glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
+.input-dark { background-color: #111; border: 1px solid #334155; color: #fff; transition: 0.2s; width: 100%; padding: 8px; border-radius: 4px; }
+.input-dark:focus { outline: none; border-color: var(--accent); }
+.btn-action { background: rgba(102, 252, 241, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 5px 15px; border-radius: 4px; font-weight: bold; transition: 0.2s; cursor: pointer; }
+.btn-action:hover { background: var(--accent); color: black; }
 
-.input-dark {
-    background-color: #111;
-    border: 1px solid #334155;
-    color: #fff;
-    transition: 0.2s;
-}
-.input-dark:focus {
-    outline: none;
-    border-color: var(--accent);
-}
+/* NAVIGATION */
+.nav-item { display: block; padding: 10px; border-left: 2px solid transparent; color: #94a3b8; text-decoration: none; transition: 0.3s; }
+.nav-item:hover, .nav-item.active { border-left-color: var(--highlight); color: #fff; background: rgba(102, 252, 241, 0.05); }
 
-/* 4. NAVIGATION (Desktop Sidebar) */
-.nav-item {
-    display: block;
-    padding: 10px;
-    border-left: 2px solid transparent;
-    color: #94a3b8;
-    text-decoration: none;
-    transition: 0.3s;
-}
-.nav-item:hover, .nav-item.active {
-    border-left-color: var(--highlight);
-    color: #fff;
-    background: rgba(102, 252, 241, 0.05);
-}
+/* MOBILE DOCK */
+.bottom-dock { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(5, 5, 5, 0.98); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); z-index: 50; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); }
+.dock-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; text-decoration: none; transition: 0.3s; width: 25%; height: 100%; }
+.dock-btn.active { color: var(--highlight); background: linear-gradient(to top, rgba(102,252,241,0.05), transparent); border-top: 2px solid var(--highlight); }
 
-/* 5. MOBILE DOCK */
-.bottom-dock {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-    background: rgba(5, 5, 5, 0.95);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px); z-index: 50;
-    display: flex; justify-content: space-around; align-items: center;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-.dock-btn {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    color: #64748b; text-decoration: none; transition: 0.3s; width: 25%; height: 100%;
-}
-.dock-btn.active {
-    color: var(--highlight);
-    background: linear-gradient(to top, rgba(102,252,241,0.05), transparent);
-    border-top: 2px solid var(--highlight);
-}
+/* FEED & SOCIAL */
+.ao3-work { font-family: 'Lucida Grande', sans-serif; border: 1px solid #333; margin-bottom: 20px; background: #111; box-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+.ao3-header { background: #222; border-bottom: 3px solid var(--ao3-red); padding: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.ao3-tags { font-size: 0.7rem; color: #fff; padding: 5px 10px; }
+.feed-tab { cursor: pointer; padding-bottom: 5px; color: #64748b; border-bottom: 2px solid transparent; transition: 0.3s; }
+.feed-tab.active { color: var(--highlight); border-color: var(--highlight); }
 
-/* 6. ADMIN & UI ELEMENTS */
-.admin-btn {
-    position: fixed; bottom: 90px; right: 20px;
-    background: #900; color: white;
-    padding: 10px 20px; border-radius: 30px;
-    font-weight: bold;
-    box-shadow: 0 0 15px rgba(255,0,0,0.4);
-    z-index: 60; display: none; cursor: pointer; transition: 0.3s;
-}
+/* CREATE POST FORM */
+.create-form-container { max-width: 800px; margin: 0 auto; background: #0a0a0a; padding: 20px; border-radius: 8px; border: 1px solid #333; }
+.create-label { font-size: 0.7rem; color: #64748b; font-weight: bold; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* HAMBURGER MENU */
+#mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease-in-out; }
+#mobile-menu.open { opacity: 1; pointer-events: auto; }
+.mobile-link { font-size: 1.5rem; color: #64748b; margin: 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+.mobile-link:hover { color: var(--accent); }
+
+/* ADMIN & MODALS */
+.admin-btn { position: fixed; bottom: 90px; right: 20px; background: #900; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.4); z-index: 60; display: none; cursor: pointer; transition: 0.3s; }
 .admin-btn:hover { transform: scale(1.05); background: #b00; }
-
-.modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.8); z-index: 80;
-    display: none; align-items: center; justify-content: center;
-    backdrop-filter: blur(5px);
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 80; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
 .modal-overlay.open { display: flex; }
 
-/* 7. SCROLLBARS */
+/* RESPONSIVE */
+@media (min-width: 1024px) { .mobile-only { display: none !important; } .desktop-only { display: flex !important; } }
+@media (max-width: 1023px) { .desktop-only { display: none !important; } }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-/* 8. RESPONSIVE */
-@media (min-width: 1024px) {
-    .mobile-only { display: none !important; }
-    .desktop-only { display: flex !important; }
-}
-@media (max-width: 1023px) {
-    .desktop-only { display: none !important; }
-}
