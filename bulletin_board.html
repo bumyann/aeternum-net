@@ -10,7 +10,6 @@
 <body class="h-screen flex flex-col lg:bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] lg:bg-fixed">
 
     <div class="w-full max-w-3xl mx-auto h-full flex flex-col relative bg-black/80 border-x border-white/5 shadow-2xl">
-        
         <header class="p-4 border-b border-white/10 bg-black/90 backdrop-blur sticky top-0 z-30 flex justify-between items-center">
             <h1 class="text-lg font-bold text-white tracking-widest">AETERNUM <span class="text-[#66fcf1]">SOCIAL</span></h1>
             <div class="flex items-center gap-3">
@@ -21,74 +20,33 @@
         </header>
 
         <div id="view-feed" class="flex-1 overflow-y-auto p-4 pb-24 scroll-smooth">
-            <div id="feed-container" class="space-y-6">
-                <div class="text-center text-gray-600 text-xs py-10 animate-pulse">Loading Archives...</div>
+            <div class="mb-4 sticky top-0 z-20">
+                <input id="search-bar" type="text" class="input-dark bg-black/80 backdrop-blur border-[#333] focus:border-[#66fcf1]" placeholder="🔍 Search works, tags, users..." onkeyup="filterFeed()">
             </div>
+            <div id="feed-container" class="space-y-6"></div>
         </div>
 
         <div id="view-create" class="hidden flex-1 overflow-y-auto p-6 pb-24 bg-[#0a0a0a]">
-            
             <div class="create-form-container">
                 <h2 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">CREATE NEW WORK</h2>
-                
                 <div class="space-y-4">
-                    <div>
-                        <label class="create-label">Title</label>
-                        <input id="post-title" type="text" class="input-dark font-bold text-lg" placeholder="Enter Title...">
-                    </div>
-                    
-                    <div>
-                        <label class="create-label">Header Image (Optional)</label>
-                        <div class="flex gap-2 items-center">
-                            <label class="flex items-center gap-2 bg-[#1a1b26] border border-gray-700 px-4 py-2 rounded cursor-pointer hover:border-white transition">
-                                <span class="text-xs text-white">📸 Upload</span>
-                                <input type="file" id="post-img-input" accept="image/*" class="hidden" onchange="previewImage('post-img-input', 'post-img-preview')">
-                            </label>
-                        </div>
-                        <img id="post-img-preview" class="hidden w-full h-40 object-cover rounded mt-2 border border-gray-700">
-                    </div>
-
-                    <div>
-                        <label class="create-label">Tags</label>
-                        <input id="post-tags" type="text" class="input-dark text-[#66fcf1]" placeholder="#romance, #scifi">
-                    </div>
-
-                    <div>
-                        <label class="create-label">Summary</label>
-                        <textarea id="post-summary" rows="3" class="input-dark" placeholder="Brief description..."></textarea>
-                    </div>
-
-                    <div>
-                        <label class="create-label">Work Content</label>
-                        <textarea id="post-body" rows="12" class="input-dark font-serif leading-relaxed" placeholder="Once upon a time..."></textarea>
-                    </div>
-
-                    <button onclick="publishWork()" class="w-full bg-[#900] hover:bg-red-700 text-white font-bold py-4 rounded text-sm tracking-widest transition shadow-lg mt-4">
-                        PUBLISH TO ARCHIVE
-                    </button>
+                    <div><label class="create-label">Title</label><input id="post-title" type="text" class="input-dark font-bold text-lg" placeholder="Title"></div>
+                    <div><label class="create-label">Header Image</label><div class="flex gap-2 items-center"><label class="flex items-center gap-2 bg-[#1a1b26] border border-gray-700 px-4 py-2 rounded cursor-pointer hover:border-white transition"><span class="text-xs text-white">📸 Upload</span><input type="file" id="post-img-input" accept="image/*" class="hidden" onchange="previewImage('post-img-input', 'post-img-preview')"></label></div><img id="post-img-preview" class="hidden w-full h-40 object-cover rounded mt-2 border border-gray-700"></div>
+                    <div><label class="create-label">Tags</label><input id="post-tags" type="text" class="input-dark text-[#66fcf1]" placeholder="#tags"></div>
+                    <div><label class="create-label">Summary</label><textarea id="post-summary" rows="3" class="input-dark" placeholder="Summary"></textarea></div>
+                    <div><label class="create-label">Content</label><textarea id="post-body" rows="12" class="input-dark font-serif leading-relaxed" placeholder="Story..."></textarea></div>
+                    <button onclick="publishWork()" class="w-full bg-[#900] hover:bg-red-700 text-white font-bold py-4 rounded text-sm tracking-widest transition shadow-lg mt-4">PUBLISH</button>
                 </div>
             </div>
         </div>
 
         <div id="view-chat" class="hidden flex-1 flex flex-col h-full overflow-hidden bg-black">
             <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-3 pb-4"></div>
-            
             <div class="p-3 bg-[#111] border-t border-white/10 flex flex-col gap-2 mb-[70px]">
-                <div id="chat-img-preview-container" class="hidden relative w-16 h-16">
-                    <img id="chat-img-preview" class="w-full h-full object-cover rounded border border-gray-600">
-                    <button onclick="clearChatImage()" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] flex items-center justify-center">×</button>
-                </div>
-                
-                <div class="flex gap-2">
-                    <label class="bg-gray-800 text-gray-400 p-2 rounded cursor-pointer hover:text-white flex items-center justify-center">
-                        📷 <input type="file" id="chat-img-input" accept="image/*" class="hidden" onchange="previewImage('chat-img-input', 'chat-img-preview', 'chat-img-preview-container')">
-                    </label>
-                    <input id="chat-input" type="text" class="flex-1 bg-black border border-gray-700 rounded px-3 text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Broadcast message...">
-                    <button onclick="sendChat()" class="btn-action">SEND</button>
-                </div>
+                <div id="chat-img-preview-container" class="hidden relative w-16 h-16"><img id="chat-img-preview" class="w-full h-full object-cover rounded border border-gray-600"><button onclick="clearChatImage()" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] flex items-center justify-center">×</button></div>
+                <div class="flex gap-2"><label class="bg-gray-800 text-gray-400 p-2 rounded cursor-pointer hover:text-white flex items-center justify-center">📷 <input type="file" id="chat-img-input" accept="image/*" class="hidden" onchange="previewImage('chat-img-input', 'chat-img-preview', 'chat-img-preview-container')"></label><input id="chat-input" type="text" class="flex-1 bg-black border border-gray-700 rounded px-3 text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Message..."><button onclick="sendChat()" class="btn-action">SEND</button></div>
             </div>
         </div>
-
     </div>
 
     <nav class="bottom-dock">
@@ -99,9 +57,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // *** CONFIG ***
         const firebaseConfig = {
             apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
   authDomain: "aeternum-840dd.firebaseapp.com",
@@ -111,15 +70,16 @@
   appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
   measurementId: "G-TDJQLYF4S4"
 };
+        const ADMIN_EMAIL = "yann359705@gmail.com"; 
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         let currentUser = null;
-        let currentPostImage = null; 
-        let currentChatImage = null; 
+        let currentPostImage = null; let currentChatImage = null;
+        let allPosts = []; // For search filtering
 
-        onAuthStateChanged(auth, async (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 document.getElementById('user-name').innerText = user.displayName || "Anonymous";
@@ -128,138 +88,97 @@
         });
 
         window.switchTab = function(tab) {
-            ['feed','create','chat'].forEach(t => {
-                document.getElementById('view-'+t).classList.add('hidden');
-                document.getElementById('btn-'+t).classList.remove('active');
-            });
-            document.getElementById('view-'+tab).classList.remove('hidden');
-            document.getElementById('btn-'+tab).classList.add('active');
+            ['feed','create','chat'].forEach(t => { document.getElementById('view-'+t).classList.add('hidden'); document.getElementById('btn-'+t).classList.remove('active'); });
+            document.getElementById('view-'+tab).classList.remove('hidden'); document.getElementById('btn-'+tab).classList.add('active');
             if(tab==='chat') document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
         }
 
-        window.previewImage = function(inputId, previewId, containerId) {
-            const file = document.getElementById(inputId).files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                const b64 = reader.result;
-                document.getElementById(previewId).src = b64;
-                document.getElementById(previewId).classList.remove('hidden');
-                if(containerId) document.getElementById(containerId).classList.remove('hidden');
-                if(inputId === 'post-img-input') currentPostImage = b64;
-                if(inputId === 'chat-img-input') currentChatImage = b64;
-            }
-            reader.readAsDataURL(file);
+        window.previewImage = function(iId, pId, cId) {
+            const f = document.getElementById(iId).files[0]; if(!f) return;
+            const r = new FileReader(); r.onloadend=()=>{ const b64=r.result; document.getElementById(pId).src=b64; document.getElementById(pId).classList.remove('hidden'); if(cId)document.getElementById(cId).classList.remove('hidden'); if(iId==='post-img-input')currentPostImage=b64; if(iId==='chat-img-input')currentChatImage=b64; }; r.readAsDataURL(f);
         }
-        
-        window.clearChatImage = function() {
-            currentChatImage = null;
-            document.getElementById('chat-img-input').value = "";
-            document.getElementById('chat-img-preview-container').classList.add('hidden');
-        }
+        window.clearChatImage = function() { currentChatImage=null; document.getElementById('chat-img-input').value=""; document.getElementById('chat-img-preview-container').classList.add('hidden'); }
 
         window.publishWork = async function() {
-            if(!currentUser) return alert("Please Login");
-            const title = document.getElementById('post-title').value;
-            const body = document.getElementById('post-body').value;
-            const summary = document.getElementById('post-summary').value;
-            const tags = document.getElementById('post-tags').value;
-
-            if(!title || !body) return alert("Title and Content required.");
-
-            try {
-                await addDoc(collection(db, "posts"), {
-                    type: "lit",
-                    uid: currentUser.uid,
-                    author: currentUser.displayName || "Anonymous",
-                    authorPic: currentUser.photoURL || null,
-                    title: title, text: body, summary: summary, tags: tags,
-                    image: currentPostImage,
-                    timestamp: serverTimestamp(), hits: 0
-                });
-                
-                document.getElementById('post-title').value = "";
-                document.getElementById('post-body').value = "";
-                document.getElementById('post-summary').value = "";
-                document.getElementById('post-tags').value = "";
-                document.getElementById('post-img-input').value = "";
-                document.getElementById('post-img-preview').classList.add('hidden');
-                currentPostImage = null;
-                switchTab('feed');
-            } catch(e) { alert("Error: " + e.message); }
+            if(!currentUser) return alert("Login required");
+            const t = document.getElementById('post-title').value;
+            const b = document.getElementById('post-body').value;
+            if(!t || !b) return alert("Title/Content missing");
+            await addDoc(collection(db, "posts"), {
+                type: "lit", uid: currentUser.uid, author: currentUser.displayName, authorPic: currentUser.photoURL,
+                title: t, text: b, summary: document.getElementById('post-summary').value, tags: document.getElementById('post-tags').value, image: currentPostImage, timestamp: serverTimestamp()
+            });
+            document.getElementById('post-title').value=""; document.getElementById('post-body').value=""; document.getElementById('post-summary').value=""; document.getElementById('post-tags').value=""; document.getElementById('post-img-input').value=""; document.getElementById('post-img-preview').classList.add('hidden'); currentPostImage=null; switchTab('feed');
         }
 
         window.sendChat = async function() {
-            const text = document.getElementById('chat-input').value.trim();
-            if(!text && !currentChatImage) return;
-
+            const txt = document.getElementById('chat-input').value.trim();
+            if(!txt && !currentChatImage) return;
             await addDoc(collection(db, "posts"), {
-                type: "chat",
-                uid: currentUser.uid,
-                author: currentUser.displayName || "Anonymous",
-                authorPic: currentUser.photoURL || null,
-                text: text,
-                image: currentChatImage,
-                timestamp: serverTimestamp()
+                type: "chat", uid: currentUser.uid, author: currentUser.displayName, authorPic: currentUser.photoURL,
+                text: txt, image: currentChatImage, timestamp: serverTimestamp()
             });
-            document.getElementById('chat-input').value = "";
-            clearChatImage();
+            document.getElementById('chat-input').value=""; clearChatImage();
         }
 
+        // FEED RENDER
         onSnapshot(query(collection(db, "posts"), where("type", "==", "lit")), (snap) => {
-            const container = document.getElementById('feed-container');
-            container.innerHTML = "";
-            let posts = []; snap.forEach(doc => posts.push(doc.data()));
-            posts.sort((a,b) => (b.timestamp?.seconds||0) - (a.timestamp?.seconds||0));
-
-            if(posts.length === 0) container.innerHTML = `<div class="text-center text-gray-500 mt-10">Archive Empty.</div>`;
-
-            posts.forEach(p => {
-                const tagHtml = p.tags ? p.tags.split(',').map(t=>`<span class="mr-2 text-gray-400 text-[10px] uppercase">#${t.trim()}</span>`).join('') : "";
-                const pfp = p.authorPic || `https://api.dicebear.com/7.x/bottts/svg?seed=${p.uid}`;
-                const imgHtml = p.image ? `<div class="w-full h-40 bg-gray-900 border-b border-gray-800"><img src="${p.image}" class="w-full h-full object-cover opacity-80"></div>` : "";
-                
-                container.innerHTML += `
-                    <div class="ao3-work overflow-hidden">
-                        ${imgHtml}
-                        <div class="ao3-header">
-                            <img src="${pfp}" class="w-8 h-8 rounded border border-gray-600">
-                            <div class="flex-1 min-w-0">
-                                <div class="ao3-title truncate">${escape(p.title)}</div>
-                                <div class="text-[10px] text-gray-400">by <span class="text-white font-bold">${escape(p.author)}</span></div>
-                            </div>
-                        </div>
-                        <div class="ao3-tags">${tagHtml}</div>
-                        <div class="ao3-summary">${escape(p.summary)}</div>
-                        <div class="p-4 text-xs font-serif text-gray-300 border-t border-gray-800 leading-6 whitespace-pre-wrap max-h-60 overflow-y-auto">
-                            ${escape(p.text)}
-                        </div>
-                    </div>`;
-            });
+            const c = document.getElementById('feed-container'); c.innerHTML = "";
+            allPosts = []; snap.forEach(d => { let p=d.data(); p.id=d.id; allPosts.push(p); });
+            allPosts.sort((a,b)=>(b.timestamp?.seconds||0)-(a.timestamp?.seconds||0));
+            if(!allPosts.length) c.innerHTML = `<div class="text-center text-gray-500 mt-10">Archive Empty.</div>`;
+            allPosts.forEach(p => renderPost(p, c));
         });
 
+        function renderPost(p, container) {
+            const tagHtml = p.tags ? p.tags.split(',').map(t=>`<span class="mr-2 text-gray-400 text-[10px] uppercase">#${t.trim()}</span>`).join('') : "";
+            const imgHtml = p.image ? `<div class="w-full h-40 bg-gray-900 border-b border-gray-800"><img src="${p.image}" class="w-full h-full object-cover opacity-80"></div>` : "";
+            // Delete Logic
+            let delBtn = "";
+            if(currentUser && (currentUser.uid === p.uid || currentUser.email === ADMIN_EMAIL)) {
+                delBtn = `<button onclick="deletePost('${p.id}')" class="text-red-500 text-[10px] hover:text-white font-bold">[DEL]</button>`;
+            }
+
+            container.innerHTML += `
+                <div class="ao3-work overflow-hidden relative group">
+                    ${imgHtml}
+                    <div class="ao3-header justify-between">
+                        <div class="flex gap-2 items-center flex-1 min-w-0">
+                            <img src="${p.authorPic||''}" class="w-8 h-8 rounded border border-gray-600">
+                            <div class="min-w-0"><div class="ao3-title truncate">${escape(p.title)}</div><div class="text-[10px] text-gray-400">by <span class="text-white font-bold">${escape(p.author)}</span></div></div>
+                        </div>
+                        ${delBtn}
+                    </div>
+                    <div class="ao3-tags">${tagHtml}</div>
+                    <div class="ao3-summary">${escape(p.summary)}</div>
+                    <div class="p-4 text-xs font-serif text-gray-300 border-t border-gray-800 leading-6 whitespace-pre-wrap max-h-60 overflow-y-auto">${escape(p.text)}</div>
+                </div>`;
+        }
+
+        window.filterFeed = function() {
+            const term = document.getElementById('search-bar').value.toLowerCase();
+            const c = document.getElementById('feed-container'); c.innerHTML = "";
+            const filtered = allPosts.filter(p => (p.title+p.tags+p.author).toLowerCase().includes(term));
+            if(!filtered.length) c.innerHTML = `<div class="text-center text-gray-500 mt-10">No results.</div>`;
+            filtered.forEach(p => renderPost(p, c));
+        }
+
+        window.deletePost = async function(id) {
+            if(confirm("Delete post?")) await deleteDoc(doc(db, "posts", id));
+        }
+
+        // CHAT RENDER
         onSnapshot(query(collection(db, "posts"), where("type", "==", "chat")), (snap) => {
-            const container = document.getElementById('chat-container');
-            container.innerHTML = "";
-            let chats = []; snap.forEach(doc => chats.push(doc.data()));
-            chats.sort((a,b) => (a.timestamp?.seconds||0) - (b.timestamp?.seconds||0));
-
-            chats.forEach(c => {
-                const pfp = c.authorPic || `https://api.dicebear.com/7.x/bottts/svg?seed=${c.uid}`;
-                const chatImg = c.image ? `<img src="${c.image}" class="mt-2 rounded max-w-full border border-gray-700">` : "";
-                container.innerHTML += `
-                    <div class="flex gap-2 items-start mb-3">
-                        <img src="${pfp}" class="w-6 h-6 rounded-full mt-1">
-                        <div class="bg-[#111] border border-gray-800 rounded-lg rounded-tl-none p-2 max-w-[85%]">
-                            <div class="text-[10px] text-[#66fcf1] font-bold mb-0.5">${escape(c.author)}</div>
-                            <div class="text-xs text-gray-300 leading-relaxed">${escape(c.text)}</div>
-                            ${chatImg}
-                        </div>
-                    </div>`;
+            const c = document.getElementById('chat-container'); c.innerHTML = "";
+            let chats = []; snap.forEach(d => chats.push(d.data()));
+            chats.sort((a,b)=>(a.timestamp?.seconds||0)-(b.timestamp?.seconds||0));
+            chats.forEach(x => {
+                const img = x.image ? `<img src="${x.image}" class="mt-2 rounded max-w-full border border-gray-700">` : "";
+                c.innerHTML += `<div class="flex gap-2 items-start mb-3"><img src="${x.authorPic||''}" class="w-6 h-6 rounded-full mt-1"><div class="bg-[#111] border border-gray-800 rounded-lg rounded-tl-none p-2 max-w-[85%]"><div class="text-[10px] text-[#66fcf1] font-bold mb-0.5">${escape(x.author)}</div><div class="text-xs text-gray-300 leading-relaxed">${escape(x.text)}</div>${img}</div></div>`;
             });
-            container.scrollTop = container.scrollHeight;
+            c.scrollTop = c.scrollHeight;
         });
-        function escape(s){ return s ? s.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
+        function escape(s){ return s?s.replace(/&/g,"&amp;").replace(/</g,"&lt;"):""; }
     </script>
 </body>
 </html>

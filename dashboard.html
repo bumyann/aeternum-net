@@ -14,17 +14,21 @@
             <img id="sidebar-pfp" src="" class="w-10 h-10 rounded-full border border-gray-600 bg-black object-cover">
             <div class="flex-1 min-w-0">
                 <h2 id="sidebar-name" class="font-bold text-white text-sm truncate">...</h2>
-                <p class="text-[10px] text-[#66fcf1]">ONLINE ⚙️</p>
+                <p class="text-[10px] text-[#66fcf1]">ONLINE</p>
             </div>
         </div>
-        <nav class="space-y-1">
-            <a href="#" class="nav-item active">/// FEED</a>
-            <a href="bulletin_board.html" class="nav-item">/// BULLETIN_BOARD</a>
-            <a href="app.html" class="nav-item">/// ARCHITECT_TOOL</a>
+        
+        <nav class="space-y-1 flex-1">
+            <div class="px-2 mb-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider">NETWORK</div>
+            <a href="#" class="nav-item active">/// LIVE FEED</a>
+            <a href="bulletin_board.html" class="nav-item">/// BULLETIN BOARD</a>
             <a href="character_files.html" class="nav-item">/// FILES</a>
         </nav>
+
         <div class="mt-auto pt-4 border-t border-white/10">
-            <a href="index.html" class="text-xs text-red-400 hover:text-red-300">< LOG_OUT</a>
+            <div class="px-2 mb-2 text-[10px] font-bold text-[#66fcf1] uppercase tracking-wider">CREATIVE SUITE</div>
+            <a href="app.html" class="nav-item group hover:text-[#66fcf1]">>> ARCHITECT.EXE</a>
+            <a href="index.html" class="nav-item text-red-400 hover:text-red-300 mt-4">< LOG_OUT</a>
         </div>
     </aside>
 
@@ -66,7 +70,7 @@
         </a>
     </aside>
 
-    <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">⚙️ OPERATOR</button>
+    <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">OPERATOR</button>
 
     <div id="admin-panel" class="fixed inset-0 bg-black/95 z-[70] hidden flex-col p-6 overflow-y-auto">
         <div class="max-w-3xl mx-auto w-full space-y-8 pb-20">
@@ -74,51 +78,37 @@
                 <h2 class="text-2xl font-bold text-[#66fcf1]">OPERATOR CONSOLE</h2>
                 <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-white">CLOSE [X]</button>
             </div>
-            
             <div class="glass-panel p-6 rounded-xl border border-indigo-500/30">
                 <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">📢 POST SYSTEM NOTICE</h3>
                 <input id="notice-title" class="input-dark mb-2 font-bold" placeholder="Notice Title">
                 <textarea id="notice-content" class="input-dark h-24 mb-4" placeholder="Content..."></textarea>
-                <button id="btn-post-notice" onclick="postNotice()" class="bg-indigo-600 text-white px-4 py-2 rounded text-xs font-bold hover:bg-indigo-500">BROADCAST NOTICE</button>
+                <button onclick="postNotice()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-xs font-bold transition">BROADCAST NOTICE</button>
             </div>
-
             <div class="bg-[#1a1a1a] p-4 rounded border border-white/20">
                 <label class="create-label text-[#66fcf1]">SELECT CHARACTER TO EDIT</label>
                 <select id="edit-char-select" class="input-dark mb-2" onchange="loadCharacterForEdit()">
-                    <option value="">-- Create New Character --</option>
+                    <option value="">-- Create New --</option>
                 </select>
                 <input type="hidden" id="edit-char-id">
             </div>
-
             <div class="glass-panel p-6 rounded-xl">
-                <h3 class="text-sm font-bold text-white mb-4">👤 CHARACTER METADATA</h3>
-                
+                <h3 class="text-sm font-bold text-white mb-4">CHARACTER METADATA</h3>
                 <div class="mb-4 flex items-center gap-4">
-                    <div class="w-16 h-16 bg-[#111] border border-gray-700 rounded overflow-hidden">
-                        <img id="bot-img-preview" class="w-full h-full object-cover hidden">
-                    </div>
-                    <label class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs cursor-pointer border border-gray-600 hover:text-white">
-                        Upload Portrait
-                        <input type="file" id="bot-img-input" class="hidden" accept="image/*" onchange="previewBotImage()">
-                    </label>
+                    <div class="w-16 h-16 bg-[#111] border border-gray-700 rounded overflow-hidden"><img id="bot-img-preview" class="w-full h-full object-cover hidden"></div>
+                    <label class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs cursor-pointer border border-gray-600 hover:text-white">Upload Portrait<input type="file" id="bot-img-input" class="hidden" accept="image/*" onchange="previewBotImage()"></label>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
                     <input id="bot-name" class="input-dark" placeholder="Name">
                     <input id="bot-tag" class="input-dark" placeholder="Tag">
                     <input id="bot-series" class="input-dark border-indigo-900 focus:border-indigo-500" placeholder="Series Name">
                 </div>
-                
                 <textarea id="bot-desc" class="input-dark h-20" placeholder="Description"></textarea>
-                
                 <h4 class="text-xs font-bold text-[#66fcf1] mt-6 mb-2 border-b border-white/10 pb-1">SCENARIOS & LINKS</h4>
                 <div id="scenarios-container" class="space-y-4"></div>
-                
                 <button onclick="addScenarioBlock()" class="mt-4 text-[10px] bg-white/10 px-3 py-1 rounded text-white hover:bg-white/20">+ ADD SCENARIO BLOCK</button>
-                
                 <div class="mt-8 pt-4 border-t border-white/20 flex gap-4">
-                    <button id="btn-save-char" onclick="saveCharacter()" class="bg-green-700 text-white px-6 py-3 rounded text-sm font-bold flex-1 hover:bg-green-600">SAVE CHARACTER</button>
-                    <button id="btn-del-char" onclick="deleteCharacter()" class="bg-red-900/30 text-red-400 border border-red-900 px-4 py-3 rounded text-sm font-bold hover:bg-red-900 hover:text-white">DELETE</button>
+                    <button onclick="saveCharacter()" class="bg-green-700 text-white px-6 py-3 rounded text-sm font-bold flex-1 hover:bg-green-600 transition">SAVE CHARACTER</button>
+                    <button onclick="deleteCharacter()" class="bg-red-900/30 text-red-400 border border-red-900 px-4 py-3 rounded text-sm font-bold hover:bg-red-900 hover:text-white transition">DELETE</button>
                 </div>
             </div>
         </div>
@@ -131,11 +121,8 @@
             <div class="space-y-4">
                 <img id="edit-pfp-preview" src="" class="w-20 h-20 rounded-full border-2 border-[#66fcf1] mx-auto bg-black object-cover">
                 <input id="edit-name" class="input-dark" placeholder="Alias">
-                <div class="flex gap-2">
-                    <input id="edit-pfp" class="input-dark" placeholder="Avatar URL" oninput="document.getElementById('edit-pfp-preview').src=this.value">
-                    <button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white">🎲</button>
-                </div>
-                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] text-black font-bold py-3 rounded text-sm">SAVE</button>
+                <div class="flex gap-2"><input id="edit-pfp" class="input-dark" placeholder="Avatar URL" oninput="document.getElementById('edit-pfp-preview').src=this.value"><button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white">🎲</button></div>
+                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] text-black font-bold py-3 rounded text-sm">SAVE IDENTITY</button>
             </div>
         </div>
     </div>
@@ -149,10 +136,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // *** CONFIG ***
         const firebaseConfig = {
             apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
   authDomain: "aeternum-840dd.firebaseapp.com",
@@ -184,19 +170,38 @@
             } else window.location.href = "index.html";
         });
 
-        // FEED LOGIC
-        onSnapshot(query(collection(db, "system_feed"), orderBy("timestamp", "desc")), (snap) => {
+        // FEED & LOGS WITH DELETE
+        const feedQ = query(collection(db, "system_feed"), orderBy("timestamp", "desc"));
+        onSnapshot(feedQ, (snap) => {
             const lat = document.getElementById('latest-notice-container');
             const log = document.getElementById('logs-container');
             lat.innerHTML=""; log.innerHTML="";
-            let docs=[]; snap.forEach(d=>docs.push(d.data()));
+            let docs=[]; snap.forEach(d=>{ let data=d.data(); data.id=d.id; docs.push(data); });
+            
             if(docs.length){
-                lat.innerHTML=`<div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4"><div class="flex items-center gap-2 mb-2 text-indigo-300"><span>📢</span> <span class="font-bold uppercase">${escape(docs[0].title)}</span></div><p class="text-gray-400 text-xs leading-relaxed">${escape(docs[0].content)}</p></div>`;
-                docs.forEach(d=>log.innerHTML+=`<div class="p-3 border-l-2 border-gray-600 bg-white/5 relative mb-2"><div class="text-[10px] text-gray-500 mb-1">${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():"Unknown"}</div><h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3><p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p></div>`);
-            } else lat.innerHTML=`<div class="text-gray-500 text-xs italic">System Offline. No announcements.</div>`;
+                // Latest
+                const l = docs[0];
+                const delBtn = currentUser?.email===ADMIN_EMAIL ? `<button onclick="deleteNotice('${l.id}')" class="text-red-500 text-[10px] ml-auto hover:text-white font-bold">[DELETE]</button>` : "";
+                lat.innerHTML=`<div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4 relative group"><div class="flex items-center gap-2 mb-2 text-indigo-300"><span>📢</span> <span class="font-bold uppercase">${escape(l.title)}</span>${delBtn}</div><p class="text-gray-400 text-xs leading-relaxed">${escape(l.content)}</p></div>`;
+                
+                // Logs
+                docs.forEach(d=>{
+                    const del = currentUser?.email===ADMIN_EMAIL ? `<button onclick="deleteNotice('${d.id}')" class="absolute top-2 right-2 text-red-500 text-[10px] opacity-0 group-hover:opacity-100 transition">[DEL]</button>` : "";
+                    log.innerHTML+=`<div class="p-3 border-l-2 border-gray-600 bg-white/5 relative mb-2 group"><div class="text-[10px] text-gray-500 mb-1">${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():"Unknown"}</div><h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3><p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p>${del}</div>`;
+                });
+            } else {
+                lat.innerHTML=`<div class="text-gray-500 text-xs italic">System Offline.</div>`;
+                log.innerHTML=`<div class="text-gray-500 text-xs italic">Archive empty.</div>`;
+            }
         });
 
-        // CHARACTER LOGIC
+        window.deleteNotice = async function(id) {
+            if(!confirm("Delete this announcement?")) return;
+            try { await deleteDoc(doc(db, "system_feed", id)); } 
+            catch(e) { alert("Error: "+e.message); }
+        }
+
+        // --- CHARACTERS ---
         onSnapshot(query(collection(db, "characters"), orderBy("timestamp", "desc")), (snap) => {
             const select = document.getElementById('edit-char-select');
             const feed = document.getElementById('characters-container');
@@ -236,63 +241,7 @@
             container.innerHTML += `<div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group"><div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${char.id}')"><div class="w-12 h-12 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative">${imgHtml}</div><div class="flex-1"><div class="flex justify-between items-center"><h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(char.name)}</h3><span class="text-[10px] text-gray-500">▼</span></div><p class="text-xs text-gray-400 mt-1">${escape(char.desc)}</p></div></div><div id="scen-${char.id}" class="scenario-list border-t border-white/5 mt-2 hidden"><div class="pt-3 space-y-2">${scenHtml}</div></div></div>`;
         }
 
-        // --- EDITOR ACTIONS ---
-        window.saveCharacter = async function() {
-            try {
-                const btn = document.getElementById('btn-save-char');
-                btn.innerText = "SAVING..."; btn.disabled = true;
-                
-                const id = document.getElementById('edit-char-id').value;
-                const name = document.getElementById('bot-name').value;
-                if(!name) throw new Error("Name is required");
-
-                let scenarios = [];
-                document.querySelectorAll('.scenario-block').forEach(b => {
-                    const title = b.querySelector('.scen-title').value;
-                    let links = [];
-                    b.querySelectorAll('.link-row').forEach(r => {
-                        const label = r.querySelector('.link-label').value;
-                        const url = r.querySelector('.link-url').value;
-                        if(label && url) links.push({label, url});
-                    });
-                    if(title) scenarios.push({title, links});
-                });
-
-                const data = {
-                    name: name,
-                    tag: document.getElementById('bot-tag').value,
-                    series: document.getElementById('bot-series').value,
-                    desc: document.getElementById('bot-desc').value,
-                    scenarios: scenarios,
-                    image: currentBotImage,
-                    timestamp: serverTimestamp()
-                };
-
-                if(id) { await setDoc(doc(db, "characters", id), data, {merge: true}); alert("Updated!"); }
-                else { await addDoc(collection(db, "characters"), data); alert("Created!"); }
-                
-                document.getElementById('edit-char-select').value = "";
-                loadCharacterForEdit();
-                btn.innerText = "SAVE CHARACTER"; btn.disabled = false;
-            } catch(e) { alert("Error: " + e.message); document.getElementById('btn-save-char').innerText = "SAVE CHARACTER"; document.getElementById('btn-save-char').disabled = false; }
-        }
-
-        window.deleteCharacter = async function() {
-            const id = document.getElementById('edit-char-id').value;
-            if(!id) return;
-            if(!confirm("Delete this character?")) return;
-            
-            try {
-                const btn = document.getElementById('btn-del-char');
-                btn.innerText = "...";
-                await deleteDoc(doc(db, "characters", id));
-                alert("Deleted");
-                document.getElementById('edit-char-select').value = "";
-                loadCharacterForEdit();
-                btn.innerText = "DELETE";
-            } catch(e) { alert("Error: " + e.message); }
-        }
-
+        // --- ADMIN / EDITOR (Same Logic) ---
         window.loadCharacterForEdit = function() {
             const id = document.getElementById('edit-char-select').value;
             document.getElementById('scenarios-container').innerHTML = "";
@@ -315,7 +264,6 @@
             document.getElementById('bot-desc').value = char.desc;
             if(char.image) { currentBotImage = char.image; document.getElementById('bot-img-preview').src = char.image; document.getElementById('bot-img-preview').classList.remove('hidden'); }
             else { document.getElementById('bot-img-preview').classList.add('hidden'); }
-            
             if(char.scenarios) char.scenarios.forEach(s => addScenarioBlock(s.title, s.links));
             else addScenarioBlock("Default", char.links||[]);
         }
@@ -330,20 +278,36 @@
         function createLRow(l="", u=""){ return `<div class="flex gap-2 link-row"><input class="link-label input-dark text-xs flex-1" placeholder="Platform" value="${escape(l)}"><input class="link-url input-dark text-xs flex-[2]" placeholder="URL" value="${escape(u)}"><button onclick="this.parentElement.remove()" class="text-red-500 px-1">✕</button></div>`; }
         window.addLinkRow = function(btn) { btn.previousElementSibling.insertAdjacentHTML('beforeend', createLRow()); }
 
-        // --- GLOBAL & PROFILE ---
-        window.postNotice = async function() {
+        window.saveCharacter = async function() {
             try {
-                const t=document.getElementById('notice-title').value; const c=document.getElementById('notice-content').value;
-                if(t) await addDoc(collection(db,"system_feed"),{title:t, content:c, timestamp:serverTimestamp()});
-                alert("Posted");
-            } catch(e){ alert("Error: "+e.message); }
+                const id = document.getElementById('edit-char-id').value;
+                const name = document.getElementById('bot-name').value;
+                if(!name) throw new Error("Name required");
+                let scenarios = [];
+                document.querySelectorAll('.scenario-block').forEach(b => {
+                    const title = b.querySelector('.scen-title').value;
+                    let links = [];
+                    b.querySelectorAll('.link-row').forEach(r => { if(r.querySelector('.link-label').value) links.push({label:r.querySelector('.link-label').value, url:r.querySelector('.link-url').value}); });
+                    if(title) scenarios.push({title, links});
+                });
+                const data = { name, tag: document.getElementById('bot-tag').value, series: document.getElementById('bot-series').value, desc: document.getElementById('bot-desc').value, scenarios, image: currentBotImage, timestamp: serverTimestamp() };
+                if(id) await setDoc(doc(db, "characters", id), data, {merge: true}); else await addDoc(collection(db, "characters"), data);
+                alert("Saved!");
+                document.getElementById('edit-char-select').value = ""; loadCharacterForEdit();
+            } catch(e){ alert(e.message); }
         }
+        window.deleteCharacter = async function() {
+            const id = document.getElementById('edit-char-id').value;
+            if(id && confirm("Delete?")) { await deleteDoc(doc(db, "characters", id)); alert("Deleted"); document.getElementById('edit-char-select').value = ""; loadCharacterForEdit(); }
+        }
+
+        // --- UTILS ---
+        window.postNotice = async function() { const t=document.getElementById('notice-title').value; const c=document.getElementById('notice-content').value; if(t) await addDoc(collection(db,"system_feed"),{title:t, content:c, timestamp:serverTimestamp()}); alert("Posted"); }
         window.previewBotImage = function(){ const f=document.getElementById('bot-img-input').files[0]; if(f){ const r=new FileReader(); r.onload=e=>{currentBotImage=e.target.result; document.getElementById('bot-img-preview').src=currentBotImage; document.getElementById('bot-img-preview').classList.remove('hidden');}; r.readAsDataURL(f); } }
-        window.saveProfile = async function(){ try{ const n=document.getElementById('edit-name').value; const p=document.getElementById('edit-pfp').value; if(n){ await updateProfile(currentUser,{displayName:n,photoURL:p}); await setDoc(doc(db,"users",currentUser.uid),{name:n,photo:p},{merge:true}); location.reload(); } } catch(e){ alert("Error: "+e.message); } }
         window.openProfileSettings = function(){ document.getElementById('profile-modal').classList.add('open'); }
         window.closeProfileSettings = function(){ document.getElementById('profile-modal').classList.remove('open'); }
         window.randomizeAvatar = function(){ const u=`https://api.dicebear.com/7.x/bottts/svg?seed=${Math.floor(Math.random()*10000)}`; document.getElementById('edit-pfp').value=u; document.getElementById('edit-pfp-preview').src=u; }
-        
+        window.saveProfile = async function(){ const n=document.getElementById('edit-name').value; const p=document.getElementById('edit-pfp').value; if(n){ await updateProfile(currentUser,{displayName:n,photoURL:p}); await setDoc(doc(db,"users",currentUser.uid),{name:n,photo:p},{merge:true}); location.reload(); } }
         window.toggleAdminPanel = function(){ const p=document.getElementById('admin-panel'); p.style.display=p.style.display==='flex'?'none':'flex'; }
         window.switchFeed = function(tab){ document.getElementById('view-stream').classList.toggle('hidden',tab!=='stream'); document.getElementById('view-logs').classList.toggle('hidden',tab!=='logs'); document.getElementById('tab-stream').classList.toggle('active',tab==='stream'); document.getElementById('tab-logs').classList.toggle('active',tab!=='stream'); }
         window.toggleScenario = function(id){ const el=document.getElementById(id); el.classList.toggle('hidden'); }
