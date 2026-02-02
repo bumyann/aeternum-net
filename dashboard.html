@@ -23,6 +23,10 @@
         .admin-btn { position: fixed; bottom: 90px; right: 20px; background: #900; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.4); z-index: 60; display: none; cursor: pointer; transition: 0.3s; }
         .admin-btn:hover { transform: scale(1.05); background: #b00; }
 
+        /* Profile Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 80; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay.open { display: flex; }
+
         @media (min-width: 1024px) { .mobile-only { display: none !important; } .desktop-only { display: flex !important; } }
         @media (max-width: 1023px) { .desktop-only { display: none !important; } }
 
@@ -38,10 +42,17 @@
     <div class="star-layer"></div>
 
     <aside class="desktop-only glass-panel rounded-xl w-64 flex-col p-4">
-        <div class="mb-6 pb-4 border-b border-white/10">
-            <h1 class="text-xl font-bold text-white tracking-widest">AETERNUM</h1>
-            <p class="text-[10px] text-[#66fcf1]">OPERATOR_MODE</p>
+        
+        <div class="mb-6 pb-4 border-b border-white/10 flex items-center gap-3 cursor-pointer hover:bg-white/5 p-2 rounded transition" onclick="openProfileSettings()">
+            <img id="sidebar-pfp" src="" class="w-10 h-10 rounded-full border border-gray-600 bg-black object-cover">
+            <div class="flex-1 min-w-0">
+                <h2 id="sidebar-name" class="font-bold text-white text-sm truncate">LOADING...</h2>
+                <p class="text-[10px] text-[#66fcf1] flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> ONLINE <span class="text-gray-500 ml-1">⚙️</span>
+                </p>
+            </div>
         </div>
+
         <nav class="space-y-1">
             <a href="#" class="nav-item active">/// FEED</a>
             <a href="bulletin_board.html" class="nav-item">/// BULLETIN_BOARD</a>
@@ -60,9 +71,14 @@
                 <button onclick="switchFeed('stream')" id="tab-stream" class="feed-tab active">NETWORK STREAM</button>
                 <button onclick="switchFeed('logs')" id="tab-logs" class="feed-tab">SYSTEM LOGS</button>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span class="text-[10px] text-gray-400">LIVE</span>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="openProfileSettings()" class="mobile-only text-white text-xl">⚙️</button>
+                
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[10px] text-gray-400">LIVE</span>
+                </div>
             </div>
         </header>
 
@@ -93,6 +109,39 @@
 
     <button id="admin-toggle" onclick="toggleAdminPanel()" class="admin-btn">⚙️ OPERATOR</button>
 
+    <div id="profile-modal" class="modal-overlay">
+        <div class="glass-panel p-6 rounded-xl w-full max-w-md mx-4 relative bg-[#050505] border border-white/20">
+            <button onclick="closeProfileSettings()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+            
+            <h2 class="text-xl font-bold text-white mb-1">IDENTITY SETTINGS</h2>
+            <p class="text-[10px] text-gray-500 mb-6 uppercase tracking-wider">Update how you appear on the network</p>
+
+            <div class="space-y-4">
+                <div class="flex justify-center mb-4">
+                    <img id="edit-pfp-preview" src="" class="w-20 h-20 rounded-full border-2 border-[#66fcf1] object-cover bg-black">
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-[#66fcf1] block mb-1">DISPLAY NAME</label>
+                    <input id="edit-name" class="w-full bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Enter Alias...">
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-[#66fcf1] block mb-1">AVATAR URL</label>
+                    <div class="flex gap-2">
+                        <input id="edit-pfp" class="flex-1 bg-[#111] border border-gray-700 p-3 rounded text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="https://..." oninput="document.getElementById('edit-pfp-preview').src = this.value">
+                        <button onclick="randomizeAvatar()" class="bg-gray-800 border border-gray-600 px-3 rounded text-xs text-white hover:bg-gray-700">🎲</button>
+                    </div>
+                    <p class="text-[9px] text-gray-500 mt-1">Paste a link to an image, or click 🎲 to generate a random bot face.</p>
+                </div>
+
+                <button onclick="saveProfile()" class="w-full bg-[#66fcf1] hover:bg-white text-black font-bold py-3 rounded text-sm tracking-widest mt-4 transition shadow-[0_0_15px_rgba(102,252,241,0.3)]">
+                    SAVE IDENTITY
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="admin-panel" class="fixed inset-0 bg-black/95 z-[70] hidden flex-col p-6 overflow-y-auto">
         <div class="max-w-2xl mx-auto w-full space-y-8">
             <div class="flex justify-between items-center border-b border-white/20 pb-4">
@@ -102,32 +151,30 @@
 
             <div class="glass-panel p-6 rounded-xl">
                 <h3 class="text-sm font-bold text-white mb-4">📢 POST SYSTEM NOTICE</h3>
-                <input id="notice-title" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Notice Title (e.g., v.1.0.9 Update)">
+                <input id="notice-title" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Notice Title">
                 <textarea id="notice-content" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-4 h-24" placeholder="Message content..."></textarea>
                 <button onclick="postNotice()" class="bg-indigo-600 text-white px-4 py-2 rounded text-xs font-bold">BROADCAST NOTICE</button>
             </div>
 
             <div class="glass-panel p-6 rounded-xl">
-                <h3 class="text-sm font-bold text-white mb-4">👤 ADD / EDIT CHARACTER</h3>
+                <h3 class="text-sm font-bold text-white mb-4">👤 ADD CHARACTER</h3>
                 <div class="grid grid-cols-2 gap-4 mb-2">
-                    <input id="bot-name" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Character Name">
-                    <input id="bot-tag" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Short Tag (e.g., Rugby Captain)">
+                    <input id="bot-name" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Name">
+                    <input id="bot-tag" class="bg-[#111] border border-gray-700 p-2 rounded text-sm text-white" placeholder="Tag">
                 </div>
-                <textarea id="bot-desc" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Description / Quote"></textarea>
+                <textarea id="bot-desc" class="w-full bg-[#111] border border-gray-700 p-2 rounded text-sm text-white mb-2" placeholder="Description"></textarea>
                 
-                <h4 class="text-xs font-bold text-gray-500 mt-2 mb-1">SCENARIO LINKS (Label, URL)</h4>
+                <h4 class="text-xs font-bold text-gray-500 mt-2 mb-1">SCENARIO LINKS</h4>
                 <div id="link-inputs" class="space-y-2 mb-4">
                     <div class="flex gap-2">
-                        <input class="link-label bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-1" placeholder="Label (e.g. JanitorAI)">
-                        <input class="link-url bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-[2]" placeholder="https://...">
+                        <input class="link-label bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-1" placeholder="Label">
+                        <input class="link-url bg-[#111] border border-gray-700 p-2 rounded text-xs text-white flex-[2]" placeholder="URL">
                     </div>
                 </div>
-                <button onclick="addLinkInput()" class="text-[10px] text-[#66fcf1] mb-4">+ Add Another Link</button>
+                <button onclick="addLinkInput()" class="text-[10px] text-[#66fcf1] mb-4">+ Add Link</button>
                 <br>
                 <button onclick="saveCharacter()" class="bg-green-700 text-white px-4 py-2 rounded text-xs font-bold">SAVE CHARACTER</button>
             </div>
-            
-            <div class="text-center text-xs text-gray-500">Changes update in real-time.</div>
         </div>
     </div>
 
@@ -140,8 +187,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // *** CONFIG ***
         const firebaseConfig = {
@@ -154,16 +201,27 @@
   measurementId: "G-TDJQLYF4S4"
 };
         
-        // *** REPLACE THIS WITH YOUR GOOGLE EMAIL ***
         const ADMIN_EMAIL = "yann359705@gmail.com"; 
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        let currentUser = null;
 
-        // 1. AUTH CHECK
+        // AUTH CHECK & UI UPDATE
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                currentUser = user;
+                // Update Sidebar UI
+                document.getElementById('sidebar-name').innerText = user.displayName || "Anonymous";
+                document.getElementById('sidebar-pfp').src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                
+                // Pre-fill Settings Modal
+                document.getElementById('edit-name').value = user.displayName || "";
+                document.getElementById('edit-pfp').value = user.photoURL || "";
+                document.getElementById('edit-pfp-preview').src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+
+                // Admin Check
                 if(user.email === ADMIN_EMAIL) {
                     document.getElementById('admin-toggle').style.display = 'block';
                 }
@@ -172,125 +230,90 @@
             }
         });
 
-        // 2. RENDER FEED (Notices)
+        // PROFILE FUNCTIONS
+        window.openProfileSettings = function() {
+            document.getElementById('profile-modal').classList.add('open');
+        }
+        window.closeProfileSettings = function() {
+            document.getElementById('profile-modal').classList.remove('open');
+        }
+        window.randomizeAvatar = function() {
+            const seed = Math.floor(Math.random() * 10000);
+            const url = `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}`;
+            document.getElementById('edit-pfp').value = url;
+            document.getElementById('edit-pfp-preview').src = url;
+        }
+        window.saveProfile = async function() {
+            const newName = document.getElementById('edit-name').value;
+            const newPfp = document.getElementById('edit-pfp').value;
+            
+            if(!newName) return alert("Name cannot be empty.");
+
+            try {
+                // Update Firebase Auth (Global)
+                await updateProfile(currentUser, {
+                    displayName: newName,
+                    photoURL: newPfp
+                });
+
+                // Update Firestore User Doc
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    name: newName,
+                    photo: newPfp
+                }, { merge: true });
+
+                alert("Identity Updated.");
+                location.reload(); // Reload to reflect changes everywhere
+            } catch(e) {
+                alert("Error: " + e.message);
+            }
+        }
+
+        // FEED & CHARACTERS LOGIC (Same as before)
         const feedQ = query(collection(db, "system_feed"), orderBy("timestamp", "desc"));
         onSnapshot(feedQ, (snap) => {
-            const latestContainer = document.getElementById('latest-notice-container');
-            const logsContainer = document.getElementById('logs-container');
-            
-            latestContainer.innerHTML = "";
-            logsContainer.innerHTML = "";
-
-            let docs = [];
-            snap.forEach(d => docs.push(d.data()));
-
+            const latest = document.getElementById('latest-notice-container');
+            const logs = document.getElementById('logs-container');
+            latest.innerHTML = ""; logs.innerHTML = "";
+            let docs = []; snap.forEach(d => docs.push(d.data()));
             if(docs.length > 0) {
-                // Latest Notice
-                const latest = docs[0];
-                latestContainer.innerHTML = `
-                    <div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4">
-                        <div class="flex items-center gap-2 mb-2 text-indigo-300">
-                            <span>📢</span> <span class="font-bold uppercase">${escape(latest.title)}</span>
-                        </div>
-                        <p class="text-gray-400 text-xs leading-relaxed">${escape(latest.content)}</p>
-                    </div>`;
-                
-                // Logs (All)
-                docs.forEach(d => {
-                    const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Unknown";
-                    logsContainer.innerHTML += `
-                        <div class="p-3 border-l-2 border-gray-600 bg-white/5 relative group">
-                            <div class="text-[10px] text-gray-500 mb-1">${date}</div>
-                            <h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3>
-                            <p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p>
-                        </div>`;
-                });
-            } else {
-                latestContainer.innerHTML = `<div class="text-gray-500 text-xs italic">System Offline. No data.</div>`;
-            }
+                latest.innerHTML = `<div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm mb-4"><div class="flex items-center gap-2 mb-2 text-indigo-300"><span>📢</span> <span class="font-bold uppercase">${escape(docs[0].title)}</span></div><p class="text-gray-400 text-xs leading-relaxed">${escape(docs[0].content)}</p></div>`;
+                docs.forEach(d => logs.innerHTML += `<div class="p-3 border-l-2 border-gray-600 bg-white/5 relative mb-2"><div class="text-[10px] text-gray-500 mb-1">${d.timestamp ? new Date(d.timestamp.toDate()).toLocaleDateString() : "Unknown"}</div><h3 class="text-xs font-bold text-gray-300">${escape(d.title)}</h3><p class="text-[10px] text-gray-500 mt-1">${escape(d.content)}</p></div>`);
+            } else latest.innerHTML = `<div class="text-gray-500 text-xs italic">System Offline.</div>`;
         });
 
-        // 3. RENDER CHARACTERS
         const charQ = query(collection(db, "characters"), orderBy("timestamp", "desc"));
         onSnapshot(charQ, (snap) => {
             const container = document.getElementById('characters-container');
             container.innerHTML = "";
-            
             snap.forEach(doc => {
                 const c = doc.data();
                 const cid = doc.id;
-                
                 let linksHtml = "";
-                if(c.links) {
-                    c.links.forEach(l => {
-                        linksHtml += `
-                            <a href="${l.url}" target="_blank" class="block p-3 bg-white/5 rounded hover:bg-[#66fcf1]/10 border border-transparent hover:border-[#66fcf1] transition flex justify-between items-center group/link">
-                                <span class="text-xs text-gray-300 group-hover/link:text-white">${escape(l.label)}</span>
-                                <span class="text-[10px] text-gray-500">OPEN ></span>
-                            </a>`;
-                    });
-                }
-
-                container.innerHTML += `
-                    <div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group relative">
-                        <div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${cid}')">
-                            <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative">
-                                <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-black flex items-center justify-center text-xs font-bold text-gray-500">${c.name[0]}</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-center">
-                                    <h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(c.name)}</h3>
-                                    <span class="text-[10px] text-gray-500">▼ EXPAND</span>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">${escape(c.desc)}</p>
-                            </div>
-                        </div>
-                        <div id="scen-${cid}" class="scenario-list border-t border-white/5 mt-2">
-                            <div class="pt-3 space-y-2">${linksHtml}</div>
-                        </div>
-                    </div>`;
+                if(c.links) c.links.forEach(l => linksHtml += `<a href="${l.url}" target="_blank" class="block p-3 bg-white/5 rounded hover:bg-[#66fcf1]/10 border border-transparent hover:border-[#66fcf1] transition flex justify-between items-center group/link"><span class="text-xs text-gray-300 group-hover/link:text-white">${escape(l.label)}</span><span class="text-[10px] text-gray-500">OPEN ></span></a>`);
+                container.innerHTML += `<div class="glass-panel p-4 rounded-lg border border-transparent hover:border-gray-600 transition group relative"><div class="flex gap-4 cursor-pointer" onclick="toggleScenario('scen-${cid}')"><div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden relative"><div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-black flex items-center justify-center text-xs font-bold text-gray-500">${c.name[0]}</div></div><div class="flex-1"><div class="flex justify-between items-center"><h3 class="font-bold text-white group-hover:text-[#66fcf1] transition">${escape(c.name)}</h3><span class="text-[10px] text-gray-500">▼ EXPAND</span></div><p class="text-xs text-gray-400 mt-1">${escape(c.desc)}</p></div></div><div id="scen-${cid}" class="scenario-list border-t border-white/5 mt-2"><div class="pt-3 space-y-2">${linksHtml}</div></div></div>`;
             });
         });
 
-        // 4. ADMIN FUNCTIONS
+        // ADMIN FUNCTIONS
         window.postNotice = async function() {
             const title = document.getElementById('notice-title').value;
             const content = document.getElementById('notice-content').value;
             if(!title) return;
-            await addDoc(collection(db, "system_feed"), {
-                title, content, timestamp: serverTimestamp()
-            });
+            await addDoc(collection(db, "system_feed"), { title, content, timestamp: serverTimestamp() });
             alert("Notice Posted");
-            document.getElementById('notice-title').value = "";
-            document.getElementById('notice-content').value = "";
+            document.getElementById('notice-title').value = ""; document.getElementById('notice-content').value = "";
         }
-
         window.saveCharacter = async function() {
             const name = document.getElementById('bot-name').value;
             const tag = document.getElementById('bot-tag').value;
             const desc = document.getElementById('bot-desc').value;
-            
-            const linkLabels = document.querySelectorAll('.link-label');
-            const linkUrls = document.querySelectorAll('.link-url');
             let links = [];
-            
-            linkLabels.forEach((el, i) => {
-                if(el.value && linkUrls[i].value) {
-                    links.push({ label: el.value, url: linkUrls[i].value });
-                }
-            });
-
+            document.querySelectorAll('.link-label').forEach((el, i) => { if(el.value && document.querySelectorAll('.link-url')[i].value) links.push({ label: el.value, url: document.querySelectorAll('.link-url')[i].value }); });
             if(!name) return;
-
-            await addDoc(collection(db, "characters"), {
-                name, tag, desc, links, timestamp: serverTimestamp()
-            });
-            
+            await addDoc(collection(db, "characters"), { name, tag, desc, links, timestamp: serverTimestamp() });
             alert("Character Saved");
-            document.getElementById('bot-name').value = "";
-            document.getElementById('bot-desc').value = "";
         }
-
         window.addLinkInput = function() {
             const div = document.createElement('div');
             div.className = "flex gap-2";
@@ -298,25 +321,15 @@
             document.getElementById('link-inputs').appendChild(div);
         }
 
-        // Global Utils
-        window.toggleAdminPanel = function() {
-            const p = document.getElementById('admin-panel');
-            p.style.display = p.style.display === 'flex' ? 'none' : 'flex';
-        }
+        // UTILS
+        window.toggleAdminPanel = function() { const p = document.getElementById('admin-panel'); p.style.display = p.style.display === 'flex' ? 'none' : 'flex'; }
         window.switchFeed = function(tab) {
             document.getElementById('view-stream').classList.toggle('hidden', tab !== 'stream');
             document.getElementById('view-logs').classList.toggle('hidden', tab !== 'logs');
             document.getElementById('tab-stream').classList.toggle('active', tab === 'stream');
             document.getElementById('tab-logs').classList.toggle('active', tab !== 'stream');
         }
-        window.toggleScenario = function(id) {
-            const el = document.getElementById(id);
-            if(el.classList.contains('open')) el.classList.remove('open');
-            else {
-                document.querySelectorAll('.scenario-list').forEach(x => x.classList.remove('open'));
-                el.classList.add('open');
-            }
-        }
+        window.toggleScenario = function(id) { const el = document.getElementById(id); if(el.classList.contains('open')) el.classList.remove('open'); else { document.querySelectorAll('.scenario-list').forEach(x => x.classList.remove('open')); el.classList.add('open'); } }
         function escape(s){ return s ? s.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
     </script>
 </body>
