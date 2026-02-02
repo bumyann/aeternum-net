@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AETERNUM // ARCHITECT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
+
+    <div id="mobile-menu">
+        <button onclick="toggleMenu()" class="absolute top-5 right-5 text-gray-500 text-4xl">&times;</button>
+        <a href="dashboard.html" class="mobile-link">FEED</a>
+        <a href="bulletin_board.html" class="mobile-link">BULLETIN BOARD</a>
+        <a href="character_files.html" class="mobile-link">CHARACTER FILES</a>
+        <a href="#" class="mobile-link text-[#66fcf1]">ARCHITECT</a>
+    </div>
+
+    <header class="bg-[#050505] border-b border-white/10 p-3 flex justify-between items-center shrink-0 z-20">
+        <div class="flex items-center gap-4">
+            <h1 class="text-sm lg:text-lg font-bold text-white tracking-widest mr-2">ARCHITECT <span class="text-[#66fcf1] text-[10px]">V4.2</span></h1>
+            <div class="flex gap-2">
+                <button onclick="setMode('character')" id="mode-btn-char" class="btn-mode active">CHARACTER</button>
+                <button onclick="setMode('lorebook')" id="mode-btn-lore" class="btn-mode">LOREBOOK</button>
+            </div>
+        </div>
+        
+        <div class="flex gap-2 items-center">
+            <div class="hidden md:flex gap-2">
+                <button onclick="document.getElementById('fileImport').click()" class="bg-gray-800 hover:bg-gray-700 text-white text-[10px] px-3 py-1.5 rounded border border-gray-600 transition">IMPORT</button>
+                <input type="file" id="fileImport" class="hidden" accept=".json,.png" onchange="importFile(this)">
+                <button onclick="exportJSON()" class="bg-gray-800 hover:bg-gray-700 text-white text-[10px] px-3 py-1.5 rounded border border-gray-600 transition">JSON</button>
+                <button id="btn-export-png" onclick="exportPNG()" class="bg-[#66fcf1]/10 hover:bg-[#66fcf1] text-[#66fcf1] hover:text-black border border-[#66fcf1] text-[10px] px-3 py-1.5 rounded font-bold transition">PNG CARD</button>
+            </div>
+            
+            <button onclick="toggleMenu()" class="text-white text-xl border border-white/20 px-2 rounded ml-2">☰</button>
+        </div>
+    </header>
+
+    <div class="md:hidden bg-[#0a0a0a] border-b border-white/10 p-2 flex justify-around">
+        <button onclick="document.getElementById('fileImport').click()" class="text-[10px] text-gray-400 font-bold">📂 IMPORT</button>
+        <button onclick="exportJSON()" class="text-[10px] text-gray-400 font-bold">💾 JSON</button>
+        <button onclick="exportPNG()" id="mob-btn-png" class="text-[10px] text-[#66fcf1] font-bold">🖼️ PNG</button>
+    </div>
+
+    <div class="flex-1 flex overflow-hidden relative">
+
+        <div id="workspace-character" class="flex-1 flex mobile-stack w-full h-full overflow-hidden">
+            
+            <aside id="sidebar-character" class="w-full md:w-64 bg-[#0a0a0a] border-r border-white/10 flex flex-col shrink-0 p-4 overflow-y-auto">
+                <div class="w-full aspect-[2/3] bg-[#111] rounded-lg border-2 border-dashed border-[#333] flex items-center justify-center overflow-hidden relative group cursor-pointer mb-4 hover:border-[#66fcf1] transition" onclick="document.getElementById('imageUpload').click()">
+                    <img id="char_avatar_preview" class="w-full h-full object-cover hidden">
+                    <div id="avatar_placeholder" class="text-center">
+                        <span class="text-2xl opacity-50">📷</span>
+                        <p class="text-[10px] text-gray-500 mt-2">CLICK TO UPLOAD</p>
+                    </div>
+                    <input type="file" id="imageUpload" class="hidden" accept="image/*" onchange="previewImage(this)">
+                </div>
+                <div class="space-y-3">
+                    <div><span class="input-label">Name</span><input type="text" id="char_name" class="w-full p-2 rounded input-dark text-sm"></div>
+                    <div><span class="input-label">Creator</span><input type="text" id="char_creator" class="w-full p-2 rounded input-dark text-sm"></div>
+                    <div><span class="input-label">Tags</span><input type="text" id="char_tags" class="w-full p-2 rounded input-dark text-sm" placeholder="tag1, tag2"></div>
+                </div>
+            </aside>
+
+            <div class="flex-1 flex flex-col bg-[#050505] overflow-hidden">
+                <div class="flex border-b border-white/10 bg-[#0a0a0a]">
+                    <button onclick="showCharTab('main')" id="tab-btn-main" class="flex-1 md:flex-none px-6 py-3 text-xs font-bold text-white border-b-2 border-[#66fcf1]">MAIN</button>
+                    <button onclick="showCharTab('greetings')" id="tab-btn-greetings" class="flex-1 md:flex-none px-6 py-3 text-xs font-bold text-gray-500 hover:text-gray-300">GREETINGS</button>
+                    <button onclick="showCharTab('lore')" id="tab-btn-lore" class="flex-1 md:flex-none px-6 py-3 text-xs font-bold text-gray-500 hover:text-gray-300">LORE</button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4" id="char-content-area">
+                    <div id="char-tab-main" class="space-y-4 max-w-4xl mx-auto">
+                        <div><span class="input-label">Description / Persona</span><textarea id="char_description" rows="8" class="w-full p-3 rounded input-dark font-mono text-xs md:text-sm"></textarea></div>
+                        <div><span class="input-label">Scenario</span><textarea id="char_scenario" rows="3" class="w-full p-3 rounded input-dark font-mono text-xs md:text-sm"></textarea></div>
+                        <div><span class="input-label">Example Dialogue</span><textarea id="char_mes_example" rows="5" class="w-full p-3 rounded input-dark font-mono text-xs md:text-sm"></textarea></div>
+                        <div><span class="input-label">Creator Notes</span><textarea id="char_note" rows="2" class="w-full p-3 rounded input-dark font-mono text-xs md:text-sm"></textarea></div>
+                    </div>
+                    <div id="char-tab-greetings" class="hidden space-y-4 max-w-4xl mx-auto">
+                        <div><span class="input-label">First Message</span><textarea id="char_first_mes" rows="6" class="w-full p-3 rounded input-dark font-mono text-xs md:text-sm"></textarea></div>
+                        <div class="border-t border-white/10 pt-4">
+                            <div class="flex justify-between mb-2"><span class="input-label">Alternate Greetings</span><button onclick="addAltGreeting()" class="text-[10px] bg-[#66fcf1] text-black font-bold px-2 py-1 rounded">+ ADD</button></div>
+                            <div id="alt-greetings-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+                    <div id="char-tab-lore" class="hidden h-full flex flex-col items-center justify-center text-gray-500">
+                        <p class="mb-2 text-sm">Switch to <b>Lorebook Mode</b> to edit entries.</p>
+                        <p class="text-xs opacity-50">Embedded lore is automatically saved with the card.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="workspace-lorebook" class="hidden flex-1 flex w-full h-full relative">
+
+            <div id="lore-sidebar" class="w-full md:w-72 bg-[#0a0a0a] border-r border-white/10 flex flex-col h-full absolute md:relative z-10">
+                <div class="p-3 border-b border-white/10 bg-[#111] flex justify-between items-center shrink-0">
+                    <input type="text" id="lore_book_name" placeholder="Book Name" class="bg-transparent text-white font-bold text-sm w-32 focus:outline-none">
+                    <button onclick="addLoreEntry()" class="bg-[#66fcf1]/20 text-[#66fcf1] px-3 py-1 rounded text-xs font-bold border border-[#66fcf1]">+ NEW</button>
+                </div>
+                <div id="lore-list" class="flex-1 overflow-y-auto"></div>
+                <div class="p-2 border-t border-white/10 text-[10px] text-gray-500 text-center shrink-0"><span id="lore-count">0</span> Entries</div>
+            </div>
+
+            <div id="lore-editor-panel" class="flex-1 flex flex-col h-full bg-[#050505] absolute md:relative w-full z-20 translate-x-full md:translate-x-0 transition-transform duration-300">
+                
+                <div class="md:hidden p-3 border-b border-white/10 bg-[#111] flex items-center gap-2">
+                    <button onclick="closeMobileEditor()" class="text-gray-400 text-sm">← BACK</button>
+                    <span class="text-xs font-bold text-white ml-auto">EDITING ENTRY</span>
+                </div>
+
+                <div id="lore-editor-empty" class="hidden md:flex absolute inset-0 items-center justify-center text-gray-500 italic z-0">Select an entry to edit</div>
+
+                <div id="lore-editor-form" class="hidden flex-1 flex flex-col overflow-y-auto p-4 md:p-6 max-w-5xl mx-auto w-full z-10 bg-[#050505]">
+
+                    <div class="flex flex-col md:flex-row justify-between items-start mb-6 bg-[#0a0a0a] p-4 rounded-lg border border-white/10 gap-4">
+                        <div class="w-full md:w-auto">
+                            <span class="input-label mb-2">Activation Logic</span>
+                            <div class="flex bg-[#050505] rounded p-1 border border-white/10">
+                                <button onclick="updateLoreField('constant', false)" id="btn-type-key" class="px-4 py-1 text-xs font-bold rounded flex-1 transition text-gray-400">🔑 Keywords</button>
+                                <button onclick="updateLoreField('constant', true)" id="btn-type-const" class="px-4 py-1 text-xs font-bold rounded flex-1 transition text-gray-400">📌 Constant</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto justify-end">
+                             <label class="flex items-center gap-2 bg-[#050505] px-3 py-1 rounded border border-white/10 cursor-pointer">
+                                <span class="text-xs font-bold text-green-400">Enabled</span>
+                                <input type="checkbox" id="lore_enabled" onchange="updateLoreField('enabled', this.checked)" class="accent-green-500">
+                            </label>
+                            <button onclick="deleteCurrentLore()" class="bg-red-900/30 hover:bg-red-600 text-red-200 hover:text-white px-3 py-1 rounded text-xs border border-red-900/50 transition">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="col-span-2">
+                                <span class="input-label">Entry Name / Comment</span>
+                                <input type="text" id="lore_comment" oninput="updateLoreField('comment', this.value)" class="w-full p-2 rounded input-dark text-sm font-bold text-white">
+                            </div>
+                             <div>
+                                <span class="input-label">Probability (%)</span>
+                                <input type="number" id="lore_probability" oninput="updateLoreField('probability', this.value)" class="w-full p-2 rounded input-dark text-sm" min="0" max="100">
+                            </div>
+                        </div>
+                        <div>
+                            <span class="input-label">Content</span>
+                            <textarea id="lore_content" oninput="updateLoreField('content', this.value)" rows="8" class="w-full p-3 rounded input-dark font-mono text-sm leading-relaxed"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="lore-keyword-section" class="space-y-4 border-t border-white/10 pt-6 mb-6">
+                        <h3 class="text-xs font-bold text-[#66fcf1] uppercase tracking-wider mb-2">Keyword Triggers</h3>
+
+                        <div>
+                            <span class="input-label text-[#66fcf1]">Primary Keys (Required)</span>
+                            <input type="text" id="lore_keys" oninput="updateLoreField('keys', this.value)" class="w-full p-2 rounded input-dark text-sm" placeholder="e.g. dragon, fire">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="input-label text-yellow-500">Secondary Keys</span>
+                                    <select id="lore_selective_logic" onchange="updateLoreField('selectiveLogic', this.value)" class="logic-select">
+                                        <option value="0">AND Any (Match 1+)</option>
+                                        <option value="1">AND All (Match All)</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="lore_secondary_keys" oninput="updateLoreField('secondary_keys', this.value)" class="w-full p-2 rounded input-dark text-sm" placeholder="Must also be present...">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="input-label text-red-400">Exclude Keys</span>
+                                    <select id="lore_exclude_logic" onchange="updateLoreField('excludeLogic', this.value)" class="logic-select">
+                                        <option value="0">NOT Any (Block if 1+)</option>
+                                        <option value="1">NOT All (Block if All)</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="lore_exclude_keys" oninput="updateLoreField('exclude_keys', this.value)" class="w-full p-2 rounded input-dark text-sm" placeholder="Block if present...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <details class="group bg-[#0a0a0a] rounded border border-white/10">
+                        <summary class="px-4 py-2 cursor-pointer text-xs font-bold text-gray-400 hover:text-white flex justify-between">
+                            <span>ADVANCED SETTINGS</span>
+                            <span class="group-open:rotate-180 transition">▼</span>
+                        </summary>
+                        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-white/10">
+                            <div>
+                                <span class="input-label">Insertion Position</span>
+                                <select id="lore_position" onchange="updateLoreField('position', this.value)" class="w-full p-2 rounded input-dark text-sm">
+                                    <option value="before_char">Before Character Definition</option>
+                                    <option value="after_char">After Character Definition</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="input-label">Insertion Order</span>
+                                <input type="number" id="lore_order" oninput="updateLoreField('insertion_order', this.value)" class="w-full p-2 rounded input-dark text-sm" placeholder="100">
+                            </div>
+                            <div>
+                                <span class="input-label text-purple-400">Group Weight</span>
+                                <input type="number" id="lore_group_weight" oninput="updateLoreField('groupWeight', this.value)" class="w-full p-2 rounded input-dark text-sm" placeholder="100">
+                            </div>
+                            <div class="flex items-end pb-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="lore_group_scoring" onchange="updateLoreField('useGroupScoring', this.checked)" class="accent-purple-500">
+                                    <span class="text-xs font-bold text-gray-300">Use Group Scoring</span>
+                                </label>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === STATE ===
+        let currentMode = 'character'; 
+        let lorebookEntries = [];
+        let selectedLoreIndex = -1; 
+        let altGreetings = [];
+        let currentImageBlob = null;
+
+        // === INIT ===
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGreetings();
+            renderLoreList();
+            setMode('character'); 
+        });
+
+        // === MENU LOGIC ===
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+
+        // === WORKSPACE NAVIGATION ===
+        function setMode(mode) {
+            currentMode = mode;
+            const isChar = mode === 'character';
+
+            // Buttons
+            document.getElementById('mode-btn-char').classList.toggle('active', isChar);
+            document.getElementById('mode-btn-lore').classList.toggle('active', !isChar);
+
+            // Containers
+            const charWS = document.getElementById('workspace-character');
+            const loreWS = document.getElementById('workspace-lorebook');
+            const pngBtn = document.getElementById('btn-export-png');
+            const mobPng = document.getElementById('mob-btn-png');
+
+            if (isChar) {
+                charWS.classList.remove('hidden');
+                loreWS.classList.add('hidden');
+                pngBtn.classList.remove('hidden');
+                mobPng.classList.remove('hidden');
+            } else {
+                charWS.classList.add('hidden');
+                loreWS.classList.remove('hidden');
+                pngBtn.classList.add('hidden');
+                mobPng.classList.add('hidden');
+                renderLoreList();
+            }
+        }
+
+        // === CHARACTER TABS ===
+        function showCharTab(tab) {
+            ['main', 'greetings', 'lore'].forEach(t => {
+                document.getElementById(`char-tab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                btn.classList.remove('text-white', 'border-[#66fcf1]');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+            document.getElementById(`char-tab-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            activeBtn.classList.add('text-white', 'border-[#66fcf1]');
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+        }
+
+        // === LOREBOOK UI ===
+        function renderLoreList() {
+            const list = document.getElementById('lore-list');
+            list.innerHTML = '';
+            document.getElementById('lore-count').innerText = lorebookEntries.length;
+
+            if (lorebookEntries.length === 0) {
+                list.innerHTML = `<div class="text-center p-4 text-gray-500 text-xs italic">No entries.<br>Click "+ NEW"</div>`;
+                return;
+            }
+
+            lorebookEntries.forEach((entry, i) => {
+                const el = document.createElement('div');
+                const isConstant = entry.constant === true;
+                const isActive = i === selectedLoreIndex;
+                const icon = isConstant ? '📌' : '🔑';
+
+                el.className = `entry-item text-sm flex justify-between items-center ${isActive ? 'active' : ''} ${isConstant ? 'constant' : ''}`;
+                el.onclick = () => selectLoreEntry(i);
+
+                el.innerHTML = `
+                    <div class="truncate pr-2">
+                        <span class="mr-1 opacity-70">${icon}</span>
+                        <span class="font-bold text-gray-300">${entry.comment || 'Untitled'}</span>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        function selectLoreEntry(index) {
+            selectedLoreIndex = index;
+            renderLoreList();
+
+            const form = document.getElementById('lore-editor-form');
+            const empty = document.getElementById('lore-editor-empty');
+            const panel = document.getElementById('lore-editor-panel');
+
+            // Handle selection
+            if (index === -1 || !lorebookEntries[index]) {
+                form.classList.add('hidden');
+                empty.classList.remove('hidden');
+                // Mobile: Hide editor if nothing selected
+                panel.classList.add('translate-x-full'); 
+                return;
+            }
+
+            // Show Form
+            form.classList.remove('hidden');
+            empty.classList.add('hidden');
+            // Mobile: Slide in
+            panel.classList.remove('translate-x-full');
+
+            // Populate Fields
+            const entry = lorebookEntries[index];
+            document.getElementById('lore_comment').value = entry.comment || "";
+            document.getElementById('lore_content').value = entry.content || "";
+            document.getElementById('lore_probability').value = entry.probability || 100;
+            document.getElementById('lore_enabled').checked = entry.enabled !== false;
+
+            // Type Toggle UI
+            const isConst = entry.constant === true;
+            const btnKey = document.getElementById('btn-type-key');
+            const btnConst = document.getElementById('btn-type-const');
+            const keySection = document.getElementById('lore-keyword-section');
+
+            if (isConst) {
+                btnConst.classList.add('bg-[#c084fc]', 'text-black');
+                btnKey.classList.remove('bg-[#66fcf1]', 'text-black');
+                keySection.classList.add('opacity-50', 'pointer-events-none'); 
+            } else {
+                btnKey.classList.add('bg-[#66fcf1]', 'text-black');
+                btnConst.classList.remove('bg-[#c084fc]', 'text-black');
+                keySection.classList.remove('opacity-50', 'pointer-events-none');
+            }
+
+            // Keys
+            document.getElementById('lore_keys').value = (entry.keys || []).join(', ');
+            document.getElementById('lore_secondary_keys').value = (entry.secondary_keys || []).join(', ');
+            document.getElementById('lore_exclude_keys').value = (entry.exclude_keys || []).join(', ');
+            document.getElementById('lore_selective_logic').value = entry.selectiveLogic || 0;
+            document.getElementById('lore_exclude_logic').value = entry.excludeLogic || 0;
+
+            // Advanced
+            document.getElementById('lore_position').value = entry.position || "before_char";
+            document.getElementById('lore_order').value = entry.insertion_order || 100;
+            document.getElementById('lore_group_weight').value = entry.groupWeight || 100; 
+            document.getElementById('lore_group_scoring').checked = entry.useGroupScoring === true;
+        }
+
+        function closeMobileEditor() {
+            document.getElementById('lore-editor-panel').classList.add('translate-x-full');
+            selectedLoreIndex = -1;
+            renderLoreList(); // Clears selection highlight
+        }
+
+        function updateLoreField(field, value) {
+            if (selectedLoreIndex === -1) return;
+            const entry = lorebookEntries[selectedLoreIndex];
+
+            if (['probability', 'insertion_order', 'groupWeight', 'selectiveLogic', 'excludeLogic'].includes(field)) {
+                entry[field] = Number(value);
+            } 
+            else if (['keys', 'secondary_keys', 'exclude_keys'].includes(field)) {
+                entry[field] = value.split(',').map(s => s.trim()).filter(s => s);
+            }
+            else {
+                entry[field] = value;
+            }
+
+            if (field === 'comment' || field === 'constant') renderLoreList();
+            if (field === 'constant') selectLoreEntry(selectedLoreIndex);
+        }
+
+        function addLoreEntry() {
+            lorebookEntries.push({
+                keys: ["keyword"], secondary_keys: [], exclude_keys: [],
+                content: "", comment: "New Entry", enabled: true,
+                insertion_order: 100, probability: 100, constant: false,
+                position: "before_char", groupWeight: 100, useGroupScoring: false,
+                selectiveLogic: 0, excludeLogic: 0
+            });
+            selectLoreEntry(lorebookEntries.length - 1);
+        }
+
+        function deleteCurrentLore() {
+            if(selectedLoreIndex > -1 && confirm("Delete this entry?")) {
+                lorebookEntries.splice(selectedLoreIndex, 1);
+                selectedLoreIndex = -1;
+                renderLoreList();
+                closeMobileEditor();
+                document.getElementById('lore-editor-form').classList.add('hidden');
+                document.getElementById('lore-editor-empty').classList.remove('hidden');
+            }
+        }
+
+        // === UTILS ===
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                currentImageBlob = file;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.getElementById('char_avatar_preview');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    document.getElementById('avatar_placeholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderGreetings(){
+            const l=document.getElementById('alt-greetings-list');
+            l.innerHTML='';
+            altGreetings.forEach((t,i)=>{
+                const d=document.createElement('div');
+                d.className="flex gap-2";
+                d.innerHTML=`<textarea onchange="altGreetings[${i}]=this.value" rows="2" class="flex-1 p-2 rounded input-dark text-xs font-mono">${t}</textarea><button onclick="altGreetings.splice(${i},1);renderGreetings()" class="text-red-400 font-bold px-2">✕</button>`;
+                l.appendChild(d);
+            });
+        }
+        function addAltGreeting(){ altGreetings.push(""); renderGreetings(); }
+
+        // === IMPORT / EXPORT (Original Logic) ===
+        function importFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const handleJson = (json) => {
+                try {
+                    let isLorebook = false;
+                    let entries = [];
+
+                    if (Array.isArray(json)) { isLorebook = true; entries = json; } 
+                    else if (json.entries && Array.isArray(json.entries)) { isLorebook = true; entries = json.entries; }
+                    else if (json.entries && typeof json.entries === 'object') { isLorebook = true; entries = Object.values(json.entries); }
+
+                    let isChar = !isLorebook && (json.spec === 'chara_card_v2' || json.data || json.first_mes);
+
+                    if (isLorebook) {
+                        setMode('lorebook');
+                        lorebookEntries = entries.map(e => ({
+                            keys: e.keys || e.key || [], 
+                            secondary_keys: e.secondary_keys || e.keysecondary || [],
+                            exclude_keys: e.exclude_keys || [],
+                            content: e.content || "", comment: e.comment || "Entry",
+                            enabled: e.disable !== true && e.enabled !== false,
+                            insertion_order: e.order || e.insertion_order || 100,
+                            probability: e.probability || 100,
+                            constant: e.constant || false,
+                            position: e.position === 1 ? "after_char" : "before_char",
+                            groupWeight: e.groupWeight || 100,
+                            useGroupScoring: e.useGroupScoring || false,
+                            selectiveLogic: e.selectiveLogic || 0,
+                            excludeLogic: e.excludeLogic || 0
+                        }));
+                        document.getElementById('lore_book_name').value = json.name || "Imported Book";
+                        selectLoreEntry(0);
+                    } 
+                    else if (isChar) {
+                        setMode('character');
+                        const d = json.data || json;
+                        document.getElementById('char_name').value = d.name || "";
+                        document.getElementById('char_creator').value = d.creator || "";
+                        document.getElementById('char_description').value = d.description || "";
+                        document.getElementById('char_first_mes').value = d.first_mes || "";
+                        document.getElementById('char_scenario').value = d.scenario || "";
+                        document.getElementById('char_mes_example').value = d.mes_example || "";
+                        document.getElementById('char_note').value = d.creator_notes || "";
+                        document.getElementById('char_tags').value = (d.tags || []).join(', ');
+                        altGreetings = d.alternate_greetings || [];
+                        if (d.character_book && d.character_book.entries) lorebookEntries = d.character_book.entries;
+                        else lorebookEntries = [];
+                        renderGreetings();
+                    }
+                    else { alert("Unknown Format"); }
+                } catch (e) { alert("Parse Error: " + e.message); }
+            };
+
+            const fname = file.name.toLowerCase();
+            if (fname.endsWith('.json') || file.type.includes('json')) {
+                const r = new FileReader(); r.onload = e => handleJson(JSON.parse(e.target.result)); r.readAsText(file);
+            } else if (fname.endsWith('.png') || file.type.includes('png')) {
+                currentImageBlob = file; 
+                // Set preview
+                const url = URL.createObjectURL(file);
+                document.getElementById('char_avatar_preview').src = url;
+                document.getElementById('char_avatar_preview').classList.remove('hidden');
+                document.getElementById('avatar_placeholder').classList.add('hidden');
+                // Read Metadata
+                readPngMetadata(file, handleJson);
+            }
+            input.value = '';
+        }
+
+        function getExportData() {
+            const stdEntries = lorebookEntries.map(e => ({
+                keys: e.keys, secondary_keys: e.secondary_keys, exclude_keys: e.exclude_keys,
+                content: e.content, comment: e.comment, insertion_order: e.insertion_order,
+                enabled: e.enabled, position: e.position, constant: e.constant, probability: e.probability,
+                groupWeight: e.groupWeight, useGroupScoring: e.useGroupScoring,
+                selectiveLogic: e.selectiveLogic, excludeLogic: e.excludeLogic
+            }));
+            if (currentMode === 'character') {
+                return { spec: "chara_card_v2", spec_version: "2.0", data: { 
+                    name: document.getElementById('char_name').value, 
+                    creator: document.getElementById('char_creator').value,
+                    description: document.getElementById('char_description').value, 
+                    first_mes: document.getElementById('char_first_mes').value,
+                    scenario: document.getElementById('char_scenario').value, 
+                    mes_example: document.getElementById('char_mes_example').value,
+                    creator_notes: document.getElementById('char_note').value, 
+                    tags: document.getElementById('char_tags').value.split(',').filter(s=>s),
+                    alternate_greetings: altGreetings, 
+                    character_book: { entries: stdEntries } 
+                }};
+            }
+            return { name: document.getElementById('lore_book_name').value, entries: stdEntries };
+        }
+
+        function exportJSON() { const d=getExportData(); const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='export.json'; a.click(); }
+        
+        async function exportPNG() { 
+            if(!currentImageBlob) return alert('No Image Uploaded'); 
+            const d=getExportData(); 
+            const b64=btoa(unescape(encodeURIComponent(JSON.stringify(d)))); 
+            const buf=await currentImageBlob.arrayBuffer(); 
+            const u8=new Uint8Array(buf); 
+            const key="chara"; 
+            const pay=new Uint8Array(key.length+1+b64.length); 
+            for(let i=0;i<key.length;i++)pay[i]=key.charCodeAt(i); 
+            pay[key.length]=0; 
+            for(let i=0;i<b64.length;i++)pay[key.length+1+i]=b64.charCodeAt(i); 
+            const chk=new Uint8Array(12+pay.length); 
+            const v=new DataView(chk.buffer); 
+            v.setUint32(0,pay.length); 
+            chk.set([116,69,88,116],4); 
+            chk.set(pay,8); 
+            v.setUint32(8+pay.length,crc32(chk.slice(4,8+pay.length))); 
+            let iend=-1; 
+            for(let i=u8.length-12;i>=0;i--){if(u8[i]===73&&u8[i+1]===69&&u8[i+2]===78&&u8[i+3]===68){iend=i-4;break;}} 
+            if(iend<0)return alert('Bad PNG Source'); 
+            const f=new Uint8Array(iend+chk.length+12); 
+            f.set(u8.slice(0,iend),0); 
+            f.set(chk,iend); 
+            f.set(u8.slice(iend),iend+chk.length); 
+            const a=document.createElement('a'); 
+            a.href=URL.createObjectURL(new Blob([f],{type:'image/png'})); 
+            a.download='card.png'; 
+            a.click(); 
+        }
+
+        function readPngMetadata(f,cb) { 
+            const r=new FileReader(); 
+            r.onload=e=>{ 
+                const v=new DataView(e.target.result); 
+                let off=8; 
+                while(off<v.byteLength){ 
+                    const l=v.getUint32(off); 
+                    const t=String.fromCharCode(...new Uint8Array(e.target.result,off+4,4)); 
+                    if(t==='tEXt'){ 
+                        const d=new Uint8Array(e.target.result,off+8,l); 
+                        const s=d.indexOf(0); 
+                        if(s>-1&&new TextDecoder().decode(d.slice(0,s))==='chara'){ 
+                            cb(JSON.parse(decodeURIComponent(escape(atob(new TextDecoder().decode(d.slice(s+1))))))); 
+                            return; 
+                        } 
+                    } 
+                    off+=12+l; 
+                } 
+                alert('No Metadata Found'); 
+            }; 
+            r.readAsArrayBuffer(f); 
+        }
+
+        const crcTable=Array(256).fill(0).map((_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^c>>>1:c>>>1;return c;}); 
+        function crc32(b){let c=-1;for(let i=0;i<b.length;i++)c=c>>>8^crcTable[(c^b[i])&255];return(c^-1)>>>0;}
+
+    </script>
+</body>
+</html>
