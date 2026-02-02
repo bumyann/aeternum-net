@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNUM // FEED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-void: #050505; --glass: rgba(20, 20, 25, 0.75); --accent: #a5b4fc; --highlight: #66fcf1; }
+        body { background-color: var(--bg-void); color: #e0e7ff; font-family: 'Space Mono', monospace; overflow: hidden; }
+        
+        /* UI */
+        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
+        .nav-item { display: block; padding: 10px 15px; border-left: 2px solid transparent; color: #94a3b8; text-decoration: none; transition: 0.3s; font-size: 0.8rem; }
+        .nav-item:hover, .nav-item.active { border-left-color: var(--highlight); color: #fff; background: rgba(102, 252, 241, 0.05); }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+        /* ANIMATION */
+        .star-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.2; }
+    </style>
+</head>
+<body class="h-screen flex justify-center p-4">
+
+    <div class="star-layer stars"></div>
+
+    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+        
+        <aside class="glass-panel rounded-xl flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-900 border border-indigo-500 flex items-center justify-center">👤</div>
+                    <div>
+                        <h2 class="font-bold text-white text-sm">OUTSIDER</h2>
+                        <p class="text-[10px] text-[#66fcf1]">ONLINE</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 py-4 overflow-y-auto">
+                <div class="px-4 mb-2 text-[10px] text-gray-500 font-bold uppercase">System</div>
+                <a href="#" class="nav-item active">/// FEED</a>
+                <a href="character_files.html" class="nav-item">/// CHARACTER FILES</a>
+                <a href="simulation_terminals.html" class="nav-item">/// SIMULATION TERMINALS</a>
+                <a href="bulletin_board.html" class="nav-item">/// BULLETIN BOARD</a>
+                <a href="network_guidelines.html" class="nav-item">/// GUIDELINES</a>
+                
+                <div class="px-4 mt-6 mb-2 text-[10px] text-[#66fcf1] font-bold uppercase">Tools</div>
+                <a href="app.html" class="nav-item group">>> ARCHITECT.EXE</a>
+                
+                <div class="px-4 mt-6 mb-2 text-[10px] text-red-400 font-bold uppercase">Session</div>
+                <a href="index.html" class="nav-item text-red-300 hover:text-red-100">< LOG_OUT</a>
+            </nav>
+        </aside>
+
+        <main class="lg:col-span-2 glass-panel rounded-xl flex flex-col overflow-hidden relative">
+            <div class="p-4 border-b border-white/5 bg-black/20 flex justify-between items-center sticky top-0 z-10">
+                <h1 class="font-bold text-[#66fcf1] tracking-widest">NETWORK STREAM</h1>
+                <div class="flex gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[10px] text-gray-400">LIVE</span>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                
+                <div class="border border-indigo-500/30 bg-indigo-900/10 p-4 rounded text-sm">
+                    <div class="flex items-center gap-2 mb-2 text-indigo-300">
+                        <span>📢</span>
+                        <span class="font-bold">SYSTEM NOTICE [v.1.0.4]</span>
+                    </div>
+                    <p class="text-gray-400 mb-2">Interface Optimisation complete.</p>
+                    <ul class="list-disc list-inside text-xs text-gray-500 space-y-1">
+                        <li>Fixed bug where simulation signal looped back to sender.</li>
+                        <li>New 'Character' asset pack available in Cache.</li>
+                        <li class="text-red-400">ALERT: Fragmentation detected in Core Directory.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel p-4 rounded border-l-2 border-l-[#66fcf1]">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex gap-2 items-center">
+                            <span class="text-[#66fcf1] font-bold text-sm">F.A.Y.E.</span>
+                            <span class="text-[10px] bg-white/10 px-1 rounded text-gray-400">ADMIN</span>
+                        </div>
+                        <span class="text-[10px] text-gray-600">NOW</span>
+                    </div>
+                    <p class="text-sm text-gray-300 italic">
+                        "Please wipe your feet before stepping into the simulation! We wouldn't want to track any 'Outside' logic into the dream, would we?"
+                    </p>
+                </div>
+
+                <div class="glass-panel p-4 rounded hover:bg-white/5 transition cursor-pointer group border border-transparent hover:border-gray-600">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden">
+                            <div class="w-full h-full bg-gradient-to-br from-gray-700 to-black"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <h3 class="font-bold text-white group-hover:text-[#66fcf1]">Izaiah Lambert</h3>
+                                <span class="text-[10px] border border-gray-700 px-1 rounded text-gray-500">Aurelon</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Rugby Captain. "Whatever happens on the field stays on the field."</p>
+                            <div class="mt-3 flex gap-2">
+                                <a href="YOUR_JANITOR_LINK_HERE" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">CONNECT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 rounded hover:bg-white/5 transition cursor-pointer group border border-transparent hover:border-gray-600">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-gray-800 rounded flex-shrink-0 border border-gray-600 overflow-hidden">
+                            <div class="w-full h-full bg-gradient-to-br from-indigo-900 to-black"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <h3 class="font-bold text-white group-hover:text-[#66fcf1]">The Overseer</h3>
+                                <span class="text-[10px] border border-purple-900 text-purple-400 px-1 rounded">Deity</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">"I have witnessed everything that happened, could happen, and will happen."</p>
+                            <div class="mt-3 flex gap-2">
+                                <a href="YOUR_CAI_LINK_HERE" target="_blank" class="text-[10px] bg-[#66fcf1]/10 text-[#66fcf1] px-2 py-1 rounded hover:bg-[#66fcf1] hover:text-black transition">CONNECT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <aside class="flex flex-col gap-6">
+            <div class="glass-panel p-6 rounded-xl flex-1 flex flex-col">
+                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Active Vessels</h3>
+                <div class="space-y-4 overflow-y-auto pr-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-xs text-gray-300">Sora (Figüra)</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-xs text-gray-300">YJ</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        <span class="text-xs text-gray-300">Mother Earth (Idle)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-2 opacity-10 text-4xl">👁️</div>
+                <h3 class="text-xs font-bold text-[#66fcf1] mb-2">F.A.Y.E.</h3>
+                <div class="text-[10px] text-gray-400 font-mono bg-black/40 p-2 rounded">
+                    > STATUS: MONITORING<br>
+                    > MOOD: CURIOUS<br>
+                    > <span class="text-indigo-300">"Leave a piece of yourself behind! It makes the world feel more real."</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</body>
+</html>
