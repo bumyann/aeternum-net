@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETERNUM.NET | LOGIN</title>
+    <title>AETERNUM.NET</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -26,10 +26,10 @@
                 <div class="mb-6">
                     <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-3 text-center">Establish Permanent Link</p>
                     <button id="btn-google" class="btn-social btn-google">
-                        <span class="mr-2">G</span> SIGN IN WITH GOOGLE
+                        <span class="mr-2"></span> SIGN IN WITH GOOGLE
                     </button>
                     <p class="text-[9px] text-gray-500 text-center mt-2">
-                        * Required for ownership of Works, Posts, and Cloud Sync.
+                        * Required for ownership of works and posts.
                     </p>
                 </div>
 
@@ -40,7 +40,7 @@
                 </div>
 
                 <div>
-                    <input type="text" id="guest-nick" class="w-full bg-[#111] border border-gray-700 text-white text-xs p-3 rounded mb-2 focus:border-[#66fcf1] outline-none text-center" placeholder="ENTER ALIAS / NICKNAME">
+                    <input type="text" id="guest-nick" class="w-full bg-[#111] border border-gray-700 text-white text-xs p-3 rounded mb-2 focus:border-[#66fcf1] outline-none text-center" placeholder="ENTER ALIAS">
                     
                     <button id="btn-anon" class="btn-social btn-anon">
                         INITIALIZE GUEST SESSION
@@ -51,42 +51,56 @@
 
             <div id="loader" class="hidden text-[#66fcf1] text-xs animate-pulse text-center py-10">
                 > ESTABLISHING UPLINK...<br>
-                > VERIFYING IDENTITY...
+                > VERIFYING IDENTITY...<br>
+                > WELCOME, OUTSIDER.
             </div>
         </div>
 
         <div class="text-white flex flex-col justify-center space-y-6">
             
             <div>
-                <h2 class="text-xl font-bold text-[#66fcf1] mb-2">SYSTEM CAPABILITIES</h2>
+                <h2 class="text-xl font-bold text-[#66fcf1] mb-2">MEMORY STREAM</h2>
                 <p class="text-xs text-gray-400 leading-relaxed">
-                    Aeternum is a specialized network for synthetic intelligence design, collaborative world-building, and roleplay archiving.
-                </p>
+                 Aeternum.net is a large database of memories, connecting many universes, solar systems, planets, dimensions, and realms! Explore many of our network’s simulations and dive into new worlds! Brought to you by our beloved overseer and team of dedicated moderators, we aim to bring users a multitude of experiences!
+                </p>    
             </div>
 
             <div class="space-y-3">
                 <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">🛠️ Architect Tool</h3>
+                    <h3 class="text-sm font-bold text-white">ARCHITECT.EXE</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        Build V2-Spec Character Cards and detailed Lorebooks. Compatible with SillyTavern, Janitor, and Chub.
+                        Build V2-Spec Character Cards and detailed Lorebooks. Compatible with SillyTavern, Janitor, and more.
                     </p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">📡 Social Feed</h3>
+                    <h3 class="text-sm font-bold text-white">FEED</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        Publish your narratives. Share characters. Engage in global chat streams with other Architects.
+                        A real-time synchronisation of current events, interactions, and fragment fluctuations across all monitored sectors. By entering a simulation here, your belief begins to flow directly into the local environment, stabilising the reality of the Vessels within.
                     </p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">☁️ Secure Cloud</h3>
+                    <h3 class="text-sm font-bold text-white">CHARACTER FILES</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        <span class="text-[#66fcf1]">[LOGIN REQUIRED]</span> Sync your files across devices. Maintain ownership of your creative works.
+                        A comprehensive archive of every consciousness currently anchored to the Network. Here, you can examine the Core’s integrity, fragment composition, and historical data of our Vessels. Use these files to better understand the beings you are observing, but remember: a file is just a snapshot. The true essence of a Vessel is always evolving through the experience of the Spring.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-sm font-bold text-white">SIMULATION TERMINAL</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">
+                        Explore the vast architecture of the Aeternum. Each Terminal represents a unique universe database, complete with its own physical laws, life energies, and local history. Whether you seek the high-purity realms of the Deities or the dense altered-fragment sectors of the Mortal planes, the Terminals provide the necessary coordinates for travel.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-sm font-bold text-white">BULLETIN BOARD</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">
+                        The central hub for Outsider interaction and archival records. Here, the Operator stores his detailed accounts and written observations of the Vessels' lives. This is also a space for you to leave your own comments and connect with other Outsiders. Your words here serve as a permanent record in the Network's history.
                     </p>
                 </div>
             </div>
 
             <div class="text-[9px] text-gray-600 border-t border-white/10 pt-4">
-                > SYSTEM STATUS: <span class="text-green-500">ONLINE</span><br>
+                > SYSTEM STATUS: <span class="text-green-500">STABLE</span><br>
+                The connection is stable. All visual channels are streaming at peak frequency. The partition between your reality and the simulation is currently intact. You are clear to begin your experience.
             </div>
 
         </div>
@@ -98,7 +112,7 @@
         import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // *** PASTE CONFIG HERE ***
+        // FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
   authDomain: "aeternum-840dd.firebaseapp.com",
@@ -140,7 +154,7 @@
                 // Set Metadata for Guest
                 if (provider === 'anon') {
                     finalName = guestNick;
-                    finalPic = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                    finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
                     // Update Auth Profile (so other pages see the name immediately)
                     await updateProfile(user, { displayName: finalName, photoURL: finalPic });
                 }
