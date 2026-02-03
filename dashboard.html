@@ -20,9 +20,11 @@
         
         <nav class="space-y-1 flex-1">
             <div class="px-2 mb-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider">NETWORK</div>
-            <a href="#" class="nav-item active">/// LIVE FEED</a>
-            <a href="bulletin_board.html" class="nav-item">/// BULLETIN BOARD</a>
-            <a href="character_files.html" class="nav-item">/// FILES</a>
+            <a href="#" class="nav-item active">LIVE FEED</a>
+            <a href="character_files.html" class="nav-item">CHARACTER FILES</a>
+            <a href="simulation_terminal.html" class="nav-item">SIMULATION TERMINAL</a>
+            <a href="bulletin_board.html" class="nav-item">BULLETIN BOARD</a>
+            
         </nav>
 
         <div class="mt-auto pt-4 border-t border-white/10">
@@ -79,7 +81,7 @@
                 <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-white">CLOSE [X]</button>
             </div>
             <div class="glass-panel p-6 rounded-xl border border-indigo-500/30">
-                <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">📢 POST SYSTEM NOTICE</h3>
+                <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">POST SYSTEM NOTICE</h3>
                 <input id="notice-title" class="input-dark mb-2 font-bold" placeholder="Notice Title">
                 <textarea id="notice-content" class="input-dark h-24 mb-4" placeholder="Content..."></textarea>
                 <button onclick="postNotice()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-xs font-bold transition">BROADCAST NOTICE</button>
@@ -160,7 +162,7 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                const pfp = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                const pfp = user.photoURL || `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
                 document.getElementById('sidebar-name').innerText = user.displayName || "Anonymous";
                 document.getElementById('sidebar-pfp').src = pfp;
                 document.getElementById('edit-name').value = user.displayName || "";
