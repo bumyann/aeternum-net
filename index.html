@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] p-4">
+<body class="min-h-screen flex flex-col items-center justify-start lg:justify-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] p-4 py-10 overflow-y-auto">
 
     <div class="scanline"></div>
 
@@ -108,85 +108,73 @@
     </div>
 
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // FIREBASE CONFIGURATION
-    const firebaseConfig = {
-        apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
-        authDomain: "aeternum-840dd.firebaseapp.com",
-        projectId: "aeternum-840dd",
-        storageBucket: "aeternum-840dd.firebasestorage.app",
-        messagingSenderId: "409417083922",
-        appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
-        measurementId: "G-TDJQLYF4S4"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
+            authDomain: "aeternum-840dd.firebaseapp.com",
+            projectId: "aeternum-840dd",
+            storageBucket: "aeternum-840dd.firebasestorage.app",
+            messagingSenderId: "409417083922",
+            appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
+            measurementId: "G-TDJQLYF4S4"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    const googleProvider = new GoogleAuthProvider();
+        const googleProvider = new GoogleAuthProvider();
 
-    async function handleLogin(provider) {
-        const guestNick = document.getElementById('guest-nick').value.trim();
-        
-        // Require nickname for guests
-        if (provider === 'anon' && !guestNick) {
-            alert("Please enter an Alias to continue as Guest.");
-            document.getElementById('guest-nick').focus();
-            return;
-        }
-
-        document.getElementById('login-form').classList.add('hidden');
-        document.getElementById('loader').classList.remove('hidden');
-
-        try {
-            let result;
-            if (provider === 'google') {
-                result = await signInWithPopup(auth, googleProvider);
-            } else {
-                result = await signInAnonymously(auth);
+        async function handleLogin(provider) {
+            const guestNick = document.getElementById('guest-nick').value.trim();
+            
+            if (provider === 'anon' && !guestNick) {
+                alert("Please enter an Alias to continue as Guest.");
+                document.getElementById('guest-nick').focus();
+                return;
             }
 
-            const user = result.user;
-            let finalName = user.displayName;
-            let finalPic = user.photoURL;
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('loader').classList.remove('hidden');
 
-            // Set Metadata for Guest
-            if (provider === 'anon') {
-                finalName = guestNick;
-                // Using the specific guest avatar URL from your recent version
-                finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
-                
-                // Update Auth Profile so other pages see the name immediately
-                await updateProfile(user, { displayName: finalName, photoURL: finalPic });
+            try {
+                let result;
+                if (provider === 'google') result = await signInWithPopup(auth, googleProvider);
+                else result = await signInAnonymously(auth);
+
+                const user = result.user;
+                let finalName = user.displayName;
+                let finalPic = user.photoURL;
+
+                if (provider === 'anon') {
+                    finalName = guestNick;
+                    finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
+                    await updateProfile(user, { displayName: finalName, photoURL: finalPic });
+                }
+
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    name: finalName,
+                    photo: finalPic,
+                    isGuest: provider === 'anon',
+                    lastLogin: new Date()
+                }, { merge: true });
+
+                window.location.href = "dashboard.html";
+
+            } catch (error) {
+                console.error(error);
+                alert("Error: " + error.message);
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('loader').classList.add('hidden');
             }
-
-            // Save user data to Firestore
-            await setDoc(doc(db, "users", user.uid), {
-                uid: user.uid,
-                name: finalName,
-                photo: finalPic,
-                isGuest: provider === 'anon',
-                lastLogin: new Date()
-            }, { merge: true });
-
-            // Redirect to dashboard upon successful authentication
-            window.location.href = "dashboard.html";
-
-        } catch (error) {
-            console.error(error);
-            alert("Error: " + error.message);
-            document.getElementById('login-form').classList.remove('hidden');
-            document.getElementById('loader').classList.add('hidden');
         }
-    }
 
-    // Attach event listeners to your centered buttons
-    document.getElementById('btn-google').onclick = () => handleLogin('google');
-    document.getElementById('btn-anon').onclick = () => handleLogin('anon');
-</script>
+        document.getElementById('btn-google').onclick = () => handleLogin('google');
+        document.getElementById('btn-anon').onclick = () => handleLogin('anon');
+    </script>
 </body>
 </html>
