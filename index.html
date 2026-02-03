@@ -14,39 +14,42 @@
 
     <div class="grid lg:grid-cols-2 gap-8 w-full max-w-4xl z-20">
 
-        <div class="glass-box p-8 rounded-xl flex flex-col justify-center">
+        <div class="glass-box p-8 rounded-xl flex flex-col items-center justify-center text-center">
             
-            <div class="text-center mb-8">
+            <div class="mb-8">
                 <h1 class="text-3xl font-bold tracking-[0.2em] text-white flicker mb-2">AETERNUM.NET</h1>
                 <p class="text-[10px] text-gray-500 tracking-widest uppercase">Network Gateway v0.1</p>
             </div>
 
-        <div id="login-form" class="flex flex-col items-center"> <div class="mb-6 w-full flex flex-col items-center"> <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-3 text-center">Establish Permanent Link</p>
-        <button id="btn-google" class="btn-social btn-google mx-auto"> <span class="mr-2"></span> SIGN IN WITH GOOGLE
-        </button>
-        <p class="text-[9px] text-gray-500 text-center mt-2">
-            * Required for ownership of works and posts.
-        </p>
-        </div>
+            <div id="login-form" class="w-full flex flex-col items-center">
+                
+                <div class="mb-6 w-full flex flex-col items-center">
+                    <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-3">Establish Permanent Link</p>
+                    <button id="btn-google" class="btn-social btn-google mx-auto">
+                        SIGN IN WITH GOOGLE
+                    </button>
+                    <p class="text-[9px] text-gray-500 mt-2">
+                        * Required for ownership of works and posts.
+                    </p>
+                </div>
 
-         <div class="flex items-center gap-4 my-6 w-full">
-        <div class="h-px bg-white/10 flex-1"></div>
-        <span class="text-[10px] text-gray-600">OR TEMPORARY ACCESS</span>
-        <div class="h-px bg-white/10 flex-1"></div>
-         </div>
+                <div class="flex items-center gap-4 my-6 w-full max-w-[300px]">
+                    <div class="h-px bg-white/10 flex-1"></div>
+                    <span class="text-[10px] text-gray-600">OR TEMPORARY ACCESS</span>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
 
-    <div class="w-full flex flex-col items-center"> <input type="text" id="guest-nick" class="w-full max-w-[280px] bg-[#111] border border-gray-700 text-white text-xs p-3 rounded mb-2 focus:border-[#66fcf1] outline-none text-center" placeholder="ENTER ALIAS">
-        
-        <button id="btn-anon" class="btn-social btn-anon mx-auto"> INITIALIZE GUEST SESSION
-        </button>
-    </div>
+                <div class="w-full flex flex-col items-center">
+                    <input type="text" id="guest-nick" class="w-full max-w-[280px] bg-[#111] border border-gray-700 text-white text-xs p-3 rounded mb-2 focus:border-[#66fcf1] outline-none text-center" placeholder="ENTER ALIAS">
+                    
+                    <button id="btn-anon" class="btn-social btn-anon mx-auto">
+                        INITIALIZE GUEST SESSION
+                    </button>
+                </div>
 
-</div>
-            
+            </div>
 
-</div>
-
-            <div id="loader" class="hidden text-[#66fcf1] text-xs animate-pulse text-center py-10">
+            <div id="loader" class="hidden text-[#66fcf1] text-xs animate-pulse py-10">
                 > ESTABLISHING UPLINK...<br>
                 > VERIFYING IDENTITY...<br>
                 > WELCOME, OUTSIDER.
@@ -72,32 +75,32 @@
                 <div class="feature-card">
                     <h3 class="text-sm font-bold text-white">FEED</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        A real-time synchronisation of current events, interactions, and fragment fluctuations across all monitored sectors. By entering a simulation here, your belief begins to flow directly into the local environment, stabilising the reality of the Vessels within.
+                        A real-time synchronisation of current events, interactions, and fragment fluctuations across all monitored sectors.
                     </p>
                 </div>
                 <div class="feature-card">
                     <h3 class="text-sm font-bold text-white">CHARACTER FILES</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        A comprehensive archive of every consciousness currently anchored to the Network. Here, you can examine the Core’s integrity, fragment composition, and historical data of our Vessels. Use these files to better understand the beings you are observing, but remember: a file is just a snapshot. The true essence of a Vessel is always evolving through the experience of the Spring.
+                        A comprehensive archive of every consciousness currently anchored to the Network. Examine Core integrity and historical data.
                     </p>
                 </div>
                 <div class="feature-card">
                     <h3 class="text-sm font-bold text-white">SIMULATION TERMINAL</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        Explore the vast architecture of the Aeternum. Each Terminal represents a unique universe database, complete with its own physical laws, life energies, and local history. Whether you seek the high-purity realms of the Deities or the dense altered-fragment sectors of the Mortal planes, the Terminals provide the necessary coordinates for travel.
+                        Explore the vast architecture of the Aeternum. Each Terminal represents a unique universe database.
                     </p>
                 </div>
                 <div class="feature-card">
                     <h3 class="text-sm font-bold text-white">BULLETIN BOARD</h3>
                     <p class="text-[10px] text-gray-400 mt-1">
-                        The central hub for Outsider interaction and archival records. Here, the Operator stores his detailed accounts and written observations of the Vessels' lives. This is also a space for you to leave your own comments and connect with other Outsiders. Your words here serve as a permanent record in the Network's history.
+                        The central hub for Outsider interaction and archival records. Leave your own comments and records.
                     </p>
                 </div>
             </div>
 
             <div class="text-[9px] text-gray-600 border-t border-white/10 pt-4">
                 > SYSTEM STATUS: <span class="text-green-500">STABLE</span><br>
-                The connection is stable. All visual channels are streaming at peak frequency. The partition between your reality and the simulation is currently intact. You are clear to begin your experience.
+                The connection is stable. Visual channels are streaming at peak frequency. You are clear to begin your experience.
             </div>
 
         </div>
@@ -105,78 +108,85 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // FIREBASE CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
-  authDomain: "aeternum-840dd.firebaseapp.com",
-  projectId: "aeternum-840dd",
-  storageBucket: "aeternum-840dd.firebasestorage.app",
-  messagingSenderId: "409417083922",
-  appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
-  measurementId: "G-TDJQLYF4S4"
-};
+    // FIREBASE CONFIGURATION
+    const firebaseConfig = {
+        apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
+        authDomain: "aeternum-840dd.firebaseapp.com",
+        projectId: "aeternum-840dd",
+        storageBucket: "aeternum-840dd.firebasestorage.app",
+        messagingSenderId: "409417083922",
+        appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
+        measurementId: "G-TDJQLYF4S4"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        const googleProvider = new GoogleAuthProvider();
+    const googleProvider = new GoogleAuthProvider();
 
-        async function handleLogin(provider) {
-            const guestNick = document.getElementById('guest-nick').value.trim();
-            
-            // Require nickname for guests
-            if (provider === 'anon' && !guestNick) {
-                alert("Please enter an Alias to continue as Guest.");
-                document.getElementById('guest-nick').focus();
-                return;
-            }
-
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('loader').classList.remove('hidden');
-
-            try {
-                let result;
-                if (provider === 'google') result = await signInWithPopup(auth, googleProvider);
-                else result = await signInAnonymously(auth);
-
-                const user = result.user;
-                let finalName = user.displayName;
-                let finalPic = user.photoURL;
-
-                // Set Metadata for Guest
-                if (provider === 'anon') {
-                    finalName = guestNick;
-                    finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
-                    // Update Auth Profile (so other pages see the name immediately)
-                    await updateProfile(user, { displayName: finalName, photoURL: finalPic });
-                }
-
-                // Save to Database
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    name: finalName,
-                    photo: finalPic,
-                    isGuest: provider === 'anon',
-                    lastLogin: new Date()
-                }, { merge: true });
-
-                window.location.href = "dashboard.html";
-
-            } catch (error) {
-                console.error(error);
-                alert("Error: " + error.message);
-                document.getElementById('login-form').classList.remove('hidden');
-                document.getElementById('loader').classList.add('hidden');
-            }
+    async function handleLogin(provider) {
+        const guestNick = document.getElementById('guest-nick').value.trim();
+        
+        // Require nickname for guests
+        if (provider === 'anon' && !guestNick) {
+            alert("Please enter an Alias to continue as Guest.");
+            document.getElementById('guest-nick').focus();
+            return;
         }
 
-        document.getElementById('btn-google').onclick = () => handleLogin('google');
-        document.getElementById('btn-anon').onclick = () => handleLogin('anon');
-    </script>
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('loader').classList.remove('hidden');
+
+        try {
+            let result;
+            if (provider === 'google') {
+                result = await signInWithPopup(auth, googleProvider);
+            } else {
+                result = await signInAnonymously(auth);
+            }
+
+            const user = result.user;
+            let finalName = user.displayName;
+            let finalPic = user.photoURL;
+
+            // Set Metadata for Guest
+            if (provider === 'anon') {
+                finalName = guestNick;
+                // Using the specific guest avatar URL from your recent version
+                finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
+                
+                // Update Auth Profile so other pages see the name immediately
+                await updateProfile(user, { displayName: finalName, photoURL: finalPic });
+            }
+
+            // Save user data to Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                uid: user.uid,
+                name: finalName,
+                photo: finalPic,
+                isGuest: provider === 'anon',
+                lastLogin: new Date()
+            }, { merge: true });
+
+            // Redirect to dashboard upon successful authentication
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            console.error(error);
+            alert("Error: " + error.message);
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('loader').classList.add('hidden');
+        }
+    }
+
+    // Attach event listeners to your centered buttons
+    document.getElementById('btn-google').onclick = () => handleLogin('google');
+    document.getElementById('btn-anon').onclick = () => handleLogin('anon');
+</script>
 </body>
 </html>
