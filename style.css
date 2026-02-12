@@ -1,14 +1,16 @@
 /* style.css - CELESTIAL BLUE (FIXED LAYOUT EDITION) */
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lucida+Grande&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen:wght@400;700&display=swap');
 
 :root {
     --bg-void: #050A14;       
     --glass: rgba(10, 15, 30, 0.92); 
     --glass-border: rgba(100, 116, 139, 0.3);
     --accent: #475569;        
-    --highlight: #7DA5FA;     
+    --highlight: #85a6ec;     
     --text-main: #E2E8F0;     
     --text-muted: #94A3B8;    
     --ao3-red: #7f1d1d;
@@ -18,7 +20,7 @@
 body {
     background-color: var(--bg-void);
     color: var(--text-main);
-    font-family: 'VT323', monospace;
+    font-family: 'Pixelify Sans', monospace;
     font-size: 24px; 
     line-height: 1.4;
     overflow: hidden;
@@ -29,7 +31,7 @@ body {
 
 /* --- FONTS & HEADERS --- */
 h1, h2, .mobile-link, .ao3-title, #sidebar-name, #user-name, .dock-label {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Silkscreen', cursive;
     text-transform: uppercase;
     line-height: 1.6;
 }
@@ -40,15 +42,16 @@ h2 { font-size: 1.1rem; }
 /* SWAP 1: FAYE / ASSISTANT TITLES (VT323, Reduced Size) */
 #faye-title, .series-name, .assistant-header {
     font-family: 'VT323', monospace !important;
-    font-size: 1.8rem; /* Reduced from 2.5rem to fit sidebar */
-    letter-spacing: 0.1em;
+    font-size: 1.8rem;  /*Reduced from 2.5rem to fit sidebar */
+    letter-spacing: 0.5rem;
     font-weight: bold;
     color: var(--highlight);
+    line-height: 1rem;
 }
 
 /* SWAP 2: SYSTEM STATUS (Press Start 2P) */
 .text-\[9px\].text-gray-600, .system-status {
-    font-family: 'Press Start 2P', cursive !important;
+    font-family: 'Silkscreen', cursive !important;
     font-size: 0.6rem !important;
     line-height: 2;
     letter-spacing: 0.05em;
@@ -56,16 +59,17 @@ h2 { font-size: 1.1rem; }
 
 /* Character Names (VT323) */
 h3 { 
-    font-family: 'VT323', monospace; 
+    font-family: 'Pixelify Sans', monospace; 
     font-size: 1.6rem; 
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.05rem;
     color: var(--highlight);
+    
 }
 
 /* --- BODY CONTENT (Lucida Console) --- */
-.ao3-work div, .ao3-work p, 
+.id-nick,.ao3-work div, .ao3-work p, 
 .announcement-body, 
 .feature-card p, 
 .character-card p, 
@@ -73,7 +77,7 @@ h3 {
 textarea, #chat-input,
 input::placeholder, textarea::placeholder
 {
-    font-family: 'Lucida Console', Monaco, monospace !important;
+    font-family: 'Pixelify Sans', Monaco, monospace !important;
     font-size: 0.95rem;
     line-height: 1.6;
     letter-spacing: -0.01em;
