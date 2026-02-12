@@ -2,54 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AETERNUM.NET</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* FORCE SCROLL ON LANDING PAGE */
+        body {
+            overflow-y: auto !important; 
+            height: auto !important;
+            min-height: 100vh;
+        }
+        /* Mobile adjustments for feature list */
+        @media (max-width: 1023px) {
+            .custom-scrollbar {
+                max-height: none !important; /* Let it expand fully on mobile */
+                overflow-y: visible !important;
+            }
+        }
+        .scanline {
+            pointer-events: none; /* Prevent interference with scrolling */
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-start lg:justify-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] p-4 py-10 overflow-y-auto">
+<body class="flex flex-col items-center justify-start lg:justify-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] p-4 py-8 lg:py-10">
 
     <div class="scanline"></div>
 
-    <div class="grid lg:grid-cols-2 gap-8 w-full max-w-4xl z-20">
+    <div class="grid lg:grid-cols-2 gap-8 w-full max-w-4xl z-20 mb-10">
 
-        <div class="glass-box p-8 rounded-xl flex flex-col items-center justify-center text-center">
+        <div class="glass-box p-6 md:p-8 rounded-xl flex flex-col items-center justify-center text-center shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/10">
             
             <div class="mb-8">
-                <h1 class="text-3xl font-bold tracking-[0.2em] text-white flicker mb-2">AETERNUM.NET</h1>
-                <p class="text-[10px] text-gray-500 tracking-widest uppercase">Network Gateway v0.1</p>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-[0.2em] text-white flicker mb-2 font-[Press Start 2P]">AETERNUM</h1>
+                <p class="text-[10px] text-gray-500 tracking-widest uppercase font-mono">Network Gateway v0.1</p>
             </div>
 
             <div id="login-form" class="w-full flex flex-col items-center">
                 
                 <div class="mb-6 w-full flex flex-col items-center">
-                    <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-3">Establish Permanent Link</p>
-                    <button id="btn-google" class="btn-social btn-google mx-auto">
+                    <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-3 font-mono">Establish Permanent Link</p>
+                    <button id="btn-google" class="btn-social btn-google mx-auto hover:text-[#66fcf1] transition border border-white/20 px-6 py-3 rounded text-xs font-bold tracking-wider bg-white/5">
                         SIGN IN WITH GOOGLE
                     </button>
-                    <p class="text-[9px] text-gray-500 mt-2">
-                        * Required for ownership of works and posts.
+                    <p class="text-[9px] text-gray-600 mt-2 font-mono">
+                        * Required for data persistence.
                     </p>
                 </div>
 
-                <div class="flex items-center gap-4 my-6 w-full max-w-[300px]">
+                <div class="flex items-center gap-4 my-4 w-full max-w-[250px]">
                     <div class="h-px bg-white/10 flex-1"></div>
-                    <span class="text-[10px] text-gray-600">OR TEMPORARY ACCESS</span>
+                    <span class="text-[9px] text-gray-700 font-mono">OR</span>
                     <div class="h-px bg-white/10 flex-1"></div>
                 </div>
 
                 <div class="w-full flex flex-col items-center">
-                    <input type="text" id="guest-nick" class="w-full max-w-[280px] bg-[#111] border border-gray-700 text-white text-xs p-3 rounded mb-2 focus:border-[#66fcf1] outline-none text-center" placeholder="ENTER ALIAS">
+                    <input type="text" id="guest-nick" class="w-full max-w-[250px] bg-[#050505] border border-gray-800 text-[#66fcf1] text-xs p-3 rounded mb-3 focus:border-[#66fcf1] outline-none text-center font-mono placeholder-gray-700" placeholder="ENTER ALIAS">
                     
-                    <button id="btn-anon" class="btn-social btn-anon mx-auto">
-                        INITIALIZE GUEST SESSION
+                    <button id="btn-anon" class="btn-social btn-anon mx-auto text-[10px] text-gray-400 hover:text-white transition font-bold uppercase tracking-widest">
+                        Initialize Guest Session
                     </button>
                 </div>
 
             </div>
 
-            <div id="loader" class="hidden text-[#66fcf1] text-xs animate-pulse py-10">
+            <div id="loader" class="hidden text-[#66fcf1] text-xs animate-pulse py-10 font-mono">
                 > ESTABLISHING UPLINK...<br>
                 > VERIFYING IDENTITY...<br>
                 > WELCOME, OUTSIDER.
@@ -58,49 +76,54 @@
 
         <div class="text-white flex flex-col justify-center space-y-6">
             
-            <div>
-                <h2 class="text-xl font-bold text-[#66fcf1] mb-2">MEMORY STREAM</h2>
-                <p class="text-xs text-gray-400 leading-relaxed">
-                 Aeternum.net is a large database of memories, connecting many universes, solar systems, planets, dimensions, and realms. Explore many of our network’s simulations and dive into new worlds!
+            <div class="text-center lg:text-left">
+                <h2 class="text-lg font-bold text-[#66fcf1] mb-2 font-[Press Start 2P] leading-relaxed">MEMORY STREAM</h2>
+                <p class="text-xs text-gray-400 leading-relaxed font-mono">
+                 Aeternum.net is a large database of memories, connecting many universes, solar systems, planets, dimensions, and realms.
                 </p>    
             </div>
 
-            <div class="space-y-3 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
-                <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">ARCHITECT.EXE</h3>
-                    <p class="text-[10px] text-gray-400 mt-1">
-                        Build V2-Spec Character Cards and detailed Lorebooks. Compatible with SillyTavern, Janitor, and more.
+            <div class="space-y-3 lg:max-h-[350px] lg:overflow-y-auto lg:pr-2 custom-scrollbar">
+                
+                <div class="feature-card bg-black/40 border border-white/10 p-4 rounded hover:border-[#66fcf1] transition">
+                    <h3 class="text-xs font-bold text-white font-[Press Start 2P] mb-2 text-[#66fcf1]">ARCHITECT.EXE</h3>
+                    <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
+                        Build V2-Spec Character Cards and detailed Lorebooks. Compatible with SillyTavern, Janitor, and more. Includes AI-powered tools.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">FEED</h3>
-                    <p class="text-[10px] text-gray-400 mt-1">
+
+                <div class="feature-card bg-black/40 border border-white/10 p-4 rounded hover:border-[#66fcf1] transition">
+                    <h3 class="text-xs font-bold text-white font-[Press Start 2P] mb-2">LIVE FEED</h3>
+                    <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
                         A real-time synchronisation of current events, interactions, and fragment fluctuations across all monitored sectors.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">CHARACTER FILES</h3>
-                    <p class="text-[10px] text-gray-400 mt-1">
+
+                <div class="feature-card bg-black/40 border border-white/10 p-4 rounded hover:border-[#66fcf1] transition">
+                    <h3 class="text-xs font-bold text-white font-[Press Start 2P] mb-2">CHARACTER FILES</h3>
+                    <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
                         A comprehensive archive of every consciousness currently anchored to the Network. Examine Core integrity and historical data.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">SIMULATION TERMINAL</h3>
-                    <p class="text-[10px] text-gray-400 mt-1">
+
+                <div class="feature-card bg-black/40 border border-white/10 p-4 rounded hover:border-[#66fcf1] transition">
+                    <h3 class="text-xs font-bold text-white font-[Press Start 2P] mb-2">SIMULATION TERMINAL</h3>
+                    <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
                         Explore the vast architecture of the Aeternum. Each Terminal represents a unique universe database.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <h3 class="text-sm font-bold text-white">BULLETIN BOARD</h3>
-                    <p class="text-[10px] text-gray-400 mt-1">
-                        The central hub for Outsider interaction and archival records. Leave your own comments and records.
+
+                <div class="feature-card bg-black/40 border border-white/10 p-4 rounded hover:border-[#66fcf1] transition">
+                    <h3 class="text-xs font-bold text-white font-[Press Start 2P] mb-2">BULLETIN BOARD</h3>
+                    <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
+                        The central hub for Outsider interaction and archival records. Leave your own comments, fanworks, and records.
                     </p>
                 </div>
             </div>
 
-            <div class="text-[9px] text-gray-600 border-t border-white/10 pt-4">
-                > SYSTEM STATUS: <span class="text-green-500">STABLE</span><br>
-                The connection is stable. Visual channels are streaming at peak frequency. You are clear to begin your experience.
+            <div class="text-[9px] text-gray-600 border-t border-white/10 pt-4 font-mono text-center lg:text-left">
+                > SYSTEM STATUS: <span class="text-green-500 animate-pulse">STABLE</span><br>
+                Visual channels are streaming at peak frequency.
             </div>
 
         </div>
@@ -112,6 +135,7 @@
         import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
             authDomain: "aeternum-840dd.firebaseapp.com",
@@ -125,7 +149,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
         const googleProvider = new GoogleAuthProvider();
 
         async function handleLogin(provider) {
@@ -147,11 +170,11 @@
 
                 const user = result.user;
                 let finalName = user.displayName;
-                let finalPic = user.photoURL;
-
+                // Updated Default PFP
+                let finalPic = user.photoURL || "b89225c04e297389666a56ba20f5b956.jpg";
+                
                 if (provider === 'anon') {
                     finalName = guestNick;
-                    finalPic = `https://files.catbox.moe/3n1ncy.jpg${user.uid}`;
                     await updateProfile(user, { displayName: finalName, photoURL: finalPic });
                 }
 

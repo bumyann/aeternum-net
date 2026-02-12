@@ -1,66 +1,208 @@
-/* style.css - MASTER STYLESHEET */
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lucida+Grande&display=swap');
+/* style.css - CELESTIAL BLUE (FIXED LAYOUT EDITION) */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lucida+Grande&display=swap');
 
 :root {
-    --bg-void: #050505;
-    --glass: rgba(20, 20, 25, 0.95);
-    --accent: #66fcf1;
-    --highlight: #66fcf1;
-    --ao3-red: #900;
+    --bg-void: #050A14;       
+    --glass: rgba(10, 15, 30, 0.92); 
+    --glass-border: rgba(100, 116, 139, 0.3);
+    --accent: #475569;        
+    --highlight: #7DA5FA;     
+    --text-main: #E2E8F0;     
+    --text-muted: #94A3B8;    
+    --ao3-red: #7f1d1d;
 }
 
 /* BASE RESET */
 body {
     background-color: var(--bg-void);
-    color: #e0e7ff;
-    font-family: 'Space Mono', monospace;
+    color: var(--text-main);
+    font-family: 'VT323', monospace;
+    font-size: 24px; 
+    line-height: 1.4;
     overflow: hidden;
-    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+    background-image: linear-gradient(rgba(5, 10, 20, 0.9), rgba(5, 10, 20, 0.8)), url('https://www.transparenttextures.com/patterns/stardust.png');
     background-attachment: fixed;
+    letter-spacing: 0.04em;
 }
 
-/* UTILITY CLASSES */
-.glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(165, 180, 252, 0.15); }
-.input-dark { background-color: #111; border: 1px solid #334155; color: #fff; transition: 0.2s; width: 100%; padding: 8px; border-radius: 4px; }
-.input-dark:focus { outline: none; border-color: var(--accent); }
-.btn-action { background: rgba(102, 252, 241, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 5px 15px; border-radius: 4px; font-weight: bold; transition: 0.2s; cursor: pointer; }
-.btn-action:hover { background: var(--accent); color: black; }
+/* --- FONTS & HEADERS --- */
+h1, h2, .mobile-link, .ao3-title, #sidebar-name, #user-name, .dock-label {
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+    line-height: 1.6;
+}
 
-/* NAVIGATION */
-.nav-item { display: block; padding: 10px; border-left: 2px solid transparent; color: #94a3b8; text-decoration: none; transition: 0.3s; }
-.nav-item:hover, .nav-item.active { border-left-color: var(--highlight); color: #fff; background: rgba(102, 252, 241, 0.05); }
+h1 { font-size: 1.4rem; } 
+h2 { font-size: 1.1rem; }
 
-/* MOBILE DOCK */
-.bottom-dock { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(5, 5, 5, 0.98); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); z-index: 50; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); }
-.dock-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; text-decoration: none; transition: 0.3s; width: 25%; height: 100%; }
-.dock-btn.active { color: var(--highlight); background: linear-gradient(to top, rgba(102,252,241,0.05), transparent); border-top: 2px solid var(--highlight); }
+/* SWAP 1: FAYE / ASSISTANT TITLES (VT323, Reduced Size) */
+#faye-title, .series-name, .assistant-header {
+    font-family: 'VT323', monospace !important;
+    font-size: 1.8rem; /* Reduced from 2.5rem to fit sidebar */
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    color: var(--highlight);
+}
 
-/* FEED & SOCIAL */
-.ao3-work { font-family: 'Lucida Grande', sans-serif; border: 1px solid #333; margin-bottom: 20px; background: #111; box-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
-.ao3-header { background: #222; border-bottom: 3px solid var(--ao3-red); padding: 10px; display: flex; gap: 10px; align-items: flex-start; }
-.ao3-tags { font-size: 0.7rem; color: #fff; padding: 5px 10px; }
-.feed-tab { cursor: pointer; padding-bottom: 5px; color: #64748b; border-bottom: 2px solid transparent; transition: 0.3s; }
-.feed-tab.active { color: var(--highlight); border-color: var(--highlight); }
+/* SWAP 2: SYSTEM STATUS (Press Start 2P) */
+.text-\[9px\].text-gray-600, .system-status {
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 0.6rem !important;
+    line-height: 2;
+    letter-spacing: 0.05em;
+}
 
-/* CREATE POST FORM */
-.create-form-container { max-width: 800px; margin: 0 auto; background: #0a0a0a; padding: 20px; border-radius: 8px; border: 1px solid #333; }
-.create-label { font-size: 0.7rem; color: #64748b; font-weight: bold; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+/* Character Names (VT323) */
+h3 { 
+    font-family: 'VT323', monospace; 
+    font-size: 1.6rem; 
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--highlight);
+}
 
-/* HAMBURGER MENU */
-#mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease-in-out; }
-#mobile-menu.open { opacity: 1; pointer-events: auto; }
-.mobile-link { font-size: 1.5rem; color: #64748b; margin: 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
-.mobile-link:hover { color: var(--accent); }
+/* --- BODY CONTENT (Lucida Console) --- */
+.ao3-work div, .ao3-work p, 
+.announcement-body, 
+.feature-card p, 
+.character-card p, 
+#chat-container .text-xs,
+textarea, #chat-input,
+input::placeholder, textarea::placeholder
+{
+    font-family: 'Lucida Console', Monaco, monospace !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+}
 
-/* ADMIN & MODALS */
-.admin-btn { position: fixed; bottom: 90px; right: 20px; background: #900; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.4); z-index: 60; display: none; cursor: pointer; transition: 0.3s; }
-.admin-btn:hover { transform: scale(1.05); background: #b00; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 80; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.modal-overlay.open { display: flex; }
+#chat-input::placeholder { opacity: 0.5; font-style: italic; }
+
+/* --- COMPONENTS --- */
+.glass-panel { 
+    background: var(--glass); 
+    backdrop-filter: blur(12px); 
+    border: 1px solid var(--glass-border); 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.input-dark { 
+    background-color: #02040a; 
+    border: 1px solid #1e293b; 
+    color: var(--highlight); 
+    transition: 0.3s; 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 4px;
+    font-family: 'VT323', monospace;
+    font-size: 1.3rem;
+}
+.input-dark:focus { outline: none; border-color: var(--highlight); box-shadow: 0 0 15px rgba(125, 165, 250, 0.2); }
+
+.btn-action { 
+    background: rgba(125, 165, 250, 0.1); 
+    border: 1px solid var(--highlight); 
+    color: var(--highlight); 
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    font-weight: normal; 
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem; 
+    transition: 0.3s; 
+    cursor: pointer; 
+    text-transform: uppercase;
+}
+.btn-action:hover { background: var(--highlight); color: #000; box-shadow: 0 0 20px rgba(125, 165, 250, 0.5); }
+
+/* --- BULLETIN BOARD TABS --- */
+.feed-tab { 
+    font-family: 'VT323', monospace !important;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    cursor: pointer; 
+    padding-bottom: 4px; 
+    color: var(--text-muted); 
+    border-bottom: 2px solid transparent; 
+    transition: 0.3s; 
+    letter-spacing: 0.05em;
+}
+.feed-tab.active { color: var(--highlight); border-color: var(--highlight); text-shadow: 0 0 8px rgba(125, 165, 250, 0.4); }
+
+/* --- SIDEBAR & NAV --- */
+aside .text-\[10px\] {
+    font-size: 1rem !important; 
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 15px;
+    display: block;
+    opacity: 0.9;
+}
+
+.nav-item { 
+    display: block; padding: 12px; border-left: 3px solid transparent; color: var(--text-muted); 
+    text-decoration: none; transition: 0.3s; text-transform: uppercase; font-size: 1.4rem;
+}
+.nav-item:hover, .nav-item.active { 
+    border-left-color: var(--highlight); color: #fff; background: linear-gradient(90deg, rgba(125, 165, 250, 0.15), transparent); text-shadow: 0 0 10px rgba(125, 165, 250, 0.6);
+}
+
+/* --- OVERLAYS (HAMBURGER & MODALS) --- */
+/* FIXED: This block was causing layout issues. Now explicitly fixed positioning. */
+#mobile-menu, .modal-overlay { 
+    position: fixed !important; 
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(5, 10, 20, 0.98); 
+    z-index: 100; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: 0.3s ease-in-out; 
+}
+
+#mobile-menu.open, .modal-overlay.open { 
+    opacity: 1 !important; 
+    pointer-events: auto !important; 
+}
+
+/* Specific styling for the hamburger links */
+.mobile-link { 
+    font-size: 1.5rem; color: var(--text-muted); margin: 25px 0; 
+    font-weight: normal; text-transform: uppercase; letter-spacing: 2px; 
+}
+.mobile-link:hover { color: var(--highlight); text-shadow: 0 0 15px var(--highlight); }
+
+/* Admin Modal Specifics */
+#admin-panel { z-index: 200; } /* Ensure admin panel is above everything */
+
+/* --- ADMIN BUTTON --- */
+.admin-btn { 
+    position: fixed; bottom: 30px; right: 20px; 
+    background: #1e293b; color: var(--highlight); 
+    padding: 15px 25px; border-radius: 4px; border: 1px solid var(--highlight);
+    font-family: 'Press Start 2P', cursive; font-size: 0.8rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 60; 
+    display: none; cursor: pointer; transition: 0.3s; 
+}
+.admin-btn:hover { transform: scale(1.05); background: var(--highlight); color: #000; }
+
+/* --- UTILITIES --- */
+.text-\[\#66fcf1\], .text-\[\#66fcf1\]\/10, .text-cyan-400 { color: var(--highlight) !important; text-shadow: 0 0 10px rgba(125, 165, 250, 0.3); }
+.border-\[\#66fcf1\] { border-color: var(--highlight) !important; }
+.focus\:border-\[\#66fcf1\]:focus { border-color: var(--highlight) !important; }
+.hover\:border-\[\#66fcf1\]:hover { border-color: var(--highlight) !important; }
+.bg-\[\#66fcf1\] { background-color: var(--highlight) !important; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--highlight); }
 
 /* RESPONSIVE */
 @media (min-width: 1024px) { .mobile-only { display: none !important; } .desktop-only { display: flex !important; } }
-@media (max-width: 1023px) { .desktop-only { display: none !important; } }
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+@media (max-width: 1023px) { .desktop-only { display: none !important; } body { font-size: 22px; } }

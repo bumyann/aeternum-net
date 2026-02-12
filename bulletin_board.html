@@ -9,13 +9,33 @@
 </head>
 <body class="h-screen flex flex-col lg:bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] lg:bg-fixed">
 
+    <div id="mobile-menu">
+        <button onclick="toggleMenu()" class="absolute top-5 right-5 text-gray-500 text-4xl hover:text-white transition">&times;</button>
+        
+        <div class="text-center w-full max-w-sm px-6 py-10 space-y-6">
+            <div class="text-xs font-bold text-[#66fcf1] uppercase tracking-wider mb-6 border-b border-white/10 pb-2 font-[Press Start 2P]">SOCIAL BOARD</div>
+            
+            <a href="#" onclick="switchTab('feed'); toggleMenu()" class="mobile-link block text-2xl hover:text-[#66fcf1] transition">LIVE FEED</a>
+            <a href="#" onclick="switchTab('create'); toggleMenu()" class="mobile-link block text-2xl hover:text-[#66fcf1] transition">CREATE POST</a>
+            <a href="#" onclick="switchTab('chat'); toggleMenu()" class="mobile-link block text-2xl hover:text-[#66fcf1] transition">GLOBAL CHAT</a>
+            
+            <div class="my-8 border-t border-white/10 w-16 mx-auto"></div>
+            
+            <a href="dashboard.html" class="mobile-link block text-xl text-red-400 hover:text-red-300 font-bold">< EXIT TO HUB</a>
+        </div>
+    </div>
+
     <div class="w-full max-w-3xl mx-auto h-full flex flex-col relative bg-black/80 border-x border-white/5 shadow-2xl">
         <header class="p-4 border-b border-white/10 bg-black/90 backdrop-blur sticky top-0 z-30 flex justify-between items-center">
             <h1 class="text-lg font-bold text-white tracking-widest">AETERNUM <span class="text-[#66fcf1]">SOCIAL</span></h1>
+            
             <div class="flex items-center gap-3">
-                <span id="user-name" class="text-xs text-gray-400">Guest</span>
-                <img id="user-pfp" src="" class="w-8 h-8 rounded-full border border-gray-600">
-                <a href="dashboard.html" class="text-xs border border-gray-600 px-2 py-1 rounded text-gray-400 hover:text-white">EXIT</a>
+                <div class="flex items-center gap-3">
+                    <span id="user-name" class="text-xs text-gray-400 hidden md:block">Guest</span>
+                    <img id="user-pfp" src="" class="w-8 h-8 rounded-full border border-gray-600 bg-black object-cover">
+                </div>
+                
+                <button onclick="toggleMenu()" class="text-white text-xl border border-white/20 px-2 rounded hover:bg-white/10 transition">☰</button>
             </div>
         </header>
 
@@ -42,34 +62,27 @@
 
         <div id="view-chat" class="hidden flex-1 flex flex-col h-full overflow-hidden bg-black">
             <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-3 pb-4"></div>
-            <div class="p-3 bg-[#111] border-t border-white/10 flex flex-col gap-2 mb-[70px]">
+            <div class="p-3 bg-[#111] border-t border-white/10 flex flex-col gap-2">
                 <div id="chat-img-preview-container" class="hidden relative w-16 h-16"><img id="chat-img-preview" class="w-full h-full object-cover rounded border border-gray-600"><button onclick="clearChatImage()" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] flex items-center justify-center">×</button></div>
-                <div class="flex gap-2"><label class="bg-gray-800 text-gray-400 p-2 rounded cursor-pointer hover:text-white flex items-center justify-center">📷 <input type="file" id="chat-img-input" accept="image/*" class="hidden" onchange="previewImage('chat-img-input', 'chat-img-preview', 'chat-img-preview-container')"></label><input id="chat-input" type="text" class="flex-1 bg-black border border-gray-700 rounded px-3 text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Message..."><button onclick="sendChat()" class="btn-action">SEND</button></div>
+                <div class="flex gap-2"><label class="bg-gray-800 text-gray-400 p-2 rounded cursor-pointer hover:text-white flex items-center justify-center">📷<input type="file" id="chat-img-input" accept="image/*" class="hidden" onchange="previewImage('chat-img-input', 'chat-img-preview', 'chat-img-preview-container')"></label><input id="chat-input" type="text" class="flex-1 bg-black border border-gray-700 rounded px-3 text-sm text-white focus:border-[#66fcf1] outline-none" placeholder="Message..."><button onclick="sendChat()" class="btn-action">SEND</button></div>
             </div>
         </div>
     </div>
-
-    <nav class="bottom-dock">
-        <button onclick="switchTab('feed')" id="btn-feed" class="dock-btn active"><span class="dock-icon">📰</span><span class="dock-label">FEED</span></button>
-        <button onclick="switchTab('create')" id="btn-create" class="dock-btn"><span class="dock-icon">✍️</span><span class="dock-label">CREATE</span></button>
-        <button onclick="switchTab('chat')" id="btn-chat" class="dock-btn"><span class="dock-icon">💬</span><span class="dock-label">CHAT</span></button>
-    </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // *** CONFIG ***
         const firebaseConfig = {
             apiKey: "AIzaSyATfSwTh7nQ-1HAE1iarmp-K6GoKkboEbc",
-  authDomain: "aeternum-840dd.firebaseapp.com",
-  projectId: "aeternum-840dd",
-  storageBucket: "aeternum-840dd.firebasestorage.app",
-  messagingSenderId: "409417083922",
-  appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
-  measurementId: "G-TDJQLYF4S4"
-};
+            authDomain: "aeternum-840dd.firebaseapp.com",
+            projectId: "aeternum-840dd",
+            storageBucket: "aeternum-840dd.firebasestorage.app",
+            messagingSenderId: "409417083922",
+            appId: "1:409417083922:web:fc33d26814a7d7e86bfccb",
+            measurementId: "G-TDJQLYF4S4"
+        };
         const ADMIN_EMAIL = "yann359705@gmail.com"; 
 
         const app = initializeApp(firebaseConfig);
@@ -77,19 +90,21 @@
         const auth = getAuth(app);
         let currentUser = null;
         let currentPostImage = null; let currentChatImage = null;
-        let allPosts = []; // For search filtering
+        let allPosts = [];
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 document.getElementById('user-name').innerText = user.displayName || "Anonymous";
-                document.getElementById('user-pfp').src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                document.getElementById('user-pfp').src = user.photoURL || "b89225c04e297389666a56ba20f5b956.jpg";
             } else window.location.href = "index.html";
         });
 
+        window.toggleMenu = function() { document.getElementById('mobile-menu').classList.toggle('open'); }
+
         window.switchTab = function(tab) {
-            ['feed','create','chat'].forEach(t => { document.getElementById('view-'+t).classList.add('hidden'); document.getElementById('btn-'+t).classList.remove('active'); });
-            document.getElementById('view-'+tab).classList.remove('hidden'); document.getElementById('btn-'+tab).classList.add('active');
+            ['feed','create','chat'].forEach(t => { document.getElementById('view-'+t).classList.add('hidden'); });
+            document.getElementById('view-'+tab).classList.remove('hidden'); 
             if(tab==='chat') document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
         }
 
@@ -121,7 +136,6 @@
             document.getElementById('chat-input').value=""; clearChatImage();
         }
 
-        // FEED RENDER
         onSnapshot(query(collection(db, "posts"), where("type", "==", "lit")), (snap) => {
             const c = document.getElementById('feed-container'); c.innerHTML = "";
             allPosts = []; snap.forEach(d => { let p=d.data(); p.id=d.id; allPosts.push(p); });
@@ -133,12 +147,10 @@
         function renderPost(p, container) {
             const tagHtml = p.tags ? p.tags.split(',').map(t=>`<span class="mr-2 text-gray-400 text-[10px] uppercase">#${t.trim()}</span>`).join('') : "";
             const imgHtml = p.image ? `<div class="w-full h-40 bg-gray-900 border-b border-gray-800"><img src="${p.image}" class="w-full h-full object-cover opacity-80"></div>` : "";
-            // Delete Logic
             let delBtn = "";
             if(currentUser && (currentUser.uid === p.uid || currentUser.email === ADMIN_EMAIL)) {
                 delBtn = `<button onclick="deletePost('${p.id}')" class="text-red-500 text-[10px] hover:text-white font-bold">[DEL]</button>`;
             }
-
             container.innerHTML += `
                 <div class="ao3-work overflow-hidden relative group">
                     ${imgHtml}
@@ -163,11 +175,7 @@
             filtered.forEach(p => renderPost(p, c));
         }
 
-        window.deletePost = async function(id) {
-            if(confirm("Delete post?")) await deleteDoc(doc(db, "posts", id));
-        }
-
-        // CHAT RENDER
+        window.deletePost = async function(id) { if(confirm("Delete post?")) await deleteDoc(doc(db, "posts", id)); }
         onSnapshot(query(collection(db, "posts"), where("type", "==", "chat")), (snap) => {
             const c = document.getElementById('chat-container'); c.innerHTML = "";
             let chats = []; snap.forEach(d => chats.push(d.data()));
